@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+sqlalchemy
+sqladmin
+wtforms
+pydantic[email]
+itsdangerous
+python-multipart
+jinja2

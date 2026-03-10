@@ -1,0 +1,1115 @@
+// ============================================
+// BUFFALO BLISS - INTERACTIVE FUNCTIONALITY
+// ============================================
+
+// ============================================
+// GLOBAL RENDERERS
+// ============================================
+
+function renderGlobalNav() {
+    const navContainer = document.getElementById('globalNav');
+    if (!navContainer) return;
+
+    const path = window.location.pathname;
+    const isSubpage = path.includes('/pages/');
+    const prefix = isSubpage ? '../' : '';
+
+    const navItems = [
+        { name: 'Home', url: prefix + 'index.html', active: path.endsWith('/index.html') || path.endsWith('/') },
+        { name: 'Magazine', url: 'https://yourbliss.us/', external: true },
+        { name: 'Attractions', url: prefix + 'pages/attractions.html', active: path.includes('attractions.html') },
+        { name: 'Events', url: prefix + 'pages/events.html', active: path.includes('events.html') },
+        { name: 'Restaurants', url: prefix + 'pages/restaurant2.html', active: path.includes('restaurants.html') }
+    ];
+
+    const moreItems = [
+        { name: 'Request Advertisement', url: prefix + 'pages/request-advertisement.html', active: path.includes('request-advertisement.html') }
+    ];
+
+    const isMoreActive = moreItems.some(item => item.active);
+
+    navContainer.innerHTML = `
+        <div class="container header-content">
+            <a href="${prefix}index.html" class="logo">Buffalo Bliss</a>
+            
+            <nav class="nav-main">
+                <ul class="nav-list">
+                    ${navItems.map(item => `
+                        <li>
+                            <a href="${item.url}" 
+                               class="nav-link ${item.active ? 'active' : ''}" 
+                               ${item.external ? 'target="_blank" rel="noopener noreferrer"' : ''}>
+                                ${item.name}
+                            </a>
+                        </li>
+                    `).join('')}
+                    
+                    <!-- More Dropdown -->
+                    <li class="nav-item-dropdown">
+                        <button class="nav-link dropdown-toggle ${isMoreActive ? 'active' : ''}">
+                            More <i class="fas fa-chevron-down ml-1" style="font-size: 0.8em;"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            ${moreItems.map(item => `
+                                <li>
+                                    <a href="${item.url}" class="dropdown-link ${item.active ? 'active' : ''}">
+                                        ${item.name}
+                                    </a>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <nav class="mobile-nav" id="mobileNav">
+            <ul class="mobile-nav-list">
+                ${navItems.map(item => `
+                    <li>
+                        <a href="${item.url}" 
+                           class="mobile-nav-link ${item.active ? 'active' : ''}"
+                           ${item.external ? 'target="_blank" rel="noopener noreferrer"' : ''}>
+                            ${item.name}
+                        </a>
+                    </li>
+                `).join('')}
+                
+                <!-- Expanded More items for mobile -->
+                <li style="border-top: 1px solid var(--color-divider); margin-top: var(--space-2); padding-top: var(--space-2);">
+                    <span class="mobile-nav-link" style="color: var(--color-text-tertiary); font-size: var(--font-size-xs);">MORE</span>
+                </li>
+                ${moreItems.map(item => `
+                    <li>
+                        <a href="${item.url}" class="mobile-nav-link ${item.active ? 'active' : ''}">
+                            ${item.name}
+                        </a>
+                    </li>
+                `).join('')}
+            </ul>
+        </nav>
+    `;
+
+    // Re-initialize mobile menu toggle
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const mobileNav = document.getElementById('mobileNav');
+
+    if (mobileMenuToggle && mobileNav) {
+        mobileMenuToggle.addEventListener('click', () => {
+            mobileMenuToggle.classList.toggle('active');
+            mobileNav.classList.toggle('active');
+            document.body.classList.toggle('no-scroll');
+        });
+    }
+
+    // Dropdown hover behavior for desktop (CSS handles most of it, but click for mobile-like touch)
+    const dropdownToggle = navContainer.querySelector('.dropdown-toggle');
+    const dropdownMenu = navContainer.querySelector('.dropdown-menu');
+    if (dropdownToggle && dropdownMenu) {
+        dropdownToggle.addEventListener('click', (e) => {
+            if (window.innerWidth < 1024) {
+                dropdownMenu.classList.toggle('active');
+            }
+        });
+    }
+}
+
+function renderGlobalFooter() {
+    const footerContainer = document.querySelector('footer.footer');
+    if (!footerContainer) return;
+
+    const path = window.location.pathname;
+    const isSubpage = path.includes('/pages/');
+    const prefix = isSubpage ? '../' : '';
+
+    footerContainer.innerHTML = `
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Buffalo Bliss</h4>
+                    <p style="color: var(--color-neutral-300); margin-bottom: var(--space-4);">
+                        Your guide to wellness, inspiration, and discovering the best of Buffalo, NY.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="footer-link" aria-label="Facebook"><i class="fab fa-facebook fa-lg"></i></a>
+                        <a href="#" class="footer-link" aria-label="Instagram"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#" class="footer-link" aria-label="Twitter"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="footer-link" aria-label="YouTube"><i class="fab fa-youtube fa-lg"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Magazine</h4>
+                    <div class="footer-links">
+                        <a href="https://yourbliss.us/category/health" class="footer-link" target="_blank">Health</a>
+                        <a href="https://yourbliss.us/category/wealth" class="footer-link" target="_blank">Wealth</a>
+                        <a href="https://yourbliss.us/category/spirit" class="footer-link" target="_blank">Spirit</a>
+                        <a href="https://yourbliss.us/category/happiness" class="footer-link" target="_blank">Happiness</a>
+                        <a href="https://yourbliss.us/recipes" class="footer-link" target="_blank">Recipes</a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Buffalo Guide</h4>
+                    <div class="footer-links">
+                        <a href="${prefix}pages/attractions.html" class="footer-link">Attractions</a>
+                        <a href="${prefix}pages/events.html" class="footer-link">Events</a>
+                        <a href="${prefix}pages/restaurant2.html" class="footer-link">Restaurants</a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <div class="footer-links">
+                        <a href="mailto:submit@yourbliss.us" class="footer-link">
+                            <i class="fas fa-envelope"></i> submit@yourbliss.us
+                        </a>
+                        <a href="tel:716-362-7849" class="footer-link">
+                            <i class="fas fa-phone"></i> 716-362-7849
+                        </a>
+                        <a href="#" class="footer-link">About Us</a>
+                        <a href="#" class="footer-link">Contact Us</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Buffalo Bliss. All rights reserved. | Bringing wellness and Buffalo together.</p>
+            </div>
+        </div>
+    `;
+}
+
+// ============================================
+// DYNAMIC CONTENT RENDERING
+// ============================================
+
+document.addEventListener('DOMContentLoaded', () => {
+    const path = window.location.pathname;
+    const isPageIndex = path.endsWith('index.html') || path === '/' || path.endsWith('/');
+    const isPageRestaurants = path.includes('restaurants.html');
+    const isPageEvents = path.includes('events.html');
+    const isPageMovies = path.includes('movies.html');
+    const isPageAttractions = path.includes('attractions.html');
+    const isPageDetails = path.includes('details.html');
+    const isPageRestaurant2 = path.includes('restaurant2.html');
+
+    // Render Global Components
+    renderGlobalNav();
+    renderGlobalFooter();
+
+    if (isPageIndex) {
+        renderFeaturedArticles();
+        renderRecipes();
+        renderExploreBuffalo();
+        initExploreBuffaloSlider();
+    } else if (isPageRestaurants) {
+        renderRestaurants();
+    } else if (isPageEvents) {
+        loadEvents();
+    } else if (isPageMovies) {
+        renderMovies();
+    } else if (isPageAttractions) {
+        renderAttractions();
+        initAttractionsSlider();
+    } else if (isPageDetails) {
+        renderDetailPage();
+    }
+
+    // Initialize UI components after rendering
+    initializeFilters();
+    initializeSearch();
+    initializeViewToggle();
+    initializeSort();
+    handleExternalLinks();
+    initializeClickableCards();
+    renderNewsletterModal();
+    initNewsletterLogic();
+    initSidebarNewsletter();
+});
+
+// Helper to resolve image paths based on current page location
+function resolveImagePath(imgSrc) {
+    if (!imgSrc) return '';
+    if (imgSrc.startsWith('http') || imgSrc.startsWith('//') || imgSrc.startsWith('data:')) {
+        return imgSrc;
+    }
+
+    // Remove leading dots or slashes if any for consistency
+    const cleanPath = imgSrc.replace(/^(\.\.\/|\.\/|\/)/, '');
+    const path = window.location.pathname;
+    const isSubpage = path.includes('/pages/');
+
+    return isSubpage ? `../${cleanPath}` : cleanPath;
+}
+
+function renderFeaturedArticles() {
+    const container = document.getElementById('featuredArticlesContainer');
+    if (!container || !siteData.articles) return;
+
+    container.innerHTML = siteData.articles.map(article => `
+        <article class="card clickable-card" data-href="${article.url}" role="link" tabindex="0" aria-label="Read article: ${article.title}">
+            <img src="${resolveImagePath(article.image)}" alt="${article.title}" class="card-image">
+            <div class="card-content">
+                <div class="flex gap-2 mb-4">
+                    ${article.badges.map(badge => `<span class="badge ${badge === 'Wealth' ? 'badge-accent' : 'badge-secondary'}">${badge}</span>`).join('')}
+                </div>
+                <h3 class="card-title">${article.title}</h3>
+                <p class="card-text">${article.description}</p>
+            </div>
+            <div class="card-footer">
+                <span style="font-size: var(--font-size-sm); color: var(--color-text-tertiary);">
+                    <i class="far fa-clock"></i> ${article.readTime}
+                </span>
+                <a href="${article.url}" class="btn btn-sm btn-ghost">Read More</a>
+            </div>
+        </article>
+    `).join('');
+}
+
+function renderRecipes() {
+    const container = document.getElementById('recipesContainer');
+    if (!container || !siteData.recipes) return;
+
+    container.innerHTML = siteData.recipes.map(recipe => `
+        <article class="card clickable-card" 
+            data-href="${recipe.url}" 
+            role="link" 
+            tabindex="0" 
+            aria-label="Read recipe: ${recipe.title}">
+            <div class="card">
+                <img src="${resolveImagePath(recipe.image)}" alt="${recipe.title}" class="card-image">
+                <div class="card-content">
+                    <h4 class="card-title">${recipe.title}</h4>
+                    <p class="card-text">${recipe.description}</p>
+                    <div class="flex gap-2">
+                        ${recipe.badges.map(badge => `<span class="badge ${badge === 'Dinner' ? 'badge-accent' : badge === 'Breakfast' ? 'badge-primary' : 'badge-secondary'}">${badge}</span>`).join('')}
+                    </div>
+                </div>
+            </div>
+        </article>
+    `).join('');
+}
+
+function renderRestaurants() {
+    const container = document.getElementById('restaurantsContainer');
+    const featuredContainer = document.getElementById('featuredRestaurantsContainer');
+    if (!container || !siteData.restaurants) return;
+
+    const featuredRestaurants = siteData.restaurants.filter(r => r.featured);
+    const allRestaurants = siteData.restaurants;
+
+    if (featuredContainer) {
+        featuredContainer.innerHTML = featuredRestaurants.map(r => `
+            <article class="card card-glass clickable-card" 
+                data-href="${r.url}" 
+                role="link" 
+                tabindex="0" 
+                aria-label="View details for ${r.name}">
+                <div class="card-content">
+                    <div style="font-size: 4rem; text-align: center; margin-bottom: var(--space-4);">${r.category && r.category.includes('indian') ? '🍛' : r.category && r.category.includes('pakistani') ? '🥘' : '🍜'}</div>
+                    <h3 class="card-title">${r.name}</h3>
+                    <p class="card-text">${r.description}</p>
+                    <div class="restaurant-meta mb-4">
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <span>${r.rating}</span>
+                        </div>
+                        <span class="price-range">${r.price}</span>
+                        <span><i class="fas fa-map-marker-alt"></i> ${r.location}</span>
+                    </div>
+                    <div class="flex gap-2 mb-4">
+                        ${r.badges.map(badge => `<span class="badge ${badge === 'Desi' ? 'badge-accent' : badge === 'Halal' ? 'badge-secondary' : 'badge-primary'}">${badge}</span>`).join('')}
+                    </div>
+                    <a href="${r.url}" class="btn btn-primary btn-sm">Visit Website</a>
+                </div>
+            </article>
+        `).join('');
+    }
+
+    container.innerHTML = allRestaurants.map(r => `
+        <article class="card clickable-card" 
+            data-category="${r.category}" 
+            data-href="${r.url}" 
+            role="link" 
+            tabindex="0" 
+            aria-label="View details for ${r.name}"
+            data-searchable="${r.searchable || r.name + ' ' + r.description}">
+            <img src="${resolveImagePath(r.image)}" alt="${r.name}" class="restaurant-image">
+            <div class="card-content restaurant-info">
+                <h3 class="card-title">${r.name}</h3>
+                <p class="card-text">${r.description}</p>
+                <div class="restaurant-meta">
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <span>${r.rating}</span>
+                    </div>
+                    <span class="price-range">${r.price}</span>
+                    <span><i class="fas fa-map-marker-alt"></i> ${r.location}</span>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="flex gap-2">
+                    ${r.badges.map(badge => `<span class="badge ${badge === 'Desi' ? 'badge-accent' : 'badge-primary'}">${badge}</span>`).join('')}
+                </div>
+                <a href="${r.url}" class="btn btn-sm btn-ghost">Details</a>
+            </div>
+        </article>
+    `).join('');
+}
+
+async function loadEvents() {
+    try {
+        const response = await fetch('http://localhost:8000/api/events');
+        const events = await response.json();
+        renderEvents(events);
+
+        // Re-initialize filters and search after rendering
+        initializeFilters();
+        initializeSearch();
+        initializeClickableCards();
+    } catch (error) {
+        console.error('Error loading events:', error);
+        // Fallback to static data if API fails
+        if (typeof siteData !== 'undefined' && siteData.events) {
+            renderEvents(siteData.events);
+        }
+    }
+}
+
+function renderEvents(events) {
+    const container = document.getElementById('eventsListContainer');
+    const featuredContainer = document.getElementById('featuredEventsContainer');
+    if (!events) return;
+
+    if (featuredContainer) {
+        const featuredEvents = events.filter(e => e.featured);
+        featuredContainer.innerHTML = featuredEvents.map(e => `
+            <article class="card card-glass clickable-card" 
+                data-href="details.html?type=events&id=${e.id}" 
+                role="link" 
+                tabindex="0" 
+                aria-label="View details for ${e.name}">
+                <img src="${resolveImagePath(e.image)}" alt="${e.name}" style="width: 100%; height: 250px; object-fit: cover; border-radius: var(--radius-xl) var(--radius-xl) 0 0;">
+                <div class="card-content">
+                    <div class="flex gap-2 mb-4">
+                        ${(typeof e.badges === 'string' ? e.badges.split(', ') : (e.badges || [])).map(badge => `<span class="badge ${badge === 'Music' ? 'badge-accent' : 'badge-primary'}">${badge}</span>`).join('')}
+                    </div>
+                    <h3 class="card-title">${e.name}</h3>
+                    <p class="card-text mb-4">${e.description}</p>
+                    <div class="event-time">
+                        <i class="far fa-calendar"></i> ${e.date}<br>
+                        <i class="far fa-clock"></i> ${e.time}<br>
+                        <i class="fas fa-map-marker-alt"></i> ${e.location}
+                    </div>
+                </div>
+                <div class="card-footer">
+                    ${e.price ? `<span style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: var(--color-accent);">${e.price}</span>` : ''}
+                    <a href="${e.url || '#'}" class="btn btn-primary btn-sm">Get Tickets</a>
+                </div>
+            </article>
+        `).join('');
+    }
+
+    if (container) {
+        container.innerHTML = events.map(e => `
+            <article class="card event-card" data-category="${e.category}">
+                <div class="event-date" style="${e.color ? `background: ${e.color}` : ''}">
+                    <span class="event-month">${e.month}</span>
+                </div>
+                <div class="event-details">
+                    <div class="flex gap-2 mb-3">
+                        ${(typeof e.badges === 'string' ? e.badges.split(', ') : (e.badges || [])).map(badge => `<span class="badge ${badge === 'Fitness' ? 'badge-primary' : badge === 'Art' ? 'badge-accent' : 'badge-secondary'}">${badge}</span>`).join('')}
+                    </div>
+                    <h3 class="card-title">${e.name}</h3>
+                    <p class="card-text">${e.description}</p>
+                    <div class="event-time">
+                        <i class="far fa-clock"></i> ${e.time} | <i class="fas fa-map-marker-alt"></i> ${e.location}
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <a href="${e.url || '#'}" class="btn btn-primary btn-sm">Learn More</a>
+                </div>
+            </article>
+        `).join('');
+    }
+}
+
+function renderMovies() {
+    const nowPlayingContainer = document.getElementById('nowPlayingContainer');
+    const comingSoonContainer = document.getElementById('comingSoonContainer');
+    if (!siteData.movies) return;
+
+    if (nowPlayingContainer) {
+        const nowPlaying = siteData.movies.filter(m => m.status === 'now_playing');
+        nowPlayingContainer.innerHTML = nowPlaying.map(m => `
+            <article class="card movie-card">
+                <img src="${resolveImagePath(m.image)}" alt="${m.name}" class="movie-poster">
+                <div class="movie-overlay">
+                    <div class="flex gap-2 mb-3">
+                        <span class="badge ${['Action', 'Comedy', 'Horror'].includes(m.category) ? 'badge-accent' : 'badge-primary'}">${m.category}</span>
+                        <span class="badge badge-primary">${m.rating}</span>
+                    </div>
+                    <h3 class="card-title" style="color: var(--color-text-primary);">${m.name}</h3>
+                    <p class="card-text mb-3">${m.description}</p>
+                    <div class="showtime-grid">
+                        ${m.showtimes.map(time => `<button class="showtime-btn">${time}</button>`).join('')}
+                    </div>
+                </div>
+            </article>
+        `).join('');
+    }
+
+    if (comingSoonContainer) {
+        const comingSoon = siteData.movies.filter(m => m.status === 'coming_soon');
+        comingSoonContainer.innerHTML = comingSoon.map(m => `
+            <div class="card">
+                <img src="${resolveImagePath(m.image)}" alt="${m.name}" class="card-image">
+                <div class="card-content">
+                    <span class="badge badge-accent mb-3">${m.releaseDate}</span>
+                    <h4 class="card-title">${m.name}</h4>
+                    <p class="card-text">${m.description}</p>
+                </div>
+            </div>
+        `).join('');
+    }
+}
+function renderExploreBuffalo() {
+    const container = document.getElementById('exploreBuffaloSlider');
+    if (!container || !siteData.exploreBuffalo) return;
+
+    container.innerHTML = siteData.exploreBuffalo.map(item => `
+        <article class="card card-glass clickable-card" 
+            data-href="${item.link}" 
+            role="link" 
+            tabindex="0" 
+            aria-label="Explore ${item.title}">
+            <div class="card-content">
+                <div style="font-size: 3rem; margin-bottom: var(--space-4);">${item.icon}</div>
+                <h3 class="card-title">${item.title}</h3>
+                <p class="card-text mb-6">
+                    ${item.description}
+                </p>
+                <div class="flex gap-2 mb-6">
+                    ${item.badges.map(badge => `<span class="badge ${badge.includes('Desi') || badge.includes('Cultural') ? 'badge-accent' : badge.includes('Restaurants') || badge.includes('Museums') ? 'badge-primary' : 'badge-secondary'}">${badge}</span>`).join('')}
+                </div>
+                <a href="${item.link}" class="btn ${item.btnClass}">
+                    ${item.btnText} <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </article>
+    `).join('');
+}
+function renderAttractions() {
+    const featuredContainer = document.getElementById('featuredAttractionsContainer');
+    const allContainer = document.getElementById('attractionsListContainer');
+    if (!siteData.attractions) return;
+
+    if (featuredContainer) {
+        const featured = siteData.attractions.filter(a => a.featured);
+        featuredContainer.innerHTML = featured.map(a => `
+            <article class="card card-glass clickable-card" 
+                data-href="details.html?type=attractions&id=${a.id}" 
+                role="link" 
+                tabindex="0" 
+                aria-label="View details for ${a.name}">
+                <img src="${resolveImagePath(a.image)}" alt="${a.name}" style="width: 100%; height: 300px; object-fit: cover; border-radius: var(--radius-xl) var(--radius-xl) 0 0;">
+                <div class="card-content">
+                    <div class="flex gap-2 mb-4">
+                        ${a.badges.map(badge => `<span class="badge ${badge === 'Natural Wonder' ? 'badge-accent' : 'badge-primary'}">${badge}</span>`).join('')}
+                    </div>
+                    <h3 class="card-title">${a.name}</h3>
+                    <p class="card-text mb-4">${a.description}</p>
+                    <div class="attraction-hours">
+                        <i class="far fa-clock"></i> ${a.hours} | <i class="fas fa-ticket-alt"></i> ${a.price}
+                    </div>
+                    <a href="details.html?type=attractions&id=${a.id}" class="btn btn-primary">Plan Your Visit</a>
+                </div>
+            </article>
+        `).join('');
+    }
+
+    if (allContainer) {
+        allContainer.innerHTML = siteData.attractions.map(a => `
+            <article class="card clickable-card" 
+                data-category="${a.category}" 
+                data-href="details.html?type=attractions&id=${a.id}" 
+                role="link" 
+                tabindex="0" 
+                aria-label="View details for ${a.name}">
+                <img src="${resolveImagePath(a.image)}" alt="${a.name}" class="attraction-image">
+                <div class="card-content">
+                    <h3 class="card-title">${a.name}</h3>
+                    <p class="card-text">${a.description}</p>
+                    <div class="attraction-hours">
+                        <i class="far fa-clock"></i> ${a.hours}<br>
+                        <i class="fas fa-ticket-alt"></i> ${a.price}
+                    </div>
+                    <div class="flex gap-2 mb-4">
+                        ${a.badges.map(badge => `<span class="badge ${badge === 'Museum' ? 'badge-primary' : badge === 'Park' ? 'badge-secondary' : 'badge-accent'}">${badge}</span>`).join('')}
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <span><i class="fas fa-map-marker-alt"></i> ${a.location || 'Buffalo'}</span>
+                    <a href="details.html?type=attractions&id=${a.id}" class="btn btn-sm btn-ghost">Details</a>
+                </div>
+            </article>
+        `).join('');
+    }
+}
+
+
+// ============================================
+// EXTERNAL LINK HANDLER
+async function renderDetailPage() {
+    const container = document.getElementById('detailPageContent');
+    if (!container) return;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const type = urlParams.get('type');
+    const id = urlParams.get('id');
+
+    if (!type || !id) {
+        container.innerHTML = '<div class="container py-20 text-center"><h2>Item not found</h2><a href="../index.html" class="btn btn-primary mt-4">Back to Home</a></div>';
+        return;
+    }
+
+    let item;
+    if (type === 'events') {
+        try {
+            const response = await fetch(`http://localhost:8000/api/events/${id}`);
+            if (response.ok) {
+                item = await response.json();
+            }
+        } catch (error) {
+            console.error('Error fetching event details:', error);
+        }
+    }
+
+    if (!item && siteData[type]) {
+        item = siteData[type].find(i => i.id === id || String(i.id) === String(id));
+    }
+
+    if (!item) {
+        container.innerHTML = '<div class="container py-20 text-center"><h2>Item not found</h2><a href="../index.html" class="btn btn-primary mt-4">Back to Home</a></div>';
+        return;
+    }
+
+    // Update Page SEO
+    document.title = `${item.name} | Your Bliss Hub`;
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute('content', item.description);
+
+    container.innerHTML = `
+        <section class="detail-hero">
+            <img src="${resolveImagePath(item.image)}" alt="${item.name}" class="detail-hero-img">
+            <div class="detail-hero-content">
+                <div class="container">
+                    <h1>${item.name}</h1>
+                    <div class="flex gap-2 justify-center">
+                        ${(typeof item.badges === 'string' ? item.badges.split(', ') : (item.badges || [])).map(badge => `<span class="badge badge-accent">${badge}</span>`).join('')}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div class="detail-grid">
+                    <!-- Left Column: Content -->
+                    <div class="detail-article">
+                        <div class="mb-8">
+                            <h2 class="mb-6">About ${item.name}</h2>
+                            ${(item.fullDescription || item.description).split('\n\n').map(p => `<p>${p}</p>`).join('')}
+                        </div>
+                        
+                        <div class="detail-cta">
+                            <a href="${item.url}" class="btn btn-primary btn-lg" target="_blank" rel="noopener noreferrer">
+                                More Details <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Sidebar -->
+                    <div class="detail-sidebar">
+                        <div class="sidebar-box">
+                            <h3 class="sidebar-title"><i class="fas fa-info-circle info-icon"></i> Quick Info</h3>
+                            <ul class="info-list">
+                                <li class="info-item">
+                                    <i class="fas fa-map-marker-alt info-icon"></i>
+                                    <div>
+                                        <strong>Location</strong><br>
+                                        ${item.location || 'Buffalo, NY'}
+                                    </div>
+                                </li>
+                                <li class="info-item">
+                                    <i class="far fa-clock info-icon"></i>
+                                    <div>
+                                        <strong>Hours</strong><br>
+                                        ${item.hours || 'Varies'}
+                                    </div>
+                                </li>
+                                <li class="info-item">
+                                    <i class="fas fa-ticket-alt info-icon"></i>
+                                    <div>
+                                        <strong>Price</strong><br>
+                                        ${item.price || 'Free Admission'}
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="sidebar-box">
+                            <h3 class="sidebar-title"><i class="fas fa-envelope info-icon"></i> Stay Inspired</h3>
+                            <p class="mb-4" style="font-size: var(--font-size-sm); color: var(--color-text-secondary);">
+                                Subscribe to our newsletter for more Buffalo hidden gems and wellness tips.
+                            </p>
+                            <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Thanks for subscribing!'); this.reset();">
+                                <input type="email" class="form-input" placeholder="Your email address" required>
+                                <button type="submit" class="btn btn-secondary w-full">Join the Hub</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    `;
+}
+
+// ============================================
+
+function handleExternalLinks() {
+    const currentHost = window.location.host;
+    const links = document.querySelectorAll('a[href]');
+
+    links.forEach(link => {
+        const href = link.getAttribute('href');
+        // Check if it's an absolute URL and has a different host
+        if (href.startsWith('http') || href.startsWith('//')) {
+            try {
+                const linkUrl = new URL(href, window.location.href);
+                if (linkUrl.host !== currentHost) {
+                    link.setAttribute('target', '_blank');
+                    link.setAttribute('rel', 'noopener noreferrer');
+                }
+            } catch (e) {
+                // If it's an invalid URL, we just skip it
+            }
+        }
+    });
+}
+
+// ============================================
+// THEME TOGGLE (DARK MODE)
+// ============================================
+
+const themeToggle = document.getElementById('themeToggle');
+const themeToggleMobile = document.getElementById('themeToggleMobile');
+const html = document.documentElement;
+
+const currentTheme = localStorage.getItem('theme') || 'light';
+html.setAttribute('data-theme', currentTheme);
+
+function toggleTheme() {
+    const theme = html.getAttribute('data-theme');
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    html.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+}
+
+if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+if (themeToggleMobile) themeToggleMobile.addEventListener('click', toggleTheme);
+
+// ============================================
+// MOBILE NAVIGATION
+// ============================================
+
+const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+const mobileNav = document.getElementById('mobileNav');
+
+if (mobileMenuToggle && mobileNav) {
+    mobileMenuToggle.addEventListener('click', () => {
+        mobileMenuToggle.classList.toggle('active');
+        mobileNav.classList.toggle('active');
+        document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
+    });
+
+    const mobileNavLinks = mobileNav.querySelectorAll('.mobile-nav-link');
+    mobileNavLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            mobileMenuToggle.classList.remove('active');
+            mobileNav.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+    });
+}
+
+// ============================================
+// SMOOTH SCROLL
+// ============================================
+
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (href !== '#' && href.startsWith('#')) {
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+                const headerOffset = 80;
+                const elementPosition = target.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+            }
+        }
+    });
+});
+
+// ============================================
+// NEWSLETTER & MODAL LOGIC
+// ============================================
+
+async function handleSubscribe(email, form) {
+    try {
+        const response = await fetch('http://localhost:8000/api/subscribe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+        });
+        const data = await response.json();
+
+        if (data.ok) {
+            alert(data.message + '! 🎉');
+            form.reset();
+            if (form.id === 'modalNewsletterForm') {
+                closeNewsletterModal();
+            }
+            localStorage.setItem('hasSubscribed', 'true');
+        } else {
+            alert('Error: ' + data.message);
+        }
+    } catch (error) {
+        console.error('Subscription error:', error);
+        alert('Failed to subscribe. Please try again later.');
+    }
+}
+
+function closeNewsletterModal() {
+    const modal = document.getElementById('newsletterModal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+        localStorage.setItem('newsletterModalDismissed', 'true');
+    }
+}
+
+function initNewsletterLogic() {
+    const bottomForm = document.getElementById('newsletterForm');
+    const modalForm = document.getElementById('modalNewsletterForm');
+    const modal = document.getElementById('newsletterModal');
+    const closeBtn = document.getElementById('closeModal');
+
+    const setupForm = (form) => {
+        if (!form) return;
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = form.querySelector('input[type="email"]').value;
+            await handleSubscribe(email, form);
+        });
+    };
+
+    setupForm(bottomForm);
+    setupForm(modalForm);
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeNewsletterModal);
+    }
+
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeNewsletterModal();
+        });
+    }
+
+    // Modal timer logic
+    const shouldShow = !localStorage.getItem('hasSubscribed') && !localStorage.getItem('newsletterModalDismissed');
+    if (shouldShow && modal) {
+        setTimeout(() => {
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }, 8000); // 8 seconds
+    }
+}
+
+// ============================================
+// SCROLL ANIMATIONS
+// ============================================
+
+const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('fade-in');
+            observer.unobserve(entry.target);
+        }
+    });
+}, observerOptions);
+
+function initializeAnimations() {
+    const animatedElements = document.querySelectorAll('.card, .section > .container > *');
+    animatedElements.forEach(el => observer.observe(el));
+}
+
+document.addEventListener('DOMContentLoaded', initializeAnimations);
+
+// ============================================
+// FILTER FUNCTIONALITY
+// ============================================
+
+function initializeFilters() {
+    const filterButtons = document.querySelectorAll('[data-filter]');
+    const filterableItems = document.querySelectorAll('[data-category]');
+    if (filterButtons.length === 0 || filterableItems.length === 0) return;
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const filterValue = (button.getAttribute('data-filter') || 'all').toLowerCase();
+            const filterParts = filterValue === 'all' ? [] : filterValue.split(/[ ,]+/).filter(Boolean);
+
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            filterableItems.forEach(item => {
+                const itemCategoryStr = (item.getAttribute('data-category') || '').toLowerCase();
+                const itemCategories = itemCategoryStr.split(/\s+/).filter(Boolean);
+
+                const isMatch = filterValue === 'all' ||
+                    filterParts.some(part => itemCategories.includes(part));
+
+                // Clear any pending timeouts by using direct assignment
+                if (isMatch) {
+                    item.style.display = ''; // Let CSS determine the display property
+                    item.style.opacity = '1';
+                    item.style.transform = 'scale(1)';
+                } else {
+                    item.style.display = 'none';
+                    item.style.opacity = '0';
+                    item.style.transform = 'scale(0.9)';
+                }
+            });
+        });
+    });
+}
+
+// ============================================
+// SEARCH FUNCTIONALITY
+// ============================================
+
+function initializeSearch() {
+    const searchInput = document.getElementById('searchInput');
+    const searchableItems = document.querySelectorAll('[data-searchable]');
+    if (!searchInput || searchableItems.length === 0) return;
+
+    searchInput.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        searchableItems.forEach(item => {
+            const searchableText = item.getAttribute('data-searchable').toLowerCase();
+            item.style.display = searchableText.includes(searchTerm) ? '' : 'none';
+        });
+    });
+}
+
+// ============================================
+// VIEW TOGGLE
+// ============================================
+
+function initializeViewToggle() {
+    const viewToggleButtons = document.querySelectorAll('[data-view]');
+    const itemsContainer = document.querySelector('.items-container');
+    if (viewToggleButtons.length === 0 || !itemsContainer) return;
+
+    viewToggleButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const view = button.getAttribute('data-view');
+            viewToggleButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            if (view === 'grid') {
+                itemsContainer.classList.remove('list-view');
+                itemsContainer.classList.add('grid-view');
+            } else {
+                itemsContainer.classList.remove('grid-view');
+                itemsContainer.classList.add('list-view');
+            }
+        });
+    });
+}
+
+// ============================================
+// SORT FUNCTIONALITY
+// ============================================
+
+function initializeSort() {
+    const sortSelect = document.getElementById('sortSelect');
+    const sortableContainer = document.querySelector('[data-sortable-container]');
+    if (!sortSelect || !sortableContainer) return;
+
+    sortSelect.addEventListener('change', (e) => {
+        const sortBy = e.target.value;
+        const items = Array.from(sortableContainer.children);
+        items.sort((a, b) => {
+            const aValue = a.getAttribute(`data-${sortBy}`);
+            const bValue = b.getAttribute(`data-${sortBy}`);
+            if (!isNaN(aValue) && !isNaN(bValue)) {
+                return sortBy === 'price' ? parseFloat(aValue) - parseFloat(bValue) : parseFloat(bValue) - parseFloat(aValue);
+            }
+            return aValue.localeCompare(bValue);
+        });
+        items.forEach(item => sortableContainer.appendChild(item));
+    });
+}
+
+// ============================================
+// CLICKABLE CARDS 
+// ============================================
+
+function initializeClickableCards() {
+    const clickableCards = document.querySelectorAll('.clickable-card[data-href]');
+    clickableCards.forEach(card => {
+        const href = card.getAttribute('data-href');
+        if (!href) return;
+
+        const handleClick = (e) => {
+            const clickedInteractive = e.target.closest('a, button, input, textarea, select, label');
+            if (clickedInteractive) return;
+
+            if (e.metaKey || e.ctrlKey || href.startsWith('http')) {
+                window.open(href, '_blank', 'noopener');
+            } else {
+                window.location.href = href;
+            }
+        };
+
+        card.removeEventListener('click', handleClick);
+        card.addEventListener('click', handleClick);
+        card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handleClick(e);
+            }
+        });
+    });
+}
+
+// ============================================
+// HEADER SCROLL EFFECT
+// ============================================
+
+const header = document.querySelector('.header');
+window.addEventListener('scroll', () => {
+    header.style.boxShadow = window.pageYOffset > 10 ? 'var(--shadow-md)' : 'none';
+});
+
+// ============================================
+// GENERIC SLIDER LOGIC
+// ============================================
+
+function initSlider(containerId, prevBtnId, nextBtnId) {
+    const container = document.getElementById(containerId);
+    const prevBtn = document.getElementById(prevBtnId);
+    const nextBtn = document.getElementById(nextBtnId);
+
+    if (!container || !prevBtn || !nextBtn) return;
+
+    const getScrollAmount = () => {
+        const firstCard = container.querySelector('.card');
+        if (!firstCard) return 350;
+        const style = window.getComputedStyle(container);
+        const gap = parseInt(style.gap) || 24;
+        return firstCard.offsetWidth + gap;
+    };
+
+    prevBtn.addEventListener('click', () => {
+        container.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+    });
+
+    nextBtn.addEventListener('click', () => {
+        container.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+    });
+
+    const updateButtons = () => {
+        const atStart = container.scrollLeft <= 10;
+        const atEnd = container.scrollLeft + container.offsetWidth >= container.scrollWidth - 10;
+
+        prevBtn.style.opacity = atStart ? '0' : '1';
+        prevBtn.style.pointerEvents = atStart ? 'none' : 'auto';
+        prevBtn.style.visibility = atStart ? 'hidden' : 'visible';
+
+        nextBtn.style.opacity = atEnd ? '0' : '1';
+        nextBtn.style.pointerEvents = atEnd ? 'none' : 'auto';
+        nextBtn.style.visibility = atEnd ? 'hidden' : 'visible';
+    };
+
+    container.addEventListener('scroll', updateButtons);
+    window.addEventListener('resize', updateButtons);
+
+    // Initial check
+    setTimeout(updateButtons, 100);
+}
+
+function initAttractionsSlider() {
+    initSlider('featuredAttractionsContainer', 'sliderPrev', 'sliderNext');
+}
+
+function initExploreBuffaloSlider() {
+    initSlider('exploreBuffaloSlider', 'explorePrev', 'exploreNext');
+}
+
+function renderNewsletterModal() {
+    // Prevent duplicate injection
+    if (document.getElementById('newsletterModal')) return;
+
+    const modalHTML = `
+        <div id="newsletterModal" class="modal">
+            <div class="modal-content">
+                <button class="modal-close" id="closeModal">&times;</button>
+                <div class="card card-glass" style="max-width: 700px; margin: 0 auto;">
+                    <div class="card-content text-center">
+                        <div style="font-size: 3rem; margin-bottom: var(--space-4);">📬</div>
+                        <h2 class="mb-4">Stay Connected</h2>
+                        <p class="card-text mb-6">
+                            Subscribe to our newsletter for the latest wellness tips, Buffalo events,
+                            and exclusive content delivered to your inbox.
+                        </p>
+                        <form class="newsletter-form" id="modalNewsletterForm">
+                            <div class="flex gap-3" style="flex-wrap: wrap;">
+                                <input type="email" class="form-input" placeholder="Enter your email address" required
+                                    style="flex: 1; min-width: 250px;">
+                                <button type="submit" class="btn btn-primary">
+                                    Subscribe <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+}
+
+function initSidebarNewsletter() {
+    const form = document.getElementById('sidebarNewsletterForm');
+    if (!form) return;
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const emailInput = form.querySelector('input[type="email"]');
+        if (emailInput) {
+            handleSubscribe(emailInput.value, form);
+        }
+    });
+}

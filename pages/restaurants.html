@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Discover the best restaurants in Buffalo, NY. From fine dining to casual eateries, including authentic Desi cuisine.">
+    <title>Buffalo Restaurants | Buffalo Bliss</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="../styles.css">
+
+    <style>
+        .page-header {
+            background: var(--gradient-hero);
+            padding: var(--space-16) 0 var(--space-12);
+            text-align: center;
+        }
+
+        .filter-bar {
+            background: var(--color-surface);
+            padding: var(--space-6);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-md);
+            margin-bottom: var(--space-8);
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-4);
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: var(--space-2);
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-full);
+            background: var(--color-neutral-100);
+            color: var(--color-text-primary);
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+            transition: all var(--transition-fast);
+            cursor: pointer;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--gradient-primary);
+            color: var(--color-white);
+        }
+
+        [data-theme="dark"] .filter-btn {
+            background: var(--color-neutral-700);
+        }
+
+        .restaurant-card {
+            display: flex;
+            flex-direction: column;
+            transition: all var(--transition-base);
+        }
+
+        .restaurant-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+        }
+
+        .restaurant-image-local {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            background-color: var(--color-neutral-100);
+        }
+
+        .restaurant-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .restaurant-meta {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            font-size: var(--font-size-sm);
+            color: var(--color-text-tertiary);
+            margin-top: auto;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: var(--space-1);
+            color: var(--color-accent);
+        }
+
+        .price-range {
+            color: var(--color-secondary-dark);
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .desi-highlight {
+            background: var(--gradient-secondary);
+            padding: var(--space-12) 0;
+            margin: var(--space-16) 0;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header" id="globalNav">
+        <!-- Site navigation rendered from script.js -->
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Buffalo Restaurants</h1>
+            <p
+                style="font-size: var(--font-size-lg); color: var(--color-text-secondary); max-width: 600px; margin: 0 auto;">
+                Discover the vibrant food scene of Buffalo, from cozy cafes to fine dining experiences
+            </p>
+        </div>
+    </section>
+
+    <!-- Desi Restaurant Highlight -->
+    <section class="desi-highlight">
+        <div class="container">
+            <div class="text-center mb-12">
+                <h2>🌶️ Authentic Desi Cuisine</h2>
+                <p>Experience the rich flavors of South Asian cooking right here in Buffalo</p>
+            </div>
+
+            <div class="grid grid-3" id="featuredRestaurantsContainer">
+                <!-- Data rendered from script.js -->
+            </div>
+        </div>
+    </section>
+
+    <!-- All Restaurants -->
+    <section class="section">
+        <div class="container">
+            <h2 class="mb-8">All Restaurants</h2>
+
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+                <div class="search-box">
+                    <input type="text" id="searchInput" class="form-input" placeholder="Search restaurants...">
+                </div>
+
+                <div class="filter-group">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="desi">Desi</button>
+                    <button class="filter-btn" data-filter="italian">Italian</button>
+                    <button class="filter-btn" data-filter="american">American</button>
+                    <button class="filter-btn" data-filter="asian">Asian</button>
+                    <button class="filter-btn" data-filter="mexican">Mexican</button>
+                    <button class="filter-btn" data-filter="vegetarian">Vegetarian</button>
+                </div>
+            </div>
+
+            <!-- Restaurant Grid -->
+            <div class="grid grid-3 items-container" id="restaurantsContainer">
+                <!-- Data rendered from script.js -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <!-- Site footer rendered from script.js -->
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="../data.js"></script>
+    <script src="../script.js"></script>
+</body>
+
+</html>

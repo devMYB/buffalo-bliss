@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Explore Buffalo attractions - museums, parks, galleries, and historic sites. Plan your perfect Buffalo adventure.">
+    <title>Buffalo Attractions | Buffalo Bliss</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="../styles.css">
+
+    <style>
+        .page-header {
+            background: var(--gradient-hero);
+            padding: var(--space-16) 0 var(--space-12);
+            text-align: center;
+        }
+
+        .attraction-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+        }
+
+        .attraction-hours {
+            background: var(--color-neutral-100);
+            padding: var(--space-3);
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-sm);
+            margin-bottom: var(--space-4);
+        }
+
+        [data-theme="dark"] .attraction-hours {
+            background: var(--color-neutral-700);
+        }
+
+        .filter-bar {
+            background: var(--color-surface);
+            padding: var(--space-6);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-md);
+            margin-bottom: var(--space-8);
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-4);
+        }
+
+        .filter-btn {
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-full);
+            background: var(--color-neutral-100);
+            color: var(--color-text-primary);
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+            transition: all var(--transition-fast);
+            cursor: pointer;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--gradient-primary);
+            color: var(--color-white);
+        }
+
+        [data-theme="dark"] .filter-btn {
+            background: var(--color-neutral-700);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header" id="globalNav">
+        <!-- Site navigation rendered from script.js -->
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>🏛️ Buffalo Attractions</h1>
+            <p
+                style="font-size: var(--font-size-lg); color: var(--color-text-secondary); max-width: 600px; margin: 0 auto;">
+                Explore museums, parks, galleries, and historic landmarks
+            </p>
+        </div>
+    </section>
+
+    <!-- Must-See Attractions -->
+    <section class="section">
+        <div class="container">
+            <h2 class="mb-8">Must-See Attractions</h2>
+
+            <div class="slider-wrapper">
+                <button class="slider-nav prev" id="sliderPrev" aria-label="Previous attraction">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+
+                <div class="slider-container">
+                    <div id="featuredAttractionsContainer" class="slider-content">
+                        <!-- Data rendered from script.js -->
+                    </div>
+                </div>
+
+                <button class="slider-nav next" id="sliderNext" aria-label="Next attraction">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- All Attractions -->
+    <section class="section" style="background: var(--color-neutral-100);">
+        <div class="container">
+            <h2 class="mb-8">Explore All Attractions</h2>
+
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="museums">Museums</button>
+                <button class="filter-btn" data-filter="parks">Parks & Nature</button>
+                <button class="filter-btn" data-filter="historic">Historic Sites</button>
+                <button class="filter-btn" data-filter="family">Family Friendly</button>
+                <button class="filter-btn" data-filter="arts">Arts & Culture</button>
+            </div>
+
+            <!-- Attractions Grid -->
+            <div class="grid grid-3 items-container" id="attractionsListContainer">
+                <!-- Data rendered from script.js -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <!-- Site footer rendered from script.js -->
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="../data.js"></script>
+    <script src="../script.js"></script>
+</body>
+
+</html>

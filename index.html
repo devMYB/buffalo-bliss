@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Your Bliss Hub - Discover wellness, health, and the best of Buffalo, NY. Your guide to restaurants, events, movies, and attractions.">
+    <title>Buffalo Bliss | Wellness & Buffalo City Guide</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header" id="globalNav">
+        <!-- Site navigation rendered from script.js -->
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content fade-in">
+                <h1 class="hero-title">Discover Your Bliss in Buffalo</h1>
+                <p class="hero-subtitle">
+                    Your guide to wellness, inspiration, and the best experiences Buffalo has to offer.
+                    From health and happiness to amazing restaurants and events.
+                </p>
+                <div class="hero-cta">
+                    <a href="https://yourbliss.us/digital-edition" class="btn btn-primary btn-lg">
+                        <i class="fas fa-book-open"></i>
+                        Read Latest Magazine
+                    </a>
+                    <a href="#buffalo-guide" class="btn btn-outline btn-lg">
+                        <i class="fas fa-compass"></i>
+                        Explore Buffalo
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Magazine Categories -->
+    <section class="section">
+        <div class="container">
+            <div class="text-center mb-12">
+                <h2>Wellness & Lifestyle</h2>
+                <p>Explore inspiring content across health, wealth, spirit, and happiness</p>
+            </div>
+
+            <div class="grid grid-4">
+                <!-- Health -->
+                <a href="https://yourbliss.us/health" class="card card-glass">
+                    <div class="card-content text-center">
+                        <div style="font-size: 3rem; margin-bottom: var(--space-4);">💚</div>
+                        <h3 class="card-title">Health</h3>
+                        <p class="card-text">Discover tips for physical wellness, nutrition, and vitality</p>
+                        <span class="badge badge-primary">12 New Articles</span>
+                    </div>
+                </a>
+
+                <!-- Wealth -->
+                <a href="https://yourbliss.us/wealth" class="card card-glass">
+                    <div class="card-content text-center">
+                        <div style="font-size: 3rem; margin-bottom: var(--space-4);">💰</div>
+                        <h3 class="card-title">Wealth</h3>
+                        <p class="card-text">Financial wellness, career growth, and abundance mindset</p>
+                        <span class="badge badge-secondary">8 New Articles</span>
+                    </div>
+                </a>
+
+                <!-- Spirit -->
+                <a href="https://yourbliss.us/spirit" class="card card-glass">
+                    <div class="card-content text-center">
+                        <div style="font-size: 3rem; margin-bottom: var(--space-4);">✨</div>
+                        <h3 class="card-title">Spirit</h3>
+                        <p class="card-text">Mindfulness, meditation, and spiritual growth</p>
+                        <span class="badge badge-accent">10 New Articles</span>
+                    </div>
+                </a>
+
+                <!-- Happiness -->
+                <a href="https://yourbliss.us/happiness" class="card card-glass">
+                    <div class="card-content text-center">
+                        <div style="font-size: 3rem; margin-bottom: var(--space-4);">😊</div>
+                        <h3 class="card-title">Happiness</h3>
+                        <p class="card-text">Joy, gratitude, and living your best life</p>
+                        <span class="badge badge-primary">15 New Articles</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Articles -->
+    <section class="section" style="background: var(--color-neutral-100);">
+        <div class="container">
+            <div class="flex-between mb-8">
+                <h2>Featured Articles</h2>
+                <a href="pages/digital-magazine.html" class="btn btn-ghost">View All <i
+                        class="fas fa-arrow-right"></i></a>
+            </div>
+
+            <div class="grid grid-3" id="featuredArticlesContainer">
+                <!-- Data rendered from script.js -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Buffalo City Guide -->
+    <section class="section" id="buffalo-guide">
+        <div class="container">
+            <div class="text-center mb-12">
+                <h2>Explore Buffalo</h2>
+                <p>Your comprehensive guide to the best of Buffalo, NY</p>
+            </div>
+            <div class="slider-wrapper">
+                <button class="slider-nav prev" id="explorePrev" aria-label="Previous category">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="slider-container">
+                    <div class="slider-content" id="exploreBuffaloSlider">
+                        <!-- Data rendered from script.js -->
+                    </div>
+                </div>
+                <button class="slider-nav next" id="exploreNext" aria-label="Next category">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recipes Section -->
+    <section class="section" style="background: var(--gradient-secondary);">
+        <div class="container">
+            <div class="text-center mb-12">
+                <h2>Delicious Recipes</h2>
+                <p>Healthy, flavorful recipes to nourish your body and soul</p>
+            </div>
+
+            <div class="grid grid-3" id="recipesContainer">
+                <!-- Data rendered from script.js -->
+            </div>
+
+            <div class="text-center mt-8">
+                <a href="https://yourbliss.us/recipes" class="btn btn-primary btn-lg">
+                    View All Recipes <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="section">
+        <div class="container">
+            <div class="card card-glass" style="max-width: 700px; margin: 0 auto;">
+                <div class="card-content text-center">
+                    <div style="font-size: 3rem; margin-bottom: var(--space-4);">📬</div>
+                    <h2 class="mb-4">Stay Connected</h2>
+                    <p class="card-text mb-6">
+                        Subscribe to our newsletter for the latest wellness tips, Buffalo events,
+                        and exclusive content delivered to your inbox.
+                    </p>
+                    <form class="newsletter-form" id="newsletterForm">
+                        <div class="flex gap-3" style="flex-wrap: wrap;">
+                            <input type="email" class="form-input" placeholder="Enter your email address" required
+                                style="flex: 1; min-width: 250px;">
+                            <button type="submit" class="btn btn-primary">
+                                Subscribe <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <!-- Site footer rendered from script.js -->
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+env/
+venv/
+.env
+
+# SQLite (We don't want to overwrite the server db with local data)
+*.db
+!seed_db.py
+
+# OS & IDE
+.DS_Store
+.vscode/
+
+# Logs
+*.log
+backend/server.log
