@@ -20,3 +20,6 @@ backend/server.log
 
 #Documents
 documents/
+
+#node
+node_modules/
