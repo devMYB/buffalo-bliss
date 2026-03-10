@@ -17,3 +17,6 @@ venv/
 # Logs
 *.log
 backend/server.log
+
+#Documents
+documents/
