@@ -19,7 +19,7 @@ function renderGlobalNav() {
         { name: 'Magazine', url: 'https://yourbliss.us/', external: true },
         { name: 'Attractions', url: prefix + 'pages/attractions.html', active: path.includes('attractions.html') },
         { name: 'Events', url: prefix + 'pages/events.html', active: path.includes('events.html') },
-        { name: 'Restaurants', url: prefix + 'pages/restaurant2.html', active: path.includes('restaurants.html') }
+        { name: 'Restaurants', url: prefix + 'pages/restaurant2.html', active: path.includes('restaurant2.html') }
     ];
 
     const moreItems = [
@@ -136,10 +136,12 @@ function renderGlobalFooter() {
                         Your guide to wellness, inspiration, and discovering the best of Buffalo, NY.
                     </p>
                     <div class="flex gap-4">
+                        <!--
                         <a href="#" class="footer-link" aria-label="Facebook"><i class="fab fa-facebook fa-lg"></i></a>
                         <a href="#" class="footer-link" aria-label="Instagram"><i class="fab fa-instagram fa-lg"></i></a>
                         <a href="#" class="footer-link" aria-label="Twitter"><i class="fab fa-twitter fa-lg"></i></a>
                         <a href="#" class="footer-link" aria-label="YouTube"><i class="fab fa-youtube fa-lg"></i></a>
+                        -->
                     </div>
                 </div>
 
@@ -173,7 +175,6 @@ function renderGlobalFooter() {
                             <i class="fas fa-phone"></i> 716-362-7849
                         </a>
                         <a href="#" class="footer-link">About Us</a>
-                        <a href="#" class="footer-link">Contact Us</a>
                     </div>
                 </div>
             </div>
@@ -312,7 +313,7 @@ function renderRestaurants() {
                 tabindex="0" 
                 aria-label="View details for ${r.name}">
                 <div class="card-content">
-                    <div style="font-size: 4rem; text-align: center; margin-bottom: var(--space-4);">${r.category && r.category.includes('indian') ? '🍛' : r.category && r.category.includes('pakistani') ? '🥘' : '🍜'}</div>
+                    <div style="font-size: 4rem; text-align: center; margin-bottom: var(--space-4); color: var(--color-primary);">${r.category && r.category.includes('indian') ? '<i class="fas fa-bowl-food"></i>' : r.category && r.category.includes('pakistani') ? '<i class="fas fa-hot-pot"></i>' : '<i class="fas fa-bowl-hot"></i>'}</div>
                     <h3 class="card-title">${r.name}</h3>
                     <p class="card-text">${r.description}</p>
                     <div class="restaurant-meta mb-4">
@@ -369,6 +370,9 @@ async function loadEvents() {
         const events = await response.json();
         renderEvents(events);
 
+        //Process newly renedered links
+        handleExternalLinks();
+
         // Re-initialize filters and search after rendering
         initializeFilters();
         initializeSearch();
@@ -410,7 +414,7 @@ function renderEvents(events) {
                 </div>
                 <div class="card-footer">
                     ${e.price ? `<span style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: var(--color-accent);">${e.price}</span>` : ''}
-                    <a href="${e.url || '#'}" class="btn btn-primary btn-sm">Get Tickets</a>
+                    <a href="${e.url || '#'}" class="btn btn-primary btn-sm" target="_blank" rel="noopener noreferrer">Visit Website</a>
                 </div>
             </article>
         `).join('');
@@ -433,7 +437,7 @@ function renderEvents(events) {
                     </div>
                 </div>
                 <div style="display: flex; align-items: center;">
-                    <a href="${e.url || '#'}" class="btn btn-primary btn-sm">Learn More</a>
+                    <a href="${e.url || '#'}" class="btn btn-primary btn-sm" target="_blank" rel="noopener noreferrer">Visit Website</a>
                 </div>
             </article>
         `).join('');
@@ -528,7 +532,7 @@ function renderAttractions() {
                     <div class="attraction-hours">
                         <i class="far fa-clock"></i> ${a.hours} | <i class="fas fa-ticket-alt"></i> ${a.price}
                     </div>
-                    <a href="details.html?type=attractions&id=${a.id}" class="btn btn-primary">Plan Your Visit</a>
+                    <a href="details.html?type=attractions&id=${a.id}" class="btn btn-primary">More Details</a>
                 </div>
             </article>
         `).join('');
@@ -628,9 +632,12 @@ async function renderDetailPage() {
                             ${(item.fullDescription || item.description).split('\n\n').map(p => `<p>${p}</p>`).join('')}
                         </div>
                         
-                        <div class="detail-cta">
+                        <div class="detail-actions" style="display: flex; flex-direction: column; gap: var(--space-4); margin-top: var(--space-8); align-items: flex-start;">
                             <a href="${item.url}" class="btn btn-primary btn-lg" target="_blank" rel="noopener noreferrer">
-                                More Details <i class="fas fa-external-link-alt ml-2"></i>
+                                Visit Website <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                            <a href="attractions.html" class="btn btn-secondary btn-lg">
+                                <i class="fas fa-arrow-left mr-2"></i> Back to Attractions
                             </a>
                         </div>
                     </div>

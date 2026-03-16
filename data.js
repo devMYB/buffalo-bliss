@@ -478,7 +478,7 @@ const siteData = {
     exploreBuffalo: [
         {
             id: "restaurants",
-            icon: "🍽️",
+            icon: '<i class="fas fa-utensils" style="color: var(--color-primary);"></i>',
             title: "Restaurants & Dining",
             description: "Discover Buffalo's vibrant food scene, from cozy cafes to fine dining. Special highlights on featured restaurants unique vibes.",
             badges: ["200+ Restaurants", "Desi Cuisine"],
@@ -489,7 +489,7 @@ const siteData = {
         },
         {
             id: "events",
-            icon: "🎉",
+            icon: '<i class="fas fa-calendar-alt" style="color: var(--color-primary);"></i>',
             title: "Events & Activities",
             description: "From cultural festivals to fitness classes, discover events happening around Buffalo. Special focus on Desi community events.",
             badges: ["This Weekend", "Cultural Events"],
@@ -500,7 +500,7 @@ const siteData = {
         },
         {
             id: "attractions",
-            icon: "🏛️",
+            icon: '<i class="fas fa-landmark" style="color: var(--color-secondary);"></i>',
             title: "Attractions & Places",
             description: "Explore museums, parks, galleries, and historic sites. Plan your perfect Buffalo adventure with our curated guides.",
             badges: ["Museums", "Parks"],
