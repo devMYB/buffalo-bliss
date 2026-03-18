@@ -366,7 +366,7 @@ function renderRestaurants() {
 
 async function loadEvents() {
     try {
-        const response = await fetch('http://localhost:8000/api/events');
+        const response = await fetch('/api/events');
         const events = await response.json();
         renderEvents(events);
 
@@ -586,7 +586,7 @@ async function renderDetailPage() {
     let item;
     if (type === 'events') {
         try {
-            const response = await fetch(`http://localhost:8000/api/events/${id}`);
+            const response = await fetch(`/api/events/${id}`);
             if (response.ok) {
                 item = await response.json();
             }
@@ -782,7 +782,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 async function handleSubscribe(email, form) {
     try {
-        const response = await fetch('http://localhost:8000/api/subscribe', {
+        const response = await fetch('/api/subscribe', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email })

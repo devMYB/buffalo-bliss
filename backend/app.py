@@ -6,6 +6,7 @@ from .models import Base, Event, AdvertisingRequest, Subscriber
 from .admin import setup_admin
 from .admin_auth import authentication_backend
 from pydantic import BaseModel, EmailStr, Field
+from typing import Optional
 import os
 
 # Initialize database tables
@@ -31,8 +32,8 @@ class AdRequestSchema(BaseModel):
     email: EmailStr
     business_name: str = Field(..., min_length=2, max_length=120)
     sector: str = Field(..., min_length=2, max_length=60)
-    other_sector: str | None = Field(default=None, max_length=120)
-    company_link: str | None = Field(default=None, max_length=500)
+    other_sector: Optional[str] = Field(default=None, max_length=120)
+    company_link: Optional[str] = Field(default=None, max_length=500)
     message: str = Field(..., min_length=1, max_length=2000)
 
 class SubscriberSchema(BaseModel):
@@ -40,8 +41,12 @@ class SubscriberSchema(BaseModel):
 
 # --- Routes ---
 
+@app.get("/")
+def root():
+    return {"message": "Buffalo Bliss Content API is running"}
+
 @app.get("/api/events")
-def get_events(category: str | None = None, db: Session = Depends(get_db)):
+def get_events(category: Optional[str] = None, db: Session = Depends(get_db)):
     query = db.query(Event)
     if category:
         query = query.filter(Event.category.contains(category))
