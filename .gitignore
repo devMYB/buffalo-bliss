@@ -23,3 +23,6 @@ documents/
 
 #node
 node_modules/
+
+#backup
+backups/

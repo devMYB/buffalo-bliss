@@ -1,5 +1,5 @@
 from sqladmin import Admin, ModelView
-from .models import Event, AdvertisingRequest, Subscriber
+from .models import Event, AdvertisingRequest, Subscriber, Restaurant
 from wtforms import SelectMultipleField
 from wtforms.validators import ValidationError
 
@@ -69,9 +69,18 @@ class SubscriberAdmin(ModelView, model=Subscriber):
     column_sortable_list = ["created_at"]
     icon = "fa-solid fa-users"
 
+class RestaurantAdmin(ModelView, model=Restaurant):
+    column_list = ["id", "name", "address", "badge1", "badge2", "sort_order"]
+    column_sortable_list = ["sort_order", "name"]
+    form_columns = ["name", "address", "catchy_phrase", "image", "description", "website_url", "badge1", "badge2", "sort_order"]
+    icon = "fa-solid fa-utensils"
+    name = "Restaurant"
+    name_plural = "Restaurants"
+
 def setup_admin(app, engine, authentication_backend):
     admin = Admin(app, engine, authentication_backend=authentication_backend, templates_dir="backend/templates")
     admin.add_view(EventAdmin)
     admin.add_view(AdvertisingRequestAdmin)
     admin.add_view(SubscriberAdmin)
+    admin.add_view(RestaurantAdmin)
     return admin

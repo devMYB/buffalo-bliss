@@ -37,7 +37,7 @@
         .event-date {
             flex-shrink: 0;
             width: 80px;
-            height: 80px;
+            min-height: 80px;
             background: var(--gradient-primary);
             border-radius: var(--radius-lg);
             display: flex;
@@ -46,16 +46,16 @@
             justify-content: center;
             color: var(--color-white);
             font-weight: var(--font-weight-bold);
+            padding: 10px 6px;
+            text-align: center;
+            align-self: flex-start;
         }
 
         .event-month {
-            font-size: var(--font-size-sm);
-            text-transform: uppercase;
-        }
-
-        .event-day {
-            font-size: var(--font-size-3xl);
-            line-height: 1;
+            font-size: 0.62rem;
+            letter-spacing: 0.04em;
+            line-height: 1.35;
+            text-align: center;
         }
 
         .event-details {

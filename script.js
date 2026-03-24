@@ -193,7 +193,6 @@ function renderGlobalFooter() {
 document.addEventListener('DOMContentLoaded', () => {
     const path = window.location.pathname;
     const isPageIndex = path.endsWith('index.html') || path === '/' || path.endsWith('/');
-    const isPageRestaurants = path.includes('restaurants.html');
     const isPageEvents = path.includes('events.html');
     const isPageMovies = path.includes('movies.html');
     const isPageAttractions = path.includes('attractions.html');
@@ -209,8 +208,6 @@ document.addEventListener('DOMContentLoaded', () => {
         renderRecipes();
         renderExploreBuffalo();
         initExploreBuffaloSlider();
-    } else if (isPageRestaurants) {
-        renderRestaurants();
     } else if (isPageEvents) {
         loadEvents();
     } else if (isPageMovies) {
@@ -220,6 +217,9 @@ document.addEventListener('DOMContentLoaded', () => {
         initAttractionsSlider();
     } else if (isPageDetails) {
         renderDetailPage();
+    }
+    else if (isPageRestaurant2) {
+        loadRestaurantArticles();
     }
 
     // Initialize UI components after rendering
@@ -297,68 +297,70 @@ function renderRecipes() {
     `).join('');
 }
 
-function renderRestaurants() {
-    const container = document.getElementById('restaurantsContainer');
-    const featuredContainer = document.getElementById('featuredRestaurantsContainer');
-    if (!container || !siteData.restaurants) return;
+async function loadRestaurantArticles() {
+    try {
+        const response = await fetch(`http://localhost:8000/api/restaurants`);
 
-    const featuredRestaurants = siteData.restaurants.filter(r => r.featured);
-    const allRestaurants = siteData.restaurants;
+        if (!response.ok) {
+            throw new Error(`API error: ${response.status}`);
+        }
 
-    if (featuredContainer) {
-        featuredContainer.innerHTML = featuredRestaurants.map(r => `
-            <article class="card card-glass clickable-card" 
-                data-href="${r.url}" 
-                role="link" 
-                tabindex="0" 
-                aria-label="View details for ${r.name}">
-                <div class="card-content">
-                    <div style="font-size: 4rem; text-align: center; margin-bottom: var(--space-4); color: var(--color-primary);">${r.category && r.category.includes('indian') ? '<i class="fas fa-bowl-food"></i>' : r.category && r.category.includes('pakistani') ? '<i class="fas fa-hot-pot"></i>' : '<i class="fas fa-bowl-hot"></i>'}</div>
-                    <h3 class="card-title">${r.name}</h3>
-                    <p class="card-text">${r.description}</p>
-                    <div class="restaurant-meta mb-4">
-                        <div class="rating">
-                            <i class="fas fa-star"></i>
-                            <span>${r.rating}</span>
-                        </div>
-                        <span class="price-range">${r.price}</span>
-                        <span><i class="fas fa-map-marker-alt"></i> ${r.location}</span>
-                    </div>
-                    <div class="flex gap-2 mb-4">
-                        ${r.badges.map(badge => `<span class="badge ${badge === 'Desi' ? 'badge-accent' : badge === 'Halal' ? 'badge-secondary' : 'badge-primary'}">${badge}</span>`).join('')}
-                    </div>
-                    <a href="${r.url}" class="btn btn-primary btn-sm">Visit Website</a>
+        const restaurants = await response.json();
+        renderRestaurantArticles(restaurants);
+        handleExternalLinks();
+    } catch (error) {
+        console.error('Error loading restaurant articles:', error);
+
+        const container = document.getElementById('restaurant2Container');
+        if (container) {
+            container.innerHTML = `
+                <div class="card card-glass" style="padding: 2rem; text-align: center;">
+                    <h3>Unable to load restaurants</h3>
+                    <p>Please make sure the backend server is running and restaurant data is available.</p>
                 </div>
-            </article>
-        `).join('');
+            `;
+        }
     }
+}
 
-    container.innerHTML = allRestaurants.map(r => `
-        <article class="card clickable-card" 
-            data-category="${r.category}" 
-            data-href="${r.url}" 
-            role="link" 
-            tabindex="0" 
-            aria-label="View details for ${r.name}"
-            data-searchable="${r.searchable || r.name + ' ' + r.description}">
-            <img src="${resolveImagePath(r.image)}" alt="${r.name}" class="restaurant-image">
-            <div class="card-content restaurant-info">
-                <h3 class="card-title">${r.name}</h3>
-                <p class="card-text">${r.description}</p>
-                <div class="restaurant-meta">
-                    <div class="rating">
-                        <i class="fas fa-star"></i>
-                        <span>${r.rating}</span>
-                    </div>
-                    <span class="price-range">${r.price}</span>
-                    <span><i class="fas fa-map-marker-alt"></i> ${r.location}</span>
+function renderRestaurantArticles(restaurants) {
+    const container = document.getElementById('restaurant2Container');
+    if (!container || !restaurants) return;
+
+    container.innerHTML = restaurants.map(r => `
+        <article class="blog-post">
+            <div class="blog-post-header">
+                <h2 class="blog-post-title">${r.name}</h2>
+                <div class="blog-post-meta">
+                    <span><i class="fas fa-map-marker-alt"></i> ${r.address}</span>
+                    <span><i class="far fa-compass"></i> ${r.catchy_phrase}</span>
                 </div>
             </div>
-            <div class="card-footer">
-                <div class="flex gap-2">
-                    ${r.badges.map(badge => `<span class="badge ${badge === 'Desi' ? 'badge-accent' : 'badge-primary'}">${badge}</span>`).join('')}
+
+            <img 
+                src="${resolveImagePath(r.image)}" 
+                alt="${r.name}" 
+                class="blog-post-image"
+            >
+
+            <div class="blog-post-content">
+                ${(r.description || '')
+            .split(/\n\s*\n/)
+            .map(paragraph => `<p>${paragraph}</p>`)
+            .join('')}
+            </div>
+
+            <div class="blog-post-footer">
+                ${r.website_url ? `
+                    <a href="${r.website_url}" class="btn btn-primary btn-sm" target="_blank" rel="noopener noreferrer">
+                        Visit Website
+                    </a>
+                ` : ''}
+
+                <div class="blog-post-tags">
+                    ${r.badge1 ? `<span class="badge badge-secondary">${r.badge1}</span>` : ''}
+                    ${r.badge2 ? `<span class="badge badge-primary">${r.badge2}</span>` : ''}
                 </div>
-                <a href="${r.url}" class="btn btn-sm btn-ghost">Details</a>
             </div>
         </article>
     `).join('');
@@ -366,11 +368,12 @@ function renderRestaurants() {
 
 async function loadEvents() {
     try {
-        const response = await fetch('/api/events');
+        const response = await fetch(`http://localhost:8000/api/events`);
+        if (!response.ok) throw new Error(`API error: ${response.status}`);
         const events = await response.json();
         renderEvents(events);
 
-        //Process newly renedered links
+        //Process newly rendered links
         handleExternalLinks();
 
         // Re-initialize filters and search after rendering
@@ -384,6 +387,33 @@ async function loadEvents() {
             renderEvents(siteData.events);
         }
     }
+}
+
+/**
+ * Format a month string for the event badge so it breaks cleanly
+ * into at most 2 lines, never mid-word.
+ * Handles: "May", "March - April", "April-December", "Year Round"
+ */
+function formatMonthBadge(month) {
+    if (!month) return '';
+    const trimmed = month.trim();
+    // "March - April"  →  "MARCH -<br>APRIL"
+    if (trimmed.includes(' - ')) {
+        const parts = trimmed.split(' - ');
+        return parts[0].toUpperCase() + ' -<br>' + parts.slice(1).join(' - ').toUpperCase();
+    }
+    // "April-December" or "May-August"  →  "APRIL-<br>DECEMBER"
+    if (trimmed.includes('-')) {
+        const idx = trimmed.indexOf('-');
+        return trimmed.slice(0, idx + 1).toUpperCase() + '<br>' + trimmed.slice(idx + 1).toUpperCase();
+    }
+    // "Year Round"  →  "YEAR<br>ROUND"
+    if (trimmed.includes(' ')) {
+        const idx = trimmed.indexOf(' ');
+        return trimmed.slice(0, idx).toUpperCase() + '<br>' + trimmed.slice(idx + 1).toUpperCase();
+    }
+    // Single word like "May"
+    return trimmed.toUpperCase();
 }
 
 function renderEvents(events) {
@@ -407,7 +437,7 @@ function renderEvents(events) {
                     <h3 class="card-title">${e.name}</h3>
                     <p class="card-text mb-4">${e.description}</p>
                     <div class="event-time">
-                        <i class="far fa-calendar"></i> ${e.date}<br>
+                        <i class="far fa-calendar"></i> ${e.month}<br>
                         <i class="far fa-clock"></i> ${e.time}<br>
                         <i class="fas fa-map-marker-alt"></i> ${e.location}
                     </div>
@@ -424,7 +454,7 @@ function renderEvents(events) {
         container.innerHTML = events.map(e => `
             <article class="card event-card" data-category="${e.category}">
                 <div class="event-date" style="${e.color ? `background: ${e.color}` : ''}">
-                    <span class="event-month">${e.month}</span>
+                    <span class="event-month">${formatMonthBadge(e.month)}</span>
                 </div>
                 <div class="event-details">
                     <div class="flex gap-2 mb-3">
@@ -586,7 +616,7 @@ async function renderDetailPage() {
     let item;
     if (type === 'events') {
         try {
-            const response = await fetch(`/api/events/${id}`);
+            const response = await fetch(`http://localhost:8000/api/events/${id}`);
             if (response.ok) {
                 item = await response.json();
             }
@@ -782,7 +812,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 async function handleSubscribe(email, form) {
     try {
-        const response = await fetch('/api/subscribe', {
+        const response = await fetch('http://localhost:8000/api/subscribe', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email })
@@ -790,7 +820,7 @@ async function handleSubscribe(email, form) {
         const data = await response.json();
 
         if (data.ok) {
-            alert(data.message + '! 🎉');
+            alert(data.message + '!');
             form.reset();
             if (form.id === 'modalNewsletterForm') {
                 closeNewsletterModal();
@@ -1085,7 +1115,7 @@ function renderNewsletterModal() {
                 <button class="modal-close" id="closeModal">&times;</button>
                 <div class="card card-glass" style="max-width: 700px; margin: 0 auto;">
                     <div class="card-content text-center">
-                        <div style="font-size: 3rem; margin-bottom: var(--space-4);">📬</div>
+                        <div style="font-size: 3rem; margin-bottom: var(--space-4);"><i class="fas fa-envelope"></i></div>
                         <h2 class="mb-4">Stay Connected</h2>
                         <p class="card-text mb-6">
                             Subscribe to our newsletter for the latest wellness tips, Buffalo events,
