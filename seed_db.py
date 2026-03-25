@@ -1,7 +1,7 @@
 import json
 from sqlalchemy.orm import Session
 from backend.db import SessionLocal, engine
-from backend.models import Base, Event, Restaurant
+from backend.models import Base, Event, Restaurant, Attraction
 
 # Initialize database
 Base.metadata.create_all(bind=engine)
@@ -276,38 +276,6 @@ events_data = [
 ]
 
 
-def seed_events():
-    db = SessionLocal()
-    try:
-        db.query(Event).delete()
-        db.commit()
-
-        for event in events_data:
-            db.add(Event(
-                id=event["id"],
-                name=event["name"],
-                description=event["description"],
-                image=event["image"],
-                category=event["category"],
-                badges=event.get("badges"),
-                month=event["month"],
-                time=event["time"],
-                location=event["location"],
-                price=event.get("price", "Free"),
-                url=event.get("url"),
-                featured=event.get("featured", False)
-            ))
-
-        db.commit()
-        print("Events seeded successfully!")
-    except Exception as e:
-        import traceback
-        print(f"Error seeding events: {e}")
-        traceback.print_exc()
-        db.rollback()
-    finally:
-        db.close()
-
 restaurants_data = [
     {
         "name": "Cafe Bewilderment",
@@ -366,6 +334,153 @@ restaurants_data = [
     }
 ]
 
+attractions_data = [
+    {
+        "name": "Niagara Falls",
+        "address": "Niagara Falls State Park, NY",
+        "description": "Experience the breathtaking power and beauty of one of the world's most famous waterfalls.",
+        "full_description": "Niagara Falls is not just a waterfall; it's a testament to the raw power of nature. To truly experience its majesty, start your day with the Maid of the Mist boat tour, which takes you right into the heart of the Horseshoe Falls. Afterward, walk through the Cave of the Winds to feel the 'tropical storm' force of the Bridal Veil Falls.\n\nFor a more peaceful experience, explore the miles of hiking trails on Goat Island or enjoy a picnic overlooking the upper rapids. As the sun sets, stay for the nightly illumination where the falls are lit in a rainbow of colors, followed by spectacular fireworks displays during the summer months.",
+        "image": "assets/images/niagara-falls.avif",
+        "category": "parks family",
+        "hours": "Open 24/7",
+        "price": "Free Admission",
+        "url": "https://www.niagarafallsstatepark.com",
+        "badge1": "Natural Wonder",
+        "badge2": "Parks & Nature",
+        "featured": True
+    },
+    {
+        "name": "Buffalo AKG Art Museum",
+        "address": "Delaware Park, Buffalo, NY",
+        "description": "World-renowned collection of modern and contemporary art in a newly renovated architectural setting.",
+        "full_description": "The Buffalo AKG Art Museum (formerly Albright-Knox) is an architectural and cultural masterpiece. Following its historic expansion, the museum now features the stunning 'Common Sky' installation in the town square. Your visit should begin in the Gundlach Building, where massive skylights illuminate some of the most important modern works in the world.\n\nDon't miss the 1962 building's classic galleries, which house masterpieces by Picasso, Matisse, and Pollock. The museum is perfectly situated at the edge of Delaware Park, making it ideal for a combined day of high culture and nature strolls. Be sure to check their calendar for 'M&T First Fridays' when admission is free for the community.",
+        "image": "https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=800",
+        "category": "arts museums",
+        "hours": "Tue-Sun 10AM-5PM",
+        "price": "$15 Adults",
+        "url": "https://buffaloakg.org",
+        "badge1": "Art",
+        "badge2": "Museums",
+        "featured": True
+    },
+    {
+        "name": "Buffalo Museum of Science",
+        "address": "1020 Humboldt Pkwy, Buffalo, NY 14211",
+        "description": "Interactive science studios and exhibits showcasing over 700,000 specimens and artifacts.",
+        "full_description": "The Buffalo Museum of Science offers an adventure through time and space for explorers of all ages...",
+        "image": "assets/images/museum-of-science.jpg",
+        "category": "museums family",
+        "hours": "Daily 10AM-4PM",
+        "price": "$23 Adults",
+        "url": "https://www.sciencebuff.org",
+        "badge1": "Museums",
+        "badge2": "Family Friendly",
+        "featured": True
+    },
+    {
+        "name": "Delaware Park",
+        "address": "Buffalo, NY 14214",
+        "description": "350-acre centerpiece of Buffalo's park system, designed by Olmsted & Vaux.",
+        "full_description": "Designed by the legendary Frederick Law Olmsted, Delaware Park is the crown jewel...",
+        "image": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800",
+        "category": "parks family",
+        "hours": "Dawn to Dusk",
+        "price": "Free",
+        "url": "https://bfloparks.org/parks/delaware-park/",
+        "badge1": "Parks & Nature",
+        "badge2": "Family Friendly",
+        "featured": True
+    },
+    {
+        "name": "Darwin D. Martin House",
+        "address": "125 Jewett Pkwy, Buffalo, NY 14214",
+        "description": "Frank Lloyd Wright's masterpiece of Prairie-style architecture.",
+        "full_description": "The Darwin D. Martin House is considered one of the most important works...",
+        "image": "assets/images/flw.jpg",
+        "category": "historic arts",
+        "hours": "Tours 10AM-4PM",
+        "price": "$25 Tours",
+        "url": "https://martinhouse.org",
+        "badge1": "Historic Sites",
+        "badge2": "Arts & Culture",
+        "featured": False
+    },
+    {
+        "name": "Buffalo Zoo",
+        "address": "300 Parkside Ave, Buffalo, NY 14214",
+        "description": "The third oldest zoo in the US.",
+        "full_description": "Located nestled within the historic Delaware Park, the Buffalo Zoo is one of the city's most beloved destinations...",
+        "image": "https://images.unsplash.com/photo-1534567153574-2b12153a87f0?w=800",
+        "category": "family parks",
+        "hours": "Daily 10AM-4PM",
+        "price": "$22.50 Adults",
+        "url": "https://buffalozoo.org",
+        "badge1": "Family Friendly",
+        "badge2": "Parks & Nature",
+        "featured": False
+    },
+    {
+        "name": "Shea's Performing Arts Center",
+        "address": "646 Main St, Buffalo, NY 14202",
+        "description": "Historic 1926 theater hosting Broadway tours.",
+        "full_description": "Stepping into Shea's Buffalo Theatre is like traveling back to the Gilded Age...",
+        "image": "assets/images/sheas.jpg",
+        "category": "arts historic",
+        "hours": "Performance Times",
+        "price": "Varies",
+        "url": "https://www.sheas.org",
+        "badge1": "Arts & Culture",
+        "badge2": "Historic Sites",
+        "featured": False
+    },
+    {
+        "name": "Canalside",
+        "address": "44 Prime St, Buffalo, NY 14202",
+        "description": "Buffalo's revitalized waterfront destination.",
+        "full_description": "Canalside is the heart of Buffalo's waterfront renaissance...",
+        "image": "assets/images/canalside.jpg",
+        "category": "family parks",
+        "hours": "Open 24/7",
+        "price": "Free Admission",
+        "url": "https://buffalowaterfront.com/canalside",
+        "badge1": "Family Friendly",
+        "badge2": "Parks & Nature",
+        "featured": False
+    }
+]
+
+def seed_events():
+    db = SessionLocal()
+    try:
+        db.query(Event).delete()
+        db.commit()
+
+        for event in events_data:
+            db.add(Event(
+                id=event["id"],
+                name=event["name"],
+                description=event["description"],
+                image=event["image"],
+                category=event["category"],
+                badges=event.get("badges"),
+                month=event["month"],
+                time=event["time"],
+                location=event["location"],
+                price=event.get("price", "Free"),
+                url=event.get("url"),
+                featured=event.get("featured", False)
+            ))
+
+        db.commit()
+        print("Events seeded successfully!")
+    except Exception as e:
+        import traceback
+        print(f"Error seeding events: {e}")
+        traceback.print_exc()
+        db.rollback()
+    finally:
+        db.close()
+
 def seed_restaurants():
     db = SessionLocal()
     try:
@@ -394,6 +509,41 @@ def seed_restaurants():
     finally:
         db.close()
 
+def seed_attractions():
+    db = SessionLocal()
+    try:
+        db.query(Attraction).delete()
+        db.commit()
+
+        for a in attractions_data:
+            attraction = Attraction(
+                name=a["name"],
+                address=a["address"],
+                image=a["image"],
+                url=a.get("url"),
+                description=a["description"],
+                full_description=a["full_description"],
+                category=a["category"],
+                hours=a["hours"],
+                price=a["price"],
+                badge1=a.get("badge1"),
+                badge2=a.get("badge2"),
+                featured=a.get("featured", False)
+            )
+            db.add(attraction)
+
+        db.commit()
+        print("Attractions seeded successfully!")
+
+    except Exception as e:
+        import traceback
+        print(f"Error seeding attractions: {e}")
+        traceback.print_exc()
+        db.rollback()
+    finally:
+        db.close()
+
 if __name__ == "__main__":
     seed_events()
     seed_restaurants()
+    seed_attractions()

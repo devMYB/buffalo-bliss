@@ -57,3 +57,24 @@ class Restaurant(Base):
     sort_order = Column(Integer, default=0)               # Controls display order
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+class Attraction(Base):
+    __tablename__ = "attractions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(200), nullable=False)
+    address = Column(String(500), nullable=False)
+    image = Column(String(500), nullable=False)
+    url = Column(String(500), nullable=True)
+    description = Column(Text, nullable=False)
+    full_description = Column(Text, nullable=False)
+    category = Column(String(500), nullable=False)
+    hours = Column(String(500), nullable=False)
+    price = Column(String(50), nullable=False)
+    badge1 = Column(String(100), nullable=True)
+    badge2 = Column(String(100), nullable=True)
+    featured = Column(Boolean, default=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    

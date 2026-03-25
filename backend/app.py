@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from .db import engine, get_db, SessionLocal
-from .models import Base, Event, AdvertisingRequest, Subscriber, Restaurant
+from .models import Base, Event, AdvertisingRequest, Subscriber, Restaurant, Attraction
 from .admin import setup_admin
 from .admin_auth import authentication_backend
 from pydantic import BaseModel, EmailStr, Field
@@ -104,6 +104,20 @@ async def subscribe(payload: SubscriberSchema, db: Session = Depends(get_db)):
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
+        
+@app.get("/api/attractions")
+def get_attractions(category: Optional[str] = None, db: Session = Depends(get_db)):
+    query = db.query(Attraction)
+    if category:
+        query = query.filter(Attraction.category.contains(category))
+    return query.all()
+
+@app.get("/api/attractions/{attraction_id}")
+def get_attraction(attraction_id: int, db: Session = Depends(get_db)):
+    attraction = db.query(Attraction).filter(Attraction.id == attraction_id).first()
+    if not attraction:
+        raise HTTPException(status_code=404, detail="Attraction not found")
+    return attraction
 
 @app.get("/api/health")
 def health_check():

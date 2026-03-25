@@ -288,28 +288,7 @@ const siteData = {
             day: "11-12"
         }
     ],
-    movies: [
-        {
-            id: "adventure-begins",
-            name: "The Adventure Begins",
-            description: "An epic journey of courage and discovery that will captivate audiences of all ages.",
-            image: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=800",
-            category: "Action",
-            rating: "PG-13",
-            showtimes: ["2:30 PM", "5:15 PM", "8:00 PM"],
-            status: "now_playing",
-            url: "https://www.fandango.com"
-        },
-        {
-            id: "winters-tale",
-            name: "Winter's Tale",
-            description: "A magical story set in a winter wonderland, exploring hope and transformation.",
-            image: "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=800",
-            releaseDate: "Feb 14, 2026",
-            category: "Romance",
-            status: "coming_soon"
-        }
-    ],
+
     attractions: [
         {
             id: "niagara-falls",

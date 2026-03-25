@@ -1,5 +1,5 @@
 from sqladmin import Admin, ModelView
-from .models import Event, AdvertisingRequest, Subscriber, Restaurant
+from .models import Event, AdvertisingRequest, Subscriber, Restaurant, Attraction
 from wtforms import SelectMultipleField
 from wtforms.validators import ValidationError
 
@@ -14,6 +14,18 @@ class MultipleSelectStringField(SelectMultipleField):
 def validate_category_limit(form, field):
     if field.data and len(field.data) > 3:
         raise ValidationError("You can select at most 3 categories.")
+
+def validate_category_limit_2(form, field):
+    if field.data and len(field.data) > 2:
+        raise ValidationError("You can select at most 2 categories.")
+
+ATTRACTION_CATEGORIES = [
+    ("parks & nature", "Parks & Nature"),
+    ("museums", "Museums"),
+    ("historic sites", "Historic Sites"),
+    ("family friendly", "Family Friendly"),
+    ("arts & culture", "Arts & Culture"),
+]
 
 EVENT_CATEGORIES = [
     ("cultural", "Cultural"),
@@ -77,10 +89,55 @@ class RestaurantAdmin(ModelView, model=Restaurant):
     name = "Restaurant"
     name_plural = "Restaurants"
 
+class AttractionAdmin(ModelView, model=Attraction):
+    column_list = [
+        "id",
+        "name",
+        "address",
+        "category",
+        "price",
+        "featured",
+        "created_at"
+    ]
+    
+    column_sortable_list = ["name", "created_at"]
+    
+    form_columns = "__all__"
+    
+    icon = "fa-solid fa-map-location-dot"
+    name = "Attraction"
+    name_plural = "Attractions"
+    
+    # Use multi-select for category (same pattern as Event)
+    form_overrides = {
+        "category": MultipleSelectStringField,
+    }
+    
+    create_template = "custom_create.html"
+    edit_template = "custom_edit.html"
+    
+    form_args = {
+        "category": {
+            "choices": ATTRACTION_CATEGORIES,
+            "validators": [validate_category_limit_2],
+            "description": "Select up to 2 categories.",
+            "render_kw": {
+                "data-role": "select2-tags",
+            }
+        }
+    }
+
+    async def on_model_change(self, data, model, is_created, request):
+        """Convert category list back to a space-separated string before saving."""
+        if "category" in data and isinstance(data["category"], list):
+            data["category"] = " ".join(data["category"])
+        return await super().on_model_change(data, model, is_created, request)
+
 def setup_admin(app, engine, authentication_backend):
     admin = Admin(app, engine, authentication_backend=authentication_backend, templates_dir="backend/templates")
     admin.add_view(EventAdmin)
     admin.add_view(AdvertisingRequestAdmin)
     admin.add_view(SubscriberAdmin)
     admin.add_view(RestaurantAdmin)
+    admin.add_view(AttractionAdmin)
     return admin

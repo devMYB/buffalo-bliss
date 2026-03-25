@@ -194,7 +194,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const path = window.location.pathname;
     const isPageIndex = path.endsWith('index.html') || path === '/' || path.endsWith('/');
     const isPageEvents = path.includes('events.html');
-    const isPageMovies = path.includes('movies.html');
     const isPageAttractions = path.includes('attractions.html');
     const isPageDetails = path.includes('details.html');
     const isPageRestaurant2 = path.includes('restaurant2.html');
@@ -210,10 +209,8 @@ document.addEventListener('DOMContentLoaded', () => {
         initExploreBuffaloSlider();
     } else if (isPageEvents) {
         loadEvents();
-    } else if (isPageMovies) {
-        renderMovies();
     } else if (isPageAttractions) {
-        renderAttractions();
+        loadAttractions();
         initAttractionsSlider();
     } else if (isPageDetails) {
         renderDetailPage();
@@ -425,7 +422,8 @@ function renderEvents(events) {
         const featuredEvents = events.filter(e => e.featured);
         featuredContainer.innerHTML = featuredEvents.map(e => `
             <article class="card card-glass clickable-card" 
-                data-href="details.html?type=events&id=${e.id}" 
+                data-href="${e.url || ' '}" 
+                if (!href) return;
                 role="link" 
                 tabindex="0" 
                 aria-label="View details for ${e.name}">
@@ -452,7 +450,7 @@ function renderEvents(events) {
 
     if (container) {
         container.innerHTML = events.map(e => `
-            <article class="card event-card" data-category="${e.category}">
+            <article class="card event-card clickable-card" data-category="${e.category}" data-href="${e.url || '#'}">
                 <div class="event-date" style="${e.color ? `background: ${e.color}` : ''}">
                     <span class="event-month">${formatMonthBadge(e.month)}</span>
                 </div>
@@ -467,52 +465,16 @@ function renderEvents(events) {
                     </div>
                 </div>
                 <div style="display: flex; align-items: center;">
-                    <a href="${e.url || '#'}" class="btn btn-primary btn-sm" target="_blank" rel="noopener noreferrer">Visit Website</a>
+                    <a href="${e.url}" class="btn btn-primary btn-sm" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">
+                        Visit Website
+                    </a>
                 </div>
             </article>
         `).join('');
     }
 }
 
-function renderMovies() {
-    const nowPlayingContainer = document.getElementById('nowPlayingContainer');
-    const comingSoonContainer = document.getElementById('comingSoonContainer');
-    if (!siteData.movies) return;
 
-    if (nowPlayingContainer) {
-        const nowPlaying = siteData.movies.filter(m => m.status === 'now_playing');
-        nowPlayingContainer.innerHTML = nowPlaying.map(m => `
-            <article class="card movie-card">
-                <img src="${resolveImagePath(m.image)}" alt="${m.name}" class="movie-poster">
-                <div class="movie-overlay">
-                    <div class="flex gap-2 mb-3">
-                        <span class="badge ${['Action', 'Comedy', 'Horror'].includes(m.category) ? 'badge-accent' : 'badge-primary'}">${m.category}</span>
-                        <span class="badge badge-primary">${m.rating}</span>
-                    </div>
-                    <h3 class="card-title" style="color: var(--color-text-primary);">${m.name}</h3>
-                    <p class="card-text mb-3">${m.description}</p>
-                    <div class="showtime-grid">
-                        ${m.showtimes.map(time => `<button class="showtime-btn">${time}</button>`).join('')}
-                    </div>
-                </div>
-            </article>
-        `).join('');
-    }
-
-    if (comingSoonContainer) {
-        const comingSoon = siteData.movies.filter(m => m.status === 'coming_soon');
-        comingSoonContainer.innerHTML = comingSoon.map(m => `
-            <div class="card">
-                <img src="${resolveImagePath(m.image)}" alt="${m.name}" class="card-image">
-                <div class="card-content">
-                    <span class="badge badge-accent mb-3">${m.releaseDate}</span>
-                    <h4 class="card-title">${m.name}</h4>
-                    <p class="card-text">${m.description}</p>
-                </div>
-            </div>
-        `).join('');
-    }
-}
 function renderExploreBuffalo() {
     const container = document.getElementById('exploreBuffaloSlider');
     if (!container || !siteData.exploreBuffalo) return;
@@ -539,13 +501,14 @@ function renderExploreBuffalo() {
         </article>
     `).join('');
 }
-function renderAttractions() {
+
+function renderAttractions(attractions) {
     const featuredContainer = document.getElementById('featuredAttractionsContainer');
     const allContainer = document.getElementById('attractionsListContainer');
-    if (!siteData.attractions) return;
+    if (!attractions) return;
 
     if (featuredContainer) {
-        const featured = siteData.attractions.filter(a => a.featured);
+        const featured = attractions.filter(a => a.featured);
         featuredContainer.innerHTML = featured.map(a => `
             <article class="card card-glass clickable-card" 
                 data-href="details.html?type=attractions&id=${a.id}" 
@@ -555,7 +518,9 @@ function renderAttractions() {
                 <img src="${resolveImagePath(a.image)}" alt="${a.name}" style="width: 100%; height: 300px; object-fit: cover; border-radius: var(--radius-xl) var(--radius-xl) 0 0;">
                 <div class="card-content">
                     <div class="flex gap-2 mb-4">
-                        ${a.badges.map(badge => `<span class="badge ${badge === 'Natural Wonder' ? 'badge-accent' : 'badge-primary'}">${badge}</span>`).join('')}
+                        ${[a.badge1, a.badge2].filter(Boolean).map(badge => `
+                            <span class="badge badge-primary">${badge}</span>
+                        `).join('')}
                     </div>
                     <h3 class="card-title">${a.name}</h3>
                     <p class="card-text mb-4">${a.description}</p>
@@ -569,7 +534,7 @@ function renderAttractions() {
     }
 
     if (allContainer) {
-        allContainer.innerHTML = siteData.attractions.map(a => `
+        allContainer.innerHTML = attractions.map(a => `
             <article class="card clickable-card" 
                 data-category="${a.category}" 
                 data-href="details.html?type=attractions&id=${a.id}" 
@@ -585,15 +550,46 @@ function renderAttractions() {
                         <i class="fas fa-ticket-alt"></i> ${a.price}
                     </div>
                     <div class="flex gap-2 mb-4">
-                        ${a.badges.map(badge => `<span class="badge ${badge === 'Museum' ? 'badge-primary' : badge === 'Park' ? 'badge-secondary' : 'badge-accent'}">${badge}</span>`).join('')}
+                        ${[a.badge1, a.badge2].filter(Boolean).map(badge => `
+                            <span class="badge badge-primary">${badge}</span>
+                        `).join('')}
                     </div>
                 </div>
                 <div class="card-footer">
-                    <span><i class="fas fa-map-marker-alt"></i> ${a.location || 'Buffalo'}</span>
+                    <span><i class="fas fa-map-marker-alt"></i> ${a.address || 'Buffalo'}</span>
                     <a href="details.html?type=attractions&id=${a.id}" class="btn btn-sm btn-ghost">Details</a>
                 </div>
             </article>
         `).join('');
+    }
+}
+
+async function loadAttractions() {
+    try {
+        const response = await fetch("http://localhost:8000/api/attractions");
+
+        if (!response.ok) {
+            throw new Error(`API error: ${response.status}`);
+        }
+
+        const attractions = await response.json();
+
+        renderAttractions(attractions);
+        handleExternalLinks();
+        initializeClickableCards();
+
+    } catch (error) {
+        console.error("Error loading attractions:", error);
+
+        const container = document.getElementById("attractionsListContainer");
+        if (container) {
+            container.innerHTML = `
+                <div class="card card-glass" style="padding: 2rem; text-align: center;">
+                    <h3>Unable to load attractions</h3>
+                    <p>Please make sure backend is running.</p>
+                </div>
+            `;
+        }
     }
 }
 
@@ -614,15 +610,34 @@ async function renderDetailPage() {
     }
 
     let item;
-    if (type === 'events') {
-        try {
-            const response = await fetch(`http://localhost:8000/api/events/${id}`);
-            if (response.ok) {
-                item = await response.json();
-            }
-        } catch (error) {
-            console.error('Error fetching event details:', error);
+    // if (type === 'events') {
+    //     try {
+    //         const response = await fetch(`http://localhost:8000/api/events/${id}`);
+    //         if (response.ok) {
+    //             item = await response.json();
+    //         }
+    //     } catch (error) {
+    //         console.error('Error fetching event details:', error);
+    //     }
+    // }
+
+    // if (type === 'attractions') {
+    //     try {
+    //         const response = await fetch(`http://localhost:8000/api/attractions/${id}`);
+    //         if (response.ok) {
+    //             item = await response.json();
+    //         }
+    //     } catch (error) {
+    //         console.error('Error fetching attraction details:', error);
+    //     }
+    // }
+    try {
+        const response = await fetch(`http://localhost:8000/api/${type}/${id}`);
+        if (response.ok) {
+            item = await response.json();
         }
+    } catch (error) {
+        console.error(`Error fetching ${type} details:`, error);
     }
 
     if (!item && siteData[type]) {
@@ -659,7 +674,7 @@ async function renderDetailPage() {
                     <div class="detail-article">
                         <div class="mb-8">
                             <h2 class="mb-6">About ${item.name}</h2>
-                            ${(item.fullDescription || item.description).split('\n\n').map(p => `<p>${p}</p>`).join('')}
+                            ${(item.full_description || item.description).split('\n\n').map(p => `<p>${p}</p>`).join('')}
                         </div>
                         
                         <div class="detail-actions" style="display: flex; flex-direction: column; gap: var(--space-4); margin-top: var(--space-8); align-items: flex-start;">
@@ -681,7 +696,7 @@ async function renderDetailPage() {
                                     <i class="fas fa-map-marker-alt info-icon"></i>
                                     <div>
                                         <strong>Location</strong><br>
-                                        ${item.location || 'Buffalo, NY'}
+                                        ${item.address || 'Buffalo, NY'}
                                     </div>
                                 </li>
                                 <li class="info-item">
