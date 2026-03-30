@@ -1,5 +1,5 @@
 // ============================================
-// BUFFALO BLISS - INTERACTIVE FUNCTIONALITY
+// YOUR BLISS IN 716 - INTERACTIVE FUNCTIONALITY
 // ============================================
 
 // ============================================
@@ -31,7 +31,7 @@ function renderGlobalNav() {
 
     navContainer.innerHTML = `
         <div class="container header-content">
-            <a href="${prefix}index.html" class="logo">Buffalo Bliss</a>
+            <a href="${prefix}index.html" class="logo">Your Bliss in 716</a>
             
             <nav class="nav-main">
                 <ul class="nav-list">
@@ -132,7 +132,7 @@ function renderGlobalFooter() {
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h4>Buffalo Bliss</h4>
+                    <h4>Your Bliss in 716</h4>
                     <p style="color: var(--color-neutral-300); margin-bottom: var(--space-4);">
                         Your guide to wellness, inspiration, and discovering the best of Buffalo, NY.
                     </p>
@@ -181,7 +181,7 @@ function renderGlobalFooter() {
             </div>
 
             <div class="footer-bottom">
-                <p>&copy; 2026 Buffalo Bliss. All rights reserved. | Bringing wellness and Buffalo together.</p>
+                <p>&copy; 2026 Your Bliss in 716. All rights reserved. | Bringing wellness and Buffalo together.</p>
             </div>
         </div>
     `;
@@ -200,6 +200,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const isPageRestaurant2 = path.includes('restaurant2.html');
     const isPageRecipes = path.includes('recipes.html');
     const isRecipeDetail = path.includes('recipe-detail.html');
+    const isPageArticle = path.includes('article.html');
+    const isArticleDetail = path.includes('article-detail.html');
 
     // Render Global Components
     renderGlobalNav();
@@ -224,6 +226,10 @@ document.addEventListener('DOMContentLoaded', () => {
         loadRecipes();
     } else if (isRecipeDetail) {
         loadRecipeDetail();
+    } else if (isPageArticle) {
+        loadArticles();
+    } else if (isArticleDetail) {
+        loadArticleDetail();
     }
 
     // Initialize UI components after rendering
@@ -253,11 +259,54 @@ function resolveImagePath(imgSrc) {
     return isSubpage ? `../${cleanPath}` : cleanPath;
 }
 
-function renderFeaturedArticles() {
+async function renderFeaturedArticles() {
     const container = document.getElementById('featuredArticlesContainer');
-    if (!container || !siteData.articles) return;
+    if (!container) return;
 
-    container.innerHTML = siteData.articles.map(article => `
+    try {
+        const response = await fetch("http://localhost:8000/api/articles?featured=true");
+        const articles = await response.json();
+
+        if (articles.length === 0) {
+            // Fallback to static if API is empty or fails (for development)
+            if (typeof siteData !== 'undefined' && siteData.articles) {
+                renderStaticFeaturedArticles(siteData.articles);
+                return;
+            }
+        }
+
+        container.innerHTML = articles.map(article => `
+            <article class="card clickable-card" data-href="pages/article-detail.html?id=${article.id}" role="link" tabindex="0" aria-label="Read article: ${article.name}">
+                <img src="${resolveImagePath(article.image)}" alt="${article.name}" class="card-image">
+                <div class="card-content">
+                    <div class="flex gap-2 mb-4">
+                        ${[article.badge1, article.badge2].filter(Boolean).map(badge => `<span class="badge badge-secondary">${badge}</span>`).join('')}
+                    </div>
+                    <h3 class="card-title">${article.name}</h3>
+                    <p class="card-text">${article.description}</p>
+                </div>
+                <div class="card-footer">
+                    <span style="font-size: var(--font-size-sm); color: var(--color-text-tertiary);">
+                        <i class="far fa-clock"></i> ${article.minutes} min read
+                    </span>
+                    <a href="pages/article-detail.html?id=${article.id}" class="btn btn-sm btn-ghost">Read More</a>
+                </div>
+            </article>
+        `).join('');
+
+        initializeClickableCards();
+    } catch (err) {
+        console.error("Featured articles failed:", err);
+        if (typeof siteData !== 'undefined' && siteData.articles) {
+            renderStaticFeaturedArticles(siteData.articles);
+        }
+    }
+}
+
+function renderStaticFeaturedArticles(articles) {
+    const container = document.getElementById('featuredArticlesContainer');
+    if (!container) return;
+    container.innerHTML = articles.map(article => `
         <article class="card clickable-card" data-href="${article.url}" role="link" tabindex="0" aria-label="Read article: ${article.title}">
             <img src="${resolveImagePath(article.image)}" alt="${article.title}" class="card-image">
             <div class="card-content">
@@ -275,6 +324,7 @@ function renderFeaturedArticles() {
             </div>
         </article>
     `).join('');
+    initializeClickableCards();
 }
 
 
@@ -799,6 +849,7 @@ async function loadAttractions() {
 
         renderAttractions(attractions);
         handleExternalLinks();
+        initializeFilters();
         initializeClickableCards();
 
     } catch (error) {
@@ -1147,11 +1198,13 @@ document.addEventListener('DOMContentLoaded', initializeAnimations);
 
 function initializeFilters() {
     const filterButtons = document.querySelectorAll('[data-filter]');
-    const filterableItems = document.querySelectorAll('[data-category]');
-    if (filterButtons.length === 0 || filterableItems.length === 0) return;
+
+    if (filterButtons.length === 0) return;
 
     filterButtons.forEach(button => {
         button.addEventListener('click', () => {
+            const filterableItems = document.querySelectorAll('[data-category]');
+            if (filterableItems.length === 0) return;
             const filterValue = (button.getAttribute('data-filter') || 'all').toLowerCase();
             const filterParts = filterValue === 'all' ? [] : filterValue.split(/[ ,]+/).filter(Boolean);
 
@@ -1181,36 +1234,43 @@ function initializeFilters() {
 }
 
 function initializeRecipeFilters() {
-    const buttons = document.querySelectorAll("#recipeTypeFilters .collection-item");
+    const filters = document.querySelectorAll("#recipeTypeFilters .collection-item");
+    const searchInput = document.getElementById('searchInput');
 
-    buttons.forEach(btn => {
-        btn.addEventListener("click", () => {
-            const filter = btn.getAttribute("data-filter");
+    // Handle Category Clicks
+    filters.forEach(item => {
+        item.addEventListener("click", () => {
+            filters.forEach(i => i.classList.remove("active"));
+            item.classList.add("active");
 
-            document.querySelectorAll("#recipeTypeFilters .collection-item")
-                .forEach(b => b.classList.remove("active"));
-
-            btn.classList.add("active");
-
+            const filter = item.getAttribute("data-filter");
             if (filter === "all") {
                 filteredRecipes = allRecipes;
-                currentPage = 1;
-                renderRecipesPageView(filteredRecipes);
-                return;
-            }
-
-            const filtered = allRecipes.filter(r => {
-                return filter.split(/[ ,]+/).some(f =>
-                    r.category.toLowerCase().includes(f)
+            } else {
+                filteredRecipes = allRecipes.filter(r =>
+                    filter.split(/[ ,]+/).some(f => r.category.toLowerCase().includes(f))
                 );
-            });
-
-            filteredRecipes = filtered;
+            }
             currentPage = 1;
-            renderRecipesPageView(filteredRecipes);
+            renderRecipesPage(filteredRecipes, currentPage);
         });
     });
+
+    // Handle Search Bar
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            filteredRecipes = allRecipes.filter(r =>
+                r.name.toLowerCase().includes(term) ||
+                r.description.toLowerCase().includes(term) ||
+                (r.category && r.category.toLowerCase().includes(term))
+            );
+            currentPage = 1;
+            renderRecipesPage(filteredRecipes, currentPage);
+        });
+    }
 }
+
 
 // ============================================
 // SEARCH FUNCTIONALITY
@@ -1420,4 +1480,185 @@ function initSidebarNewsletter() {
             handleSubscribe(emailInput.value, form);
         }
     });
+}
+
+// ============================================
+// ARTICLES LOGIC
+// ============================================
+
+let allArticles = [];
+let filteredArticles = [];
+let currentArticlePage = 1;
+const ARTICLES_PER_PAGE = 6;
+
+async function loadArticles() {
+    try {
+        const response = await fetch("http://localhost:8000/api/articles");
+        const articles = await response.json();
+
+        allArticles = articles;
+        filteredArticles = articles;
+
+        renderArticlesPageView(articles);
+        initializeArticleFilters();
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const category = urlParams.get('category');
+        if (category) {
+            applyArticleFilter(category);
+        }
+    } catch (error) {
+        console.error("Error loading articles:", error);
+    }
+}
+
+function renderArticlesPageView(articles) {
+    if (!articles) return;
+    const featuredSlider = document.getElementById("featuredArticlesSliderContainer");
+    if (featuredSlider) {
+        const featured = articles.filter(a => a.featured);
+        featuredSlider.innerHTML = featured.map(a => `
+            <div class="card clickable-card" data-href="article-detail.html?id=${a.id}">
+                <img src="${resolveImagePath(a.image)}" class="card-image" style="height: 200px; object-fit: cover;">
+                <div class="card-content">
+                    <h3 class="card-title" style="font-size: var(--font-size-lg);">${a.name}</h3>
+                    <span class="badge badge-secondary">${a.category.toUpperCase()}</span>
+                </div>
+            </div>
+        `).join('');
+        initSlider('featuredArticlesSliderContainer', 'featuredArticlesPrev', 'featuredArticlesNext');
+    }
+    renderArticlesPage(articles, currentArticlePage);
+}
+
+function renderArticlesPage(articles, page) {
+    const container = document.getElementById("articlesPageContainer");
+    const pagination = document.getElementById("articlesPagination");
+    if (!container) return;
+    if (articles.length === 0) {
+        container.innerHTML = '<div class="text-center py-20"><p>No articles found in this category.</p></div>';
+        if (pagination) pagination.innerHTML = '';
+        return;
+    }
+    const start = (page - 1) * ARTICLES_PER_PAGE;
+    const end = start + ARTICLES_PER_PAGE;
+    const pageArticles = articles.slice(start, end);
+
+    container.innerHTML = pageArticles.map(a => `
+        <article class="article-post">
+            <a href="article-detail.html?id=${a.id}">
+                <img src="${resolveImagePath(a.image)}" alt="${a.name}" class="article-post-image">
+            </a>
+            <div class="article-post-content">
+                <span class="article-post-category">${a.category}</span>
+                <a href="article-detail.html?id=${a.id}" style="text-decoration: none; color: inherit;">
+                    <h2 class="article-post-title">${a.name}</h2>
+                </a>
+                <p class="article-post-description">${a.description}</p>
+                <div class="flex gap-2 mb-4">
+                    ${[a.badge1, a.badge2].filter(Boolean).map(b => `<span class="badge badge-secondary">${b}</span>`).join('')}
+                </div>
+                <a href="article-detail.html?id=${a.id}" class="continue-reading">Read Full Article →</a>
+            </div>
+        </article>
+    `).join('');
+    initializeClickableCards();
+    if (pagination) {
+        const totalPages = Math.ceil(articles.length / ARTICLES_PER_PAGE);
+        pagination.innerHTML = Array.from({ length: totalPages }, (_, i) => `
+            <button class="pagination-btn ${i + 1 === page ? 'active' : ''}" onclick="changeArticlePage(${i + 1})">
+                ${i + 1}
+            </button>
+        `).join('');
+    }
+}
+
+function changeArticlePage(page) {
+    currentArticlePage = page;
+    renderArticlesPage(filteredArticles, currentArticlePage);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function initializeArticleFilters() {
+    const filterItems = document.querySelectorAll('#articleCategoryFilters .collection-item');
+    const searchInput = document.getElementById('articleSearchInput');
+    filterItems.forEach(item => {
+        item.addEventListener('click', () => {
+            filterItems.forEach(i => i.classList.remove('active'));
+            item.classList.add('active');
+            const filter = item.getAttribute('data-filter');
+            applyArticleFilter(filter);
+        });
+    });
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            filteredArticles = allArticles.filter(a =>
+                a.name.toLowerCase().includes(term) ||
+                a.description.toLowerCase().includes(term) ||
+                a.category.toLowerCase().includes(term)
+            );
+            currentArticlePage = 1;
+            renderArticlesPage(filteredArticles, currentArticlePage);
+        });
+    }
+}
+
+function applyArticleFilter(category) {
+    if (category === 'all') {
+        filteredArticles = allArticles;
+    } else {
+        filteredArticles = allArticles.filter(a => a.category.toLowerCase() === category.toLowerCase());
+    }
+    const filterItems = document.querySelectorAll('#articleCategoryFilters .collection-item');
+    filterItems.forEach(i => {
+        if (i.getAttribute('data-filter') === category) {
+            i.classList.add('active');
+        } else {
+            i.classList.remove('active');
+        }
+    });
+    currentArticlePage = 1;
+    renderArticlesPage(filteredArticles, currentArticlePage);
+}
+
+async function loadArticleDetail() {
+    const container = document.getElementById('articleDetailContainer');
+    if (!container) return;
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+    if (!id) {
+        container.innerHTML = "<p>Article not found.</p>";
+        return;
+    }
+    try {
+        const response = await fetch(`http://localhost:8000/api/articles/${id}`);
+        const article = await response.json();
+        renderArticleDetail(article);
+    } catch (error) {
+        console.error("Error loading article:", error);
+        container.innerHTML = "<p>Failed to load article details.</p>";
+    }
+}
+
+function renderArticleDetail(article) {
+    const container = document.getElementById('articleDetailContainer');
+    const titleHeader = document.getElementById('articleMainTitle');
+    const descHeader = document.getElementById('articleMainDescription');
+    const badgeHeader = document.getElementById('articleBadge');
+    if (!container || !article) return;
+    if (titleHeader) titleHeader.textContent = article.name;
+    if (descHeader) descHeader.textContent = article.description;
+    if (badgeHeader) badgeHeader.textContent = article.category.toUpperCase();
+    container.innerHTML = `
+        <article class="blog-post">
+            <img src="${resolveImagePath(article.image)}" alt="${article.name}" class="blog-post-image">
+            <div class="blog-post-content">
+                ${article.full_description.split(/\n\s*\n/).map(p => `<p>${p}</p>`).join('')}
+            </div>
+            <div class="flex gap-2 mt-6">
+                ${[article.badge1, article.badge2].filter(Boolean).map(b => `<span class="badge badge-secondary">${b}</span>`).join('')}
+            </div>
+        </article>
+    `;
 }

@@ -1,7 +1,7 @@
 import json
 from sqlalchemy.orm import Session
 from backend.db import SessionLocal, engine
-from backend.models import Base, Event, Restaurant, Attraction
+from backend.models import Base, Event, Restaurant, Attraction, Recipe, Article
 
 # Initialize database
 Base.metadata.create_all(bind=engine)
@@ -455,7 +455,7 @@ recipes_data = [
         "name": "Chocolate Lava Cake",
         "image": "https://images.getrecipekit.com/20250325120225-how-20to-20make-20chocolate-20molten-20lava-20cake-20in-20the-20microwave.png?width=650&quality=90&",
         "description": "A rich and decadent chocolate dessert with a molten center.",
-        "full_description": "Ingredients:\n- Dark chocolate\n- Butter\n- Eggs\n- Sugar\n\nInstructions:\nMelt chocolate and butter together. Mix eggs and sugar separately, combine with chocolate, and bake until the center remains soft and gooey.\n\nServe warm with vanilla ice cream for the best experience.",
+        "full_description": "Ingredients:\n- 170g Dark chocolate (60-70% cacao)\n- 115g Unsalted butter\n- 2 Large eggs + 2 egg yolks\n- 50g Granulated sugar\n- 1/2 tsp Vanilla extract\n- Pinch of salt\n- 30g All-purpose flour\n\nInstructions:\nPreheat oven to 425°F. Melt chocolate and butter until smooth. Whisk eggs, yolks, sugar, vanilla, and salt until thick and pale. Fold the chocolate into the egg mixture, then gently fold in the flour. Bake in greased ramekins for 12–14 minutes until the edges are firm but the center is soft.\n\nServe warm with vanilla ice cream for the best experience.",
         "category": "dessert",
         "badge1": "Dessert",
         "badge2": "Indulgent",
@@ -467,7 +467,7 @@ recipes_data = [
         "name": "Vegan Lentil Soup",
         "image": "https://cdn.apartmenttherapy.info/image/upload/f_jpg,q_auto:eco,c_fill,g_auto,w_1500,ar_1:1/k%2FPhoto%2FRecipes%2F2024-10-red-lentil-soup%2Fred-lentil-soup-180",
         "description": "A hearty, protein-rich soup perfect for a healthy meal.",
-        "full_description": "Ingredients:\n- Lentils\n- Carrots\n- Celery\n- Garlic\n\nInstructions:\nCook lentils with vegetables and spices. Simmer until soft and flavorful.\n\nThis dish is perfect for meal prep and keeps well for several days.",
+        "full_description": "Ingredients:\n- 200g Dried lentils, rinsed\n- 1 Large onion, diced\n- 2 Medium carrots, sliced\n- 2 Celery stalks, chopped\n- 3 Cloves garlic, minced\n- 1 tsp Ground cumin\n- 1/2 tsp Smoked paprika\n- 950ml Vegetable broth\n- 400g Canned crushed tomatoes\n- 2 tbsp Olive oil\n- Fresh lemon juice\n\nInstructions:\nSauté onion, carrots, and celery in olive oil for 5–7 minutes. Stir in garlic and spices, then add lentils, broth, and tomatoes. Bring to a boil, then simmer covered for 25–30 minutes until lentils are tender. Partially blend for a creamier texture if desired and finish with a squeeze of lemon juice.\n\nServe warm with a side of crusty sourdough bread for the best experience.",
         "category": "vegan dinner",
         "badge1": "Vegan",
         "badge2": "Healthy",
@@ -479,7 +479,7 @@ recipes_data = [
         "name": "Stuffed Zucchini Boats",
         "image": "https://hips.hearstapps.com/hmg-prod/images/stuffed-zucchini-recipe-3-1656619330.jpg?crop=1.00xw:1.00xh;0,0&resize=1200:*",
         "description": "A light and flavorful vegetable-based dish.",
-        "full_description": "Ingredients:\n- Zucchini\n- Bell peppers\n- Cheese\n\nInstructions:\nSlice zucchini, scoop the center, and fill with sautéed vegetables. Bake until tender.\n\nGreat as a light lunch or side dish.",
+        "full_description": "Ingredients:\n- 3 Medium zucchini, halved\n- 200g Cooked lentils\n- 1 Small onion, diced\n- 2 Cloves garlic, minced\n- 100g Mushrooms, chopped\n- 400g Canned crushed tomatoes\n- 1 tsp Dried oregano\n- 1/2 tsp Smoked paprika\n- 2 tbsp Olive oil\n- 30g Nutritional yeast\n\nInstructions:\nPreheat oven to 400°F. Scoop out zucchini centers and chop the flesh. Sauté onion, garlic, mushrooms, and zucchini flesh in olive oil for 5 minutes. Stir in lentils, tomatoes, and spices, simmering for 10 minutes. Fill zucchini boats with the mixture, sprinkle with nutritional yeast, and bake for 20–25 minutes until tender.\n\nServe warm with a fresh side salad for the best experience.",
         "category": "lunch vegetarian",
         "badge1": "Vegetarian",
         "badge2": "Healthy",
@@ -491,7 +491,7 @@ recipes_data = [
         "name": "Avocado Toast Deluxe",
         "image": "https://www.allrecipes.com/thmb/H1mSgOExKFdto3PWLfC9aTgJmlI=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/11699506-avocado-toast-4x3-ea45b882fb0c454a9ca31647d4fd3c01.jpg",
         "description": "A nutritious and quick breakfast option.",
-        "full_description": "Ingredients:\n- Bread\n- Avocado\n- Lemon\n\nInstructions:\nToast bread, mash avocado with lemon juice, spread evenly, and top with chili flakes.\n\nPerfect for a quick morning meal.",
+        "full_description": "Ingredients:\n- 2 Slices sourdough or whole-grain bread\n- 1 Large ripe avocado\n- 1/2 tsp Red pepper flakes\n- 1/4 tsp Garlic powder\n- 100g Cherry tomatoes, halved\n- 30g Microgreens or arugula\n- 1 tbsp Extra virgin olive oil\n- 1 tbsp Toasted sunflower seeds\n\nInstructions:\nToast the bread until golden brown. Mash the avocado with garlic powder and a pinch of salt until creamy or chunky. Spread the avocado evenly onto the toast and top with halved cherry tomatoes and fresh microgreens. Finish with a sprinkle of red pepper flakes, toasted seeds, and a light drizzle of olive oil.\n\nServe warm with a side of fresh fruit for the best experience.",
         "category": "breakfast",
         "badge1": "Breakfast",
         "badge2": "Quick",
@@ -503,7 +503,7 @@ recipes_data = [
         "name": "Meal Prep Chicken Bowls",
         "image": "https://healthyfitnessmeals.com/wp-content/uploads/2018/08/Grilled-chicken-burrito-bowls-10.jpg",
         "description": "Balanced meals perfect for weekly prep.",
-        "full_description": "Ingredients:\n- Chicken\n- Rice\n- Vegetables\n\nInstructions:\nCook chicken and portion with rice and veggies into containers.\n\nIdeal for busy weekdays.",
+        "full_description": "Ingredients:\n- 500g Chicken breast, cubed\n- 200g Quinoa or brown rice\n- 400g Broccoli florets\n- 2 Bell peppers, sliced\n- 2 tbsp Olive oil\n- 1 tsp Garlic powder\n- 1 tsp Smoked paprika\n- 60ml Soy sauce\n- 1 tbsp Honey\n\nInstructions:\nCook grains according to package. Sauté seasoned chicken in olive oil for 8–10 minutes until brown. In the same skillet, sauté broccoli and peppers for 5–7 minutes. Whisk soy sauce and honey together, coat the chicken and vegetables, then divide into four meal prep containers over the grains.\n\nServe warm with a drizzle of extra sauce for the best experience.",
         "category": "meal-prep dinner",
         "badge1": "Meal Prep",
         "badge2": "High Protein",
@@ -515,7 +515,7 @@ recipes_data = [
         "name": "Classic Pancakes",
         "image": "https://img.delicious.com.au/EyhPamCD/del/2023/06/easy-pancake-191698-2.jpg",
         "description": "Fluffy pancakes for a perfect breakfast.",
-        "full_description": "Ingredients:\n- Flour\n- Milk\n- Eggs\n\nInstructions:\nMix ingredients into a batter and cook on a skillet until golden brown.\n\nServe with syrup and butter.",
+        "full_description": "Ingredients:\n- 190g All-purpose flour\n- 2 tbsp Granulated sugar\n- 2 tsp Baking powder\n- 1/2 tsp Salt\n- 300ml Milk\n- 1 Large egg\n- 3 tbsp Unsalted butter, melted\n- 1 tsp Vanilla extract\n\nInstructions:\nWhisk dry ingredients in one bowl and wet ingredients in another. Combine the two, stirring gently until just mixed but still slightly lumpy. Cook 60ml portions of batter on a greased skillet over medium-low heat at 350°F. Flip when bubbles form and edges look set, then cook until golden brown.\n\nServe warm with maple syrup for the best experience.",
         "category": "breakfast",
         "badge1": "Breakfast",
         "badge2": "Comfort Food",
@@ -527,7 +527,7 @@ recipes_data = [
         "name": "Quinoa Buddha Bowl",
         "image": "https://www.eatwell101.com/wp-content/uploads/2021/02/Healthy-Chickpea-Quinoa-Salad-recipe-1.jpg",
         "description": "A nutritious bowl packed with plant-based goodness.",
-        "full_description": "Ingredients:\n- Quinoa\n- Chickpeas\n- Vegetables\n\nInstructions:\nCook quinoa and assemble with roasted vegetables and dressing.\n\nHealthy and filling.",
+        "full_description": "Ingredients:\n- 200g Dried lentils, rinsed\n- 1 Large onion, diced\n- 2 Medium carrots, sliced\n- 2 Celery stalks, chopped\n- 3 Cloves garlic, minced\n- 1 tsp Ground cumin\n- 1/2 tsp Smoked paprika\n- 950ml Vegetable broth\n- 400g Canned crushed tomatoes\n- 2 tbsp Olive oil\n- Fresh lemon juice\n\nInstructions:\nSauté onion, carrots, and celery in olive oil for 5–7 minutes. Stir in garlic and spices, then add lentils, broth, and tomatoes. Bring to a boil, then simmer covered for 25–30 minutes until lentils are tender. Partially blend for a creamier texture if desired and finish with a squeeze of lemon juice.\n\nServe warm with a side of crusty sourdough bread for the best experience.",
         "category": "vegan lunch",
         "badge1": "Vegan",
         "badge2": "Balanced",
@@ -539,12 +539,63 @@ recipes_data = [
         "name": "Chocolate Chip Cookies",
         "image": "https://mojo.generalmills.com/api/public/content/_pLFRXFETcuXWg_Z0MhZPw_gmi_hi_res_jpeg.jpeg?v=693b292b&t=466b54bb264e48b199fc8e83ef1136b4",
         "description": "Classic cookies with a soft and chewy texture.",
-        "full_description": "Ingredients:\n- Flour\n- Sugar\n- Chocolate chips\n\nInstructions:\nMix ingredients, shape dough, and bake until golden.\n\nPerfect for dessert or snacks.",
+        "full_description": "Ingredients:\n- 280g All-purpose flour\n- 170g Unsalted butter, softened\n- 150g Brown sugar, packed\n- 100g Granulated sugar\n- 1 Large egg + 1 egg yolk\n- 1 tsp Vanilla extract\n- 1/2 tsp Baking soda\n- 1/2 tsp Salt\n- 200g Semi-sweet chocolate chips\n\nInstructions:\nPreheat oven to 325°F. Cream the butter and sugars until fluffy, then whisk in the egg, yolk, and vanilla. Gradually mix in the dry ingredients and fold in the chocolate chips. Scoop dough onto lined sheets and bake for 12–15 minutes until the edges are golden but the centers are still soft.\n\nServe warm with a cold glass of milk for the best experience.",
         "category": "dessert",
         "badge1": "Dessert",
         "badge2": "Classic",
         "featured": False,
         "sort_order": 8
+    }
+]
+
+articles_data = [
+    {
+        "name": "30 Day Money and Mindfulness Challenge",
+        "image": "https://www.swcandy.com/cdn/shop/articles/BP1.png?v=1770102088",
+        "description": "Transform your relationship with money through daily mindfulness practices.",
+        "full_description": "Spending naturally increases with our stress levels. This 30-day challenge helps you identify triggers and develop a healthier financial mindset...\n\nWeek 1: Awareness. Track every penny you spend and note how you felt at that moment.\n\nWeek 2: Intention. Before any purchase, ask if it aligns with your core values.\n\nWeek 3: Gratitude. Focus on what you already have rather than what you lack.\n\nWeek 4: Implementation. Set new, mindful spending habits for the future.",
+        "minutes": 5,
+        "category": "wealth",
+        "badge1": "Wealth",
+        "badge2": "Challenge",
+        "sort_order": 1,
+        "featured": True
+    },
+    {
+        "name": "Falling in Love with Your Business",
+        "image": "https://images.unsplash.com/photo-1598929214007-1851f46b11e3?q=80&w=734&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Learn why embracing your entrepreneurial journey is vital for both your service and your soul.",
+        "full_description": "Entrepreneurship is a marathon, not a sprint. To stay the course, you must find joy in the process...\n\nPassion is the fuel that keeps you going when things get tough. Rediscover the reason you started your business in the first place.\n\nYour service to others is a reflection of your own inner growth. When you love what you do, it shows in the quality of your work.",
+        "minutes": 8,
+        "category": "wealth",
+        "badge1": "Wealth",
+        "badge2": "Growth",
+        "sort_order": 2,
+        "featured": True
+    },
+    {
+        "name": "Why Modern Happiness Isn't Just Romantic",
+        "image": "https://plus.unsplash.com/premium_photo-1682436765795-874b22e69435?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Exploring the multifaceted nature of fulfillment beyond traditional relationships.",
+        "full_description": "In a world that often prioritizes romantic love, we explore other avenues for deep fulfillment...\n\nCommunity, purpose, and self-discovery are equally important pillars of a happy life. We look at how building strong friendships and pursuing personal passions can lead to a more balanced and joyful existence.",
+        "minutes": 7,
+        "category": "happiness",
+        "badge1": "Happiness",
+        "badge2": "Wellness",
+        "sort_order": 3,
+        "featured": True
+    },
+    {
+        "name": "Physical Wellness in Buffalo",
+        "image": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800",
+        "description": "Discover the best ways to stay active and healthy in the Queen City.",
+        "full_description": "From yoga in Delaware Park to cycling along the Outer Harbor, Buffalo offers plenty of opportunities for physical activity...\n\nExplore local gyms, wellness centers, and outdoor spaces that encourage a healthy lifestyle and community connection.",
+        "minutes": 6,
+        "category": "health",
+        "badge1": "Health",
+        "badge2": "Buffalo",
+        "sort_order": 4,
+        "featured": False
     }
 ]
 
@@ -675,8 +726,39 @@ def seed_recipes():
     finally:
         db.close()
 
-if __name__ == "__main__":
-    seed_events()
-    seed_restaurants()
-    seed_attractions()
-    seed_recipes()
+def seed_articles():
+    db = SessionLocal()
+    try:
+        db.query(Article).delete()
+        db.commit()
+
+        for a in articles_data:
+            db.add(Article(
+                name=a["name"],
+                image=a["image"],
+                description=a["description"],
+                full_description=a["full_description"],
+                minutes=a["minutes"],
+                category=a["category"],
+                badge1=a.get("badge1"),
+                badge2=a.get("badge2"),
+                sort_order=a.get("sort_order", 0),
+                featured=a.get("featured", False)
+            ))
+
+        db.commit()
+        print("Articles seeded successfully!")
+    except Exception as e:
+        import traceback
+        print(f"Error seeding articles: {e}")
+        traceback.print_exc()
+        db.rollback()
+    finally:
+        db.close()
+
+# if __name__ == "__main__":
+#     seed_events()
+#     seed_restaurants()
+#     seed_attractions()
+#     seed_recipes()
+#     seed_articles()

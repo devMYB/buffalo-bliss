@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="Explore our collection of delicious, healthy recipes to nourish your body and soul. Blog-style recipes and wellness tips.">
-    <title>The Latest & Greatest Recipes | Your Bliss in 716</title>
+        content="Explore our collection of articles on health, wealth, spirit, and happiness to nourish your body and soul.">
+    <title>Wellness & Lifestyle Articles | Your Bliss in 716</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,26 +33,20 @@
             padding: var(--space-12) 0;
         }
 
-        .recipe-layout {
+        .article-layout {
             display: grid;
             grid-template-columns: 1fr 350px;
             gap: var(--space-12);
         }
 
         @media (max-width: 1024px) {
-            .recipe-layout {
+            .article-layout {
                 grid-template-columns: 1fr;
             }
         }
 
-        /* Section Title */
-        /* Section Title (Removed but kept class for any future use) */
-        .section-title-sm {
-            display: none;
-        }
-
-        /* Recipe Post Style */
-        .recipe-post {
+        /* Article Post Style */
+        .article-post {
             display: grid;
             grid-template-columns: 300px 1fr;
             gap: var(--space-8);
@@ -63,33 +57,34 @@
         }
 
         @media (max-width: 640px) {
-            .recipe-post {
+            .article-post {
                 grid-template-columns: 1fr;
             }
         }
 
-        .recipe-post-image {
+        .article-post-image {
             width: 100%;
             height: 250px;
             object-fit: cover;
             border-radius: var(--radius-sm);
         }
 
-        .recipe-post-content {
+        .article-post-content {
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
 
-        .recipe-post-date {
+        .article-post-category {
             text-transform: uppercase;
             font-size: var(--font-size-xs);
             letter-spacing: 1px;
-            color: var(--color-text-tertiary);
+            color: var(--color-primary);
+            font-weight: var(--font-weight-bold);
             margin-bottom: var(--space-2);
         }
 
-        .recipe-post-title {
+        .article-post-title {
             font-family: var(--font-heading);
             font-size: var(--font-size-3xl);
             color: var(--color-neutral-800);
@@ -97,7 +92,7 @@
             line-height: 1.2;
         }
 
-        .recipe-post-description {
+        .article-post-description {
             color: var(--color-text-secondary);
             margin-bottom: var(--space-6);
             line-height: 1.6;
@@ -108,7 +103,6 @@
             font-size: var(--font-size-sm);
             font-weight: var(--font-weight-bold);
             color: var(--color-accent);
-            /* Golden-sand accent */
             letter-spacing: 1px;
             text-decoration: none;
             display: inline-flex;
@@ -184,93 +178,10 @@
             width: 24px;
             height: 24px;
             background: var(--color-secondary-dark);
-            /* Using secondary green */
             color: white;
             border-radius: 50%;
             font-size: 10px;
             margin-right: var(--space-3);
-        }
-
-        .collection-count {
-            color: var(--color-text-tertiary);
-            font-size: var(--font-size-xs);
-        }
-
-        /* Search Widget */
-        .search-widget {
-            margin-bottom: var(--space-8);
-        }
-
-        /* Newsletter Sidebar Widget */
-        .newsletter-widget {
-            background-color: var(--color-white);
-            border: 1px solid var(--color-neutral-100);
-            text-align: center;
-        }
-
-        .newsletter-widget-title {
-            font-family: var(--font-heading);
-            font-size: var(--font-size-xl);
-            margin-bottom: var(--space-2);
-        }
-
-        .newsletter-widget-text {
-            font-size: var(--font-size-sm);
-            color: var(--color-text-secondary);
-            margin-bottom: var(--space-6);
-        }
-
-        /* Badges inside post */
-        .recipe-post-badges {
-            margin-top: var(--space-4);
-            display: flex;
-            gap: var(--space-2);
-            flex-wrap: wrap;
-        }
-
-        /* Buttons from screenshot */
-        .btn-plum {
-            background: var(--gradient-primary);
-            color: var(--color-white) !important;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: var(--space-4) var(--space-8);
-            border-radius: var(--radius-sm);
-            font-size: var(--font-size-sm);
-            width: 100%;
-            border: none;
-            box-shadow: var(--shadow-md);
-        }
-
-        .btn-plum:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        [data-theme="dark"] .page-wrapper {
-            background-color: var(--color-neutral-900);
-        }
-
-        [data-theme="dark"] .sidebar-widget {
-            background-color: var(--color-neutral-800);
-        }
-
-        /* Slider Card Size Adjustment - Always 3 cards */
-        .slider-content .recipes-card {
-            flex: 0 0 calc((100% - (2 * var(--space-6))) / 3) !important;
-            min-width: unset !important;
-        }
-
-        @media (max-width: 1024px) {
-            .slider-content .recipes-card {
-                flex: 0 0 calc((100% - var(--space-6)) / 2) !important;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .slider-content .recipes-card {
-                flex: 0 0 100% !important;
-            }
         }
 
         /* Pagination Styles */
@@ -306,6 +217,14 @@
             background: var(--color-neutral-100);
             border-color: var(--color-neutral-300);
         }
+
+        [data-theme="dark"] .page-wrapper {
+            background-color: var(--color-neutral-900);
+        }
+
+        [data-theme="dark"] .sidebar-widget {
+            background-color: var(--color-neutral-800);
+        }
     </style>
 </head>
 
@@ -318,31 +237,28 @@
     <!-- Page Header -->
     <section class="page-header">
         <div class="container">
-            <h1>Recipe Corner</h1>
+            <h1>Wellness & Lifestyle</h1>
             <p
                 style="font-size: var(--font-size-lg); color: var(--color-text-secondary); max-width: 600px; margin: 0 auto;">
-                Discover nourishing recipes and wellness inspiration for your Buffalo home
+                Explore inspiring articles on health, wealth, spirit, and happiness for a balanced life.
             </p>
         </div>
     </section>
 
-    <!-- This month's top picks -->
+    <!-- Featured Articles Slider (Optional, keeping similar to recipes) -->
     <section class="section" style="background: var(--color-neutral-50);">
         <div class="container">
-            <h2 class="mb-8">This month's top picks</h2>
-
+            <h2 class="mb-8">Featured Articles</h2>
             <div class="slider-wrapper">
-                <button class="slider-nav prev" id="topPicksPrev" aria-label="Previous recipe">
+                <button class="slider-nav prev" id="featuredArticlesPrev" aria-label="Previous article">
                     <i class="fas fa-chevron-left"></i>
                 </button>
-
                 <div class="slider-container">
-                    <div id="topPicksContainer" class="slider-content">
+                    <div id="featuredArticlesSliderContainer" class="slider-content">
                         <!-- Data rendered from script.js -->
                     </div>
                 </div>
-
-                <button class="slider-nav next" id="topPicksNext" aria-label="Next recipe">
+                <button class="slider-nav next" id="featuredArticlesNext" aria-label="Next article">
                     <i class="fas fa-chevron-right"></i>
                 </button>
             </div>
@@ -351,15 +267,15 @@
 
     <div class="page-wrapper">
         <div class="container">
-            <div class="recipe-layout">
+            <div class="article-layout">
                 <!-- Main Content -->
                 <main class="main-content">
-                    <div id="recipesPageContainer">
+                    <div id="articlesPageContainer">
                         <!-- Data rendered from script.js -->
                     </div>
 
                     <!-- Pagination -->
-                    <div id="recipesPagination" class="pagination-container">
+                    <div id="articlesPagination" class="pagination-container">
                         <!-- Numbers rendered from script.js -->
                     </div>
                 </main>
@@ -367,70 +283,47 @@
                 <!-- Sidebar -->
                 <aside class="sidebar">
                     <!-- Search Widget -->
-                    <div class="search-widget">
+                    <div class="sidebar-widget">
+                        <h3 class="sidebar-title">Search Articles</h3>
                         <div class="form-group mb-0">
-                            <input type="text" id="searchInput" class="form-input" placeholder="Search recipes...">
+                            <input type="text" id="articleSearchInput" class="form-input"
+                                placeholder="Search articles...">
                         </div>
                     </div>
 
-                    <!-- Collections Widget -->
+                    <!-- Categories Widget -->
                     <div class="sidebar-widget">
-                        <h3 class="sidebar-title">Explore Recipe Types</h3>
-                        <ul class="collection-list" id="recipeTypeFilters">
-                            <li class="collection-item clickable" data-filter="all">
-                                <span><span class="collection-number">1</span> All Recipes</span>
+                        <h3 class="sidebar-title">Categories</h3>
+                        <ul class="collection-list" id="articleCategoryFilters">
+                            <li class="collection-item clickable active" data-filter="all">
+                                <span><span class="collection-number">1</span> All Categories</span>
                             </li>
-                            <li class="collection-item clickable" data-filter="breakfast">
-                                <span><span class="collection-number">2</span> Healthy Breakfast Ideas</span>
-
+                            <li class="collection-item clickable" data-filter="health">
+                                <span><span class="collection-number">2</span> Health</span>
                             </li>
-                            <li class="collection-item clickable" data-filter="vegan, vegetarian">
-                                <span><span class="collection-number">3</span> Plant-Based Favorites</span>
-
+                            <li class="collection-item clickable" data-filter="wealth">
+                                <span><span class="collection-number">3</span> Wealth</span>
                             </li>
-                            <li class="collection-item clickable" data-filter="meal-prep">
-                                <span><span class="collection-number">4</span> Wellness Meal Prepping</span>
-
+                            <li class="collection-item clickable" data-filter="spirit">
+                                <span><span class="collection-number">4</span> Spirit</span>
                             </li>
-                            <li class="collection-item clickable" data-filter="dinner">
-                                <span><span class="collection-number">5</span> Quick Weekly Dinners</span>
-
-                            </li>
-                            <li class="collection-item clickable" data-filter="lunch">
-                                <span><span class="collection-number">6</span> Go-to Lunches</span>
-
-                            </li>
-                            <li class="collection-item clickable" data-filter="dessert">
-                                <span><span class="collection-number">7</span> Indulgent Desserts</span>
-
-                            </li>
-                            <li class="collection-item clickable" data-filter="other">
-                                <span><span class="collection-number">8</span> Good Mood Foods</span>
-
+                            <li class="collection-item clickable" data-filter="happiness">
+                                <span><span class="collection-number">5</span> Happiness</span>
                             </li>
                         </ul>
                     </div>
 
-                    <!-- Sidebar Image Ad-like section -->
-                    <div style="border-radius: var(--radius-sm); overflow: hidden; box-shadow: var(--shadow-sm);">
-                        <img src="https://images.unsplash.com/photo-1547517023-7ca0c162f816?w=800"
-                            alt="Buffalo Wellness" style="width: 100%; display: block;">
-                        <div
-                            style="background: var(--color-secondary-dark); color: white; padding: var(--space-4); text-align: center;">
-                            <h4 style="font-family: 'Playfair Display'; margin: 0;">Buffalo Wellness Guides</h4>
-                        </div>
-                    </div>
-
-                    <!-- Newsletter Widget -->
-                    <div class="sidebar-widget newsletter-widget">
+                    <!-- Stay Inspired Section -->
+                    <div class="sidebar-widget newsletter-widget text-center">
                         <i class="fas fa-heart"
                             style="font-size: 2rem; color: var(--color-primary); margin-bottom: var(--space-4);"></i>
                         <h3 class="newsletter-widget-title">Stay Inspired</h3>
-                        <p class="newsletter-widget-text">Join our community for fresh Buffalo wellness, inspiration,
-                            and delicious recipes delivered to your inbox.</p>
-                        <form id="sidebarNewsletterForm">
+                        <p class="newsletter-widget-text">Join our community for fresh Buffalo wellness and inspiration
+                            delivered to your inbox.</p>
+                        <form id="articleNewsletterForm">
                             <input type="email" class="form-input mb-4" placeholder="Your email address" required>
-                            <button type="submit" class="btn btn-plum">Subscribe to Bliss</button>
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Subscribe to
+                                Bliss</button>
                         </form>
                     </div>
                 </aside>

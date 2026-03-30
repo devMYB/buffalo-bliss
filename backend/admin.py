@@ -1,5 +1,5 @@
 from sqladmin import Admin, ModelView
-from .models import Event, AdvertisingRequest, Subscriber, Restaurant, Attraction, Recipe
+from .models import Event, AdvertisingRequest, Subscriber, Restaurant, Attraction, Recipe, Article
 from wtforms import SelectMultipleField
 from wtforms.validators import ValidationError
 
@@ -51,6 +51,13 @@ RECIPE_CATEGORIES = [
     ("lunch", "Go-to Lunches"),
     ("dessert", "Indulgent Desserts"),
     ("other", "Good Mood Foods"),
+]
+
+ARTICLE_CATEGORIES = [
+    ("health", "Health"),
+    ("wealth", "Wealth"),
+    ("spirit", "Spirit"),
+    ("happiness", "Happiness"),
 ]
 
 class EventAdmin(ModelView, model=Event):
@@ -187,6 +194,32 @@ class RecipeAdmin(ModelView, model=Recipe):
             data["category"] = " ".join(data["category"])
         return await super().on_model_change(data, model, is_created, request)
 
+class ArticleAdmin(ModelView, model=Article):
+    column_list = [
+        "id",
+        "name",
+        "category",
+        "badge1",
+        "badge2",
+        "minutes",
+        "sort_order",
+        "featured"
+    ]
+
+    column_sortable_list = ["sort_order", "name"]
+
+    form_columns = "__all__"
+
+    icon = "fa-solid fa-file-lines"
+    name = "Article"
+    name_plural = "Articles"
+
+    form_args = {
+        "category": {
+            "choices": ARTICLE_CATEGORIES,
+        }
+    }
+
    
 
 def setup_admin(app, engine, authentication_backend):
@@ -197,4 +230,5 @@ def setup_admin(app, engine, authentication_backend):
     admin.add_view(RestaurantAdmin)
     admin.add_view(AttractionAdmin)
     admin.add_view(RecipeAdmin)
+    admin.add_view(ArticleAdmin)
     return admin

@@ -4,9 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="Discover hidden gems in Buffalo, NY - Cafe Bewilderment, Blueberry Treehouse Farm, and more. Authentic blog-style reviews of Buffalo's best-kept secrets.">
-    <title>Buffalo's Hidden Gems | Your Bliss in 716</title>
+    <meta name="description" content="Read more about wellness, lifestyle, and how to live your best life in Buffalo.">
+    <title>Article Details | Your Bliss in 716</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,12 +31,11 @@
     <section class="page-header"
         style="background: var(--gradient-hero); padding: var(--space-16) 0 var(--space-8); text-align: center;">
         <div class="container">
-            <span class="gem-badge mb-4">Curated Collection</span>
-            <h1>Buffalo's Hidden Gems</h1>
-            <p
+            <span class="gem-badge mb-4" id="articleBadge">Featured Article</span>
+            <h1 id="articleMainTitle">Buffalo Wellness Articles</h1>
+            <p id="articleMainDescription"
                 style="font-size: var(--font-size-lg); color: var(--color-text-secondary); max-width: 600px; margin: 0 auto;">
-                Beyond the well-trodden path lies a world of discovery. We've uncovered the most enchanting,
-                undiscovered culinary treasures in and around Buffalo.
+                Explore insights and tips designed to bring health, wealth, and happiness to your life.
             </p>
         </div>
     </section>
@@ -47,9 +45,10 @@
         <div class="blog-container">
             <div class="blog-layout">
                 <!-- Main Content Column -->
-                <div class="blog-main" id="restaurant2Container">
-                    <div class="card card-glass" style="padding: 2rem; text-align: center;">
-                        Loading restaurants...
+                <div class="blog-main" id="articleDetailContainer">
+                    <div id="articleLoadingState" class="text-center py-20">
+                        <i class="fas fa-spinner fa-spin fa-3x color-primary"></i>
+                        <p class="mt-4">Loading article secrets...</p>
                     </div>
                 </div>
 
@@ -58,11 +57,11 @@
                     <!-- Newsletter Section -->
                     <div class="card card-glass sidebar-newsletter">
                         <div style="font-size: 3rem; margin-bottom: var(--space-4); color: var(--color-primary);"><i
-                                class="fas fa-envelope"></i></div>
-                        <h3 class="mb-4">Stay Connected</h3>
+                                class="fas fa-heart"></i></div>
+                        <h3 class="mb-4">Stay Inspired</h3>
                         <p class="card-text mb-6">
-                            Subscribe to our newsletter for the latest wellness tips, Buffalo events,
-                            and exclusive content delivered to your inbox.
+                            Subscribe to our newsletter for fresh Buffalo wellness and inspiration delivered to your
+                            inbox.
                         </p>
                         <form class="newsletter-form" id="sidebarNewsletterForm">
                             <input type="email" class="form-input" placeholder="Enter your email address" required>
@@ -72,35 +71,17 @@
                         </form>
                     </div>
 
-                    <!-- Stay Inspired Box (Optional extra sidebar content) -->
+                    <!-- Navigation Box -->
                     <div class="card card-glass" style="padding: var(--space-6);">
                         <h4 class="mb-4">Explore More Bliss</h4>
                         <p class="card-text" style="font-size: var(--font-size-sm);">
                             Discover your path to wellness and happiness with our curated guides and articles.
                         </p>
-                        <a href="../index.html" class="btn btn-sm btn-ghost" style="width: 100%;">
+                        <a href="../pages/article.html" class="btn btn-sm btn-ghost" style="width: 100%;">
+                            Back to Articles <i class="fas fa-arrow-left"></i>
+                        </a>
+                        <a href="../index.html" class="btn btn-sm btn-ghost mt-4" style="width: 100%;">
                             Back to Home <i class="fas fa-home"></i>
-                        </a>
-                    </div>
-
-                    <div class="card card-glass" style="padding: var(--space-6);">
-                        <h4 class="mb-4">Explore Other Attractions</h4>
-                        <p class="card-text" style="font-size: var(--font-size-sm);">
-                            Explore the must-see sights, local favorites, and unforgettable experiences Buffalo has to
-                            offer.
-                        </p>
-                        <a href="../pages/attractions.html" class="btn btn-sm btn-ghost" style="width: 100%;">
-                            Back to Attractions <i class="fas fa-bank"></i>
-                        </a>
-                    </div>
-
-                    <div class="card card-glass" style="padding: var(--space-6);">
-                        <h4 class="mb-4">Explore Other Events</h4>
-                        <p class="card-text" style="font-size: var(--font-size-sm);">
-                            Find festivals, concerts, and local happenings that bring the city to life.
-                        </p>
-                        <a href="../pages/events.html" class="btn btn-sm btn-ghost" style="width: 100%;">
-                            Back to Events <i class="fas fa-masks-theater"></i>
                         </a>
                     </div>
                 </aside>
