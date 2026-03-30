@@ -695,6 +695,11 @@ button {
   font-size: var(--font-size-sm);
 }
 
+.continue-reading {
+  display: inline-block;
+  margin-top: 12px;
+}
+
 /* ============================================
    CARDS
    ============================================ */
@@ -1421,4 +1426,57 @@ button {
 
 .sidebar-newsletter .btn {
   width: 100%;
+}
+
+/* ============================================
+   RECIPE PAGE STYLES
+   ============================================ */
+
+.recipe-post-image {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+}
+
+.recipe-post-image:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+}
+
+.recipe-post-title {
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.recipe-post-title:hover {
+  transform: translateY(-2px);
+  text-decoration: underline;
+}
+
+.recipe-post-content a {
+  display: inline-block;
+}
+
+.recipe-post {
+  transition: transform 0.25s ease;
+}
+
+/* Hover entire card */
+.recipe-post:hover {
+  transform: translateY(-4px);
+}
+
+/* Lift image when card is hovered */
+.recipe-post:hover .recipe-post-image {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Title reacts when card hovered */
+.recipe-post:hover .recipe-post-title {
+  text-decoration: underline;
+  transform: translateY(-2px);
+}
+
+.recipe-post {
+  border-radius: 16px;
+  overflow: hidden;
 }

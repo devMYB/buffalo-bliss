@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Explore our collection of delicious, healthy recipes to nourish your body and soul. Authentic blog-style recipes and wellness tips.">
+    <title>Recipe Details | Buffalo Bliss</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="../styles.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header" id="globalNav">
+        <!-- Site navigation rendered from script.js -->
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header"
+        style="background: var(--gradient-hero); padding: var(--space-16) 0 var(--space-8); text-align: center;">
+        <div class="container">
+            <span class="gem-badge mb-4">Curated Recipe</span>
+            <h1 id="recipeMainTitle">Nourishing Buffalo Recipes</h1>
+            <p id="recipeMainDescription"
+                style="font-size: var(--font-size-lg); color: var(--color-text-secondary); max-width: 600px; margin: 0 auto;">
+                Discover delicious, healthy meals designed to bring wellness to your Buffalo home.
+            </p>
+        </div>
+    </section>
+
+    <!-- Blog Content -->
+    <main class="section">
+        <div class="blog-container">
+            <div class="blog-layout">
+                <!-- Main Content Column -->
+                <div class="blog-main" id="recipeDetailContainer">
+                    <div id="recipeLoadingState" class="text-center py-20">
+                        <i class="fas fa-spinner fa-spin fa-3x color-primary"></i>
+                        <p class="mt-4">Loading recipe secrets...</p>
+                    </div>
+                </div>
+
+                <!-- Sidebar Column -->
+                <aside class="blog-sidebar">
+                    <!-- Newsletter Section -->
+                    <div class="card card-glass sidebar-newsletter">
+                        <div style="font-size: 3rem; margin-bottom: var(--space-4); color: var(--color-primary);"><i
+                                class="fas fa-heart"></i></div>
+                        <h3 class="mb-4">Stay Inspired</h3>
+                        <p class="card-text mb-6">
+                            Subscribe to our newsletter for fresh Buffalo wellness, inspiration,
+                            and delicious recipes delivered to your inbox.
+                        </p>
+                        <form class="newsletter-form" id="sidebarNewsletterForm">
+                            <input type="email" class="form-input" placeholder="Enter your email address" required>
+                            <button type="submit" class="btn btn-primary">
+                                Subscribe <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Stay Inspired Box -->
+                    <div class="card card-glass" style="padding: var(--space-6);">
+                        <h4 class="mb-4">Explore More Bliss</h4>
+                        <p class="card-text" style="font-size: var(--font-size-sm);">
+                            Discover your path to wellness and happiness with our curated guides and articles.
+                        </p>
+                        <a href="../pages/recipes.html" class="btn btn-sm btn-ghost" style="width: 100%;">
+                            Back to Recipes <i class="fas fa-utensils"></i>
+                        </a>
+                        <a href="../index.html" class="btn btn-sm btn-ghost mt-4" style="width: 100%;">
+                            Back to Home <i class="fas fa-home"></i>
+                        </a>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <!-- Site footer rendered from script.js -->
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="../data.js"></script>
+    <script src="../script.js"></script>
+</body>
+
+</html>

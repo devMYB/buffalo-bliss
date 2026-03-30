@@ -77,4 +77,18 @@ class Attraction(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
-    
+class Recipe(Base):
+    __tablename__ = "recipes"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(200), nullable=False)
+    image = Column(String(500), nullable=False)
+    description = Column(Text, nullable=False)         # short preview
+    full_description = Column(Text, nullable=False)    # full blog-style content
+    category = Column(String(200), nullable=False)     # e.g. "vegan breakfast"
+    badge1 = Column(String(100), nullable=True)
+    badge2 = Column(String(100), nullable=True)
+    featured = Column(Boolean, default=False)
+    sort_order = Column(Integer, default=0)            # controls display order
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

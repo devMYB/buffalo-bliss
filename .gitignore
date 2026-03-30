@@ -26,3 +26,5 @@ node_modules/
 
 #backup
 backups/
+
+events_backup.py

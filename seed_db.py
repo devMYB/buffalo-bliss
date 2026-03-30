@@ -449,6 +449,105 @@ attractions_data = [
     }
 ]
 
+recipes_data = [
+    {
+        "id": 1,
+        "name": "Chocolate Lava Cake",
+        "image": "https://images.getrecipekit.com/20250325120225-how-20to-20make-20chocolate-20molten-20lava-20cake-20in-20the-20microwave.png?width=650&quality=90&",
+        "description": "A rich and decadent chocolate dessert with a molten center.",
+        "full_description": "Ingredients:\n- Dark chocolate\n- Butter\n- Eggs\n- Sugar\n\nInstructions:\nMelt chocolate and butter together. Mix eggs and sugar separately, combine with chocolate, and bake until the center remains soft and gooey.\n\nServe warm with vanilla ice cream for the best experience.",
+        "category": "dessert",
+        "badge1": "Dessert",
+        "badge2": "Indulgent",
+        "featured": True,
+        "sort_order": 1
+    },
+    {
+        "id": 2,
+        "name": "Vegan Lentil Soup",
+        "image": "https://cdn.apartmenttherapy.info/image/upload/f_jpg,q_auto:eco,c_fill,g_auto,w_1500,ar_1:1/k%2FPhoto%2FRecipes%2F2024-10-red-lentil-soup%2Fred-lentil-soup-180",
+        "description": "A hearty, protein-rich soup perfect for a healthy meal.",
+        "full_description": "Ingredients:\n- Lentils\n- Carrots\n- Celery\n- Garlic\n\nInstructions:\nCook lentils with vegetables and spices. Simmer until soft and flavorful.\n\nThis dish is perfect for meal prep and keeps well for several days.",
+        "category": "vegan dinner",
+        "badge1": "Vegan",
+        "badge2": "Healthy",
+        "featured": True,
+        "sort_order": 2
+    },
+    {
+        "id": 3,
+        "name": "Stuffed Zucchini Boats",
+        "image": "https://hips.hearstapps.com/hmg-prod/images/stuffed-zucchini-recipe-3-1656619330.jpg?crop=1.00xw:1.00xh;0,0&resize=1200:*",
+        "description": "A light and flavorful vegetable-based dish.",
+        "full_description": "Ingredients:\n- Zucchini\n- Bell peppers\n- Cheese\n\nInstructions:\nSlice zucchini, scoop the center, and fill with sautéed vegetables. Bake until tender.\n\nGreat as a light lunch or side dish.",
+        "category": "lunch vegetarian",
+        "badge1": "Vegetarian",
+        "badge2": "Healthy",
+        "featured": True,
+        "sort_order": 3
+    },
+    {
+        "id": 4,
+        "name": "Avocado Toast Deluxe",
+        "image": "https://www.allrecipes.com/thmb/H1mSgOExKFdto3PWLfC9aTgJmlI=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/11699506-avocado-toast-4x3-ea45b882fb0c454a9ca31647d4fd3c01.jpg",
+        "description": "A nutritious and quick breakfast option.",
+        "full_description": "Ingredients:\n- Bread\n- Avocado\n- Lemon\n\nInstructions:\nToast bread, mash avocado with lemon juice, spread evenly, and top with chili flakes.\n\nPerfect for a quick morning meal.",
+        "category": "breakfast",
+        "badge1": "Breakfast",
+        "badge2": "Quick",
+        "featured": False,
+        "sort_order": 4
+    },
+    {
+        "id": 5,
+        "name": "Meal Prep Chicken Bowls",
+        "image": "https://healthyfitnessmeals.com/wp-content/uploads/2018/08/Grilled-chicken-burrito-bowls-10.jpg",
+        "description": "Balanced meals perfect for weekly prep.",
+        "full_description": "Ingredients:\n- Chicken\n- Rice\n- Vegetables\n\nInstructions:\nCook chicken and portion with rice and veggies into containers.\n\nIdeal for busy weekdays.",
+        "category": "meal-prep dinner",
+        "badge1": "Meal Prep",
+        "badge2": "High Protein",
+        "featured": False,
+        "sort_order": 5
+    },
+    {
+        "id": 6,
+        "name": "Classic Pancakes",
+        "image": "https://img.delicious.com.au/EyhPamCD/del/2023/06/easy-pancake-191698-2.jpg",
+        "description": "Fluffy pancakes for a perfect breakfast.",
+        "full_description": "Ingredients:\n- Flour\n- Milk\n- Eggs\n\nInstructions:\nMix ingredients into a batter and cook on a skillet until golden brown.\n\nServe with syrup and butter.",
+        "category": "breakfast",
+        "badge1": "Breakfast",
+        "badge2": "Comfort Food",
+        "featured": False,
+        "sort_order": 6
+    },
+    {
+        "id": 7,
+        "name": "Quinoa Buddha Bowl",
+        "image": "https://www.eatwell101.com/wp-content/uploads/2021/02/Healthy-Chickpea-Quinoa-Salad-recipe-1.jpg",
+        "description": "A nutritious bowl packed with plant-based goodness.",
+        "full_description": "Ingredients:\n- Quinoa\n- Chickpeas\n- Vegetables\n\nInstructions:\nCook quinoa and assemble with roasted vegetables and dressing.\n\nHealthy and filling.",
+        "category": "vegan lunch",
+        "badge1": "Vegan",
+        "badge2": "Balanced",
+        "featured": False,
+        "sort_order": 7
+    },
+    {
+        "id": 8,
+        "name": "Chocolate Chip Cookies",
+        "image": "https://mojo.generalmills.com/api/public/content/_pLFRXFETcuXWg_Z0MhZPw_gmi_hi_res_jpeg.jpeg?v=693b292b&t=466b54bb264e48b199fc8e83ef1136b4",
+        "description": "Classic cookies with a soft and chewy texture.",
+        "full_description": "Ingredients:\n- Flour\n- Sugar\n- Chocolate chips\n\nInstructions:\nMix ingredients, shape dough, and bake until golden.\n\nPerfect for dessert or snacks.",
+        "category": "dessert",
+        "badge1": "Dessert",
+        "badge2": "Classic",
+        "featured": False,
+        "sort_order": 8
+    }
+]
+
 def seed_events():
     db = SessionLocal()
     try:
@@ -543,7 +642,41 @@ def seed_attractions():
     finally:
         db.close()
 
+def seed_recipes():
+    db = SessionLocal()
+    try:
+        from backend.models import Recipe
+
+        db.query(Recipe).delete()
+        db.commit()
+
+        for r in recipes_data:
+            db.add(Recipe(
+                id=r["id"],
+                name=r["name"],
+                image=r["image"],
+                description=r["description"],
+                full_description=r["full_description"],
+                category=r["category"],
+                badge1=r.get("badge1"),
+                badge2=r.get("badge2"),
+                featured=r.get("featured", False),
+                sort_order=r.get("sort_order", 0)
+            ))
+
+        db.commit()
+        print("Recipes seeded successfully!")
+
+    except Exception as e:
+        import traceback
+        print(f"Error seeding recipes: {e}")
+        traceback.print_exc()
+        db.rollback()
+    finally:
+        db.close()
+
 if __name__ == "__main__":
     seed_events()
     seed_restaurants()
     seed_attractions()
+    seed_recipes()

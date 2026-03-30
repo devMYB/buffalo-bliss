@@ -19,6 +19,7 @@ function renderGlobalNav() {
         { name: 'Magazine', url: 'https://yourbliss.us/', external: true },
         { name: 'Attractions', url: prefix + 'pages/attractions.html', active: path.includes('attractions.html') },
         { name: 'Events', url: prefix + 'pages/events.html', active: path.includes('events.html') },
+        { name: 'Recipes', url: prefix + 'pages/recipes.html', active: path.includes('recipes.html') },
         { name: 'Restaurants', url: prefix + 'pages/restaurant2.html', active: path.includes('restaurant2.html') }
     ];
 
@@ -152,7 +153,7 @@ function renderGlobalFooter() {
                         <a href="https://yourbliss.us/category/wealth" class="footer-link" target="_blank">Wealth</a>
                         <a href="https://yourbliss.us/category/spirit" class="footer-link" target="_blank">Spirit</a>
                         <a href="https://yourbliss.us/category/happiness" class="footer-link" target="_blank">Happiness</a>
-                        <a href="https://yourbliss.us/recipes" class="footer-link" target="_blank">Recipes</a>
+                        <a href="${prefix}pages/recipes.html" class="footer-link">Recipes</a>
                     </div>
                 </div>
 
@@ -197,6 +198,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const isPageAttractions = path.includes('attractions.html');
     const isPageDetails = path.includes('details.html');
     const isPageRestaurant2 = path.includes('restaurant2.html');
+    const isPageRecipes = path.includes('recipes.html');
+    const isRecipeDetail = path.includes('recipe-detail.html');
 
     // Render Global Components
     renderGlobalNav();
@@ -204,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (isPageIndex) {
         renderFeaturedArticles();
-        renderRecipes();
+        loadHomepageRecipes();
         renderExploreBuffalo();
         initExploreBuffaloSlider();
     } else if (isPageEvents) {
@@ -217,6 +220,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     else if (isPageRestaurant2) {
         loadRestaurantArticles();
+    } else if (isPageRecipes) {
+        loadRecipes();
+    } else if (isRecipeDetail) {
+        loadRecipeDetail();
     }
 
     // Initialize UI components after rendering
@@ -270,28 +277,244 @@ function renderFeaturedArticles() {
     `).join('');
 }
 
-function renderRecipes() {
-    const container = document.getElementById('recipesContainer');
-    if (!container || !siteData.recipes) return;
 
-    container.innerHTML = siteData.recipes.map(recipe => `
-        <article class="card clickable-card" 
-            data-href="${recipe.url}" 
-            role="link" 
-            tabindex="0" 
-            aria-label="Read recipe: ${recipe.title}">
-            <div class="card">
-                <img src="${resolveImagePath(recipe.image)}" alt="${recipe.title}" class="card-image">
+let allRecipes = [];
+let filteredRecipes = [];
+
+async function loadHomepageRecipes() {
+    try {
+        const response = await fetch("http://localhost:8000/api/recipes");
+        const recipes = await response.json();
+
+        const container = document.getElementById("recipesContainer");
+        if (!container) return;
+
+        const featured = recipes.filter(r => r.featured);
+
+        const top3 = featured.length >= 3
+            ? featured.slice(0, 3)
+            : recipes.slice(0, 3); //fallback
+
+        container.innerHTML = top3.map(r => `
+            <div class="card clickable-card" data-href="pages/recipe-detail.html?id=${r.id}">
+                <img src="${resolveImagePath(r.image)}" class="card-image">
+        
                 <div class="card-content">
-                    <h4 class="card-title">${recipe.title}</h4>
-                    <p class="card-text">${recipe.description}</p>
-                    <div class="flex gap-2">
-                        ${recipe.badges.map(badge => `<span class="badge ${badge === 'Dinner' ? 'badge-accent' : badge === 'Breakfast' ? 'badge-primary' : 'badge-secondary'}">${badge}</span>`).join('')}
+                    <h3 class="card-title">${r.name}</h3>
+                    <p class="card-text">${r.description}</p>
+
+                    <div class="flex gap-2 mt-3">
+                        ${[r.badge1, r.badge2].filter(Boolean).map(b => `
+                            <span class="badge badge-primary">${b}</span>
+                        `).join('')}
                     </div>
                 </div>
             </div>
+        `).join('');
+
+    } catch (err) {
+        console.error("Homepage recipes failed:", err);
+    }
+}
+
+async function loadRecipes() {
+    try {
+        const response = await fetch("http://localhost:8000/api/recipes");
+        const recipes = await response.json();
+
+        allRecipes = recipes;
+        filteredRecipes = recipes;
+
+        renderRecipesPageView(recipes);
+
+        initializeRecipeFilters();
+
+    } catch (error) {
+        console.error("Error loading recipes:", error);
+    }
+}
+
+let currentPage = 1;
+const RECIPES_PER_PAGE = 6;
+
+function renderRecipesPageView(recipes) {
+    if (!recipes) return;
+
+    // =============================
+    // 1. FEATURED (TOP PICKS)
+    // =============================
+    const topContainer = document.getElementById("topPicksContainer");
+
+    if (topContainer) {
+        const featured = recipes.filter(r => r.featured);
+
+        topContainer.innerHTML = featured.map(r => `
+            <div class="card recipes-card">
+                <img src="${resolveImagePath(r.image)}" class="card-image">
+
+                <div class="card-content">
+                    <h3 class="card-title">${r.name}</h3>
+
+                    <div class="flex gap-2 mb-3">
+                        ${[r.badge1, r.badge2].filter(Boolean).map(b => `
+                            <span class="badge badge-primary">${b}</span>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        initSlider('topPicksContainer', 'topPicksPrev', 'topPicksNext')
+    }
+
+    // =============================
+    // 2. PAGINATED MAIN LIST
+    // =============================
+    renderRecipesPage(recipes, currentPage);
+}
+
+function renderRecipesPage(recipes, page) {
+    const container = document.getElementById("recipesPageContainer");
+    const pagination = document.getElementById("recipesPagination");
+
+    if (!container) return;
+
+    const start = (page - 1) * RECIPES_PER_PAGE;
+    const end = start + RECIPES_PER_PAGE;
+
+    const pageRecipes = recipes.slice(start, end);
+
+    // =============================
+    // MAIN LAYOUT
+    // =============================
+    container.innerHTML = pageRecipes.map(r => `
+        <article class="recipe-post" data-category="${r.category || ''}">
+
+            <!-- IMAGE LEFT -->
+            <a href="recipe-detail.html?id=${r.id}">
+                <img 
+                    src="${resolveImagePath(r.image)}" 
+                    alt="${r.name}" 
+                    class="recipe-post-image"
+                />
+            </a>
+
+            <!-- CONTENT RIGHT -->
+            <div class="recipe-post-content">
+
+                <a href="recipe-detail.html?id=${r.id}" style="text-decoration: none; color: inherit;">
+                    <h2 class="recipe-post-title">${r.name}</h2>
+                </a>
+
+                <p class="recipe-post-description">
+                    ${r.description}
+                </p>
+
+                <div class="recipe-post-badges">
+                    ${[r.badge1, r.badge2].filter(Boolean).map(b => `
+                        <span class="badge badge-primary">${b}</span>
+                    `).join('')}
+                </div>
+
+                <a href="recipe-detail.html?id=${r.id}" class="continue-reading">
+                    View Full Recipe →
+                </a>
+            </div>
+
         </article>
     `).join('');
+
+    initializeClickableCards();
+
+    // =============================
+    // PAGINATION BUTTONS
+    // =============================
+    if (pagination) {
+        const totalPages = Math.ceil(recipes.length / RECIPES_PER_PAGE);
+
+        pagination.innerHTML = Array.from({ length: totalPages }, (_, i) => `
+            <button 
+                class="pagination-btn ${i + 1 === page ? 'active' : ''}" 
+                onclick="changeRecipePage(${i + 1})"
+            >
+                ${i + 1}
+            </button>
+        `).join('');
+    }
+}
+
+function changeRecipePage(page) {
+    currentPage = page;
+    renderRecipesPage(filteredRecipes, currentPage);
+}
+
+async function loadRecipeDetail() {
+    const container = document.getElementById('recipeDetailContainer');
+    if (!container) return;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+
+    if (!id) {
+        container.innerHTML = "<p>Recipe not found.</p>";
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:8000/api/recipes/${id}`);
+        const recipe = await response.json();
+
+        renderRecipeDetail(recipe);
+
+    } catch (error) {
+        console.error("Error loading recipe:", error);
+        container.innerHTML = "<p>Failed to load recipe.</p>";
+    }
+}
+
+function renderRecipeDetail(recipe) {
+    const container = document.getElementById('recipeDetailContainer');
+    if (!container || !recipe) return;
+
+    container.innerHTML = `
+        <article class="blog-post">
+
+            <!-- TITLE -->
+            <h1 class="blog-post-title mb-6">${recipe.name}</h1>
+            <br>
+
+            <!-- IMAGE -->
+            <img 
+                src="${resolveImagePath(recipe.image)}" 
+                alt="${recipe.name}" 
+                class="blog-post-image"
+            >
+
+            <!-- FULL DESCRIPTION -->
+            <div class="blog-post-content">
+                ${(recipe.full_description || recipe.description)
+            .split(/\n\s*\n/)
+            .map(p => `<p>${p}</p>`)
+            .join('')}
+            </div>
+
+            <!-- BADGES -->
+            <div class="flex gap-2 mt-6">
+                ${[recipe.badge1, recipe.badge2].filter(Boolean).map(b => `
+                    <span class="badge badge-primary">${b}</span>
+                `).join('')}
+            </div>
+            <br>
+            <br>
+
+            <div class="mt-8">
+                <a href="recipes.html" class="btn btn-primary">
+                    <i class="fas fa-arrow-left mr-2"></i> Back to Recipes
+                </a>
+            </div>
+
+        </article>
+    `;
 }
 
 async function loadRestaurantArticles() {
@@ -422,8 +645,7 @@ function renderEvents(events) {
         const featuredEvents = events.filter(e => e.featured);
         featuredContainer.innerHTML = featuredEvents.map(e => `
             <article class="card card-glass clickable-card" 
-                data-href="${e.url || ' '}" 
-                if (!href) return;
+                data-href="${e.url || '#'}"
                 role="link" 
                 tabindex="0" 
                 aria-label="View details for ${e.name}">
@@ -501,6 +723,7 @@ function renderExploreBuffalo() {
         </article>
     `).join('');
 }
+
 
 function renderAttractions(attractions) {
     const featuredContainer = document.getElementById('featuredAttractionsContainer');
@@ -957,6 +1180,38 @@ function initializeFilters() {
     });
 }
 
+function initializeRecipeFilters() {
+    const buttons = document.querySelectorAll("#recipeTypeFilters .collection-item");
+
+    buttons.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const filter = btn.getAttribute("data-filter");
+
+            document.querySelectorAll("#recipeTypeFilters .collection-item")
+                .forEach(b => b.classList.remove("active"));
+
+            btn.classList.add("active");
+
+            if (filter === "all") {
+                filteredRecipes = allRecipes;
+                currentPage = 1;
+                renderRecipesPageView(filteredRecipes);
+                return;
+            }
+
+            const filtered = allRecipes.filter(r => {
+                return filter.split(/[ ,]+/).some(f =>
+                    r.category.toLowerCase().includes(f)
+                );
+            });
+
+            filteredRecipes = filtered;
+            currentPage = 1;
+            renderRecipesPageView(filteredRecipes);
+        });
+    });
+}
+
 // ============================================
 // SEARCH FUNCTIONALITY
 // ============================================
@@ -1119,6 +1374,7 @@ function initAttractionsSlider() {
 function initExploreBuffaloSlider() {
     initSlider('exploreBuffaloSlider', 'explorePrev', 'exploreNext');
 }
+
 
 function renderNewsletterModal() {
     // Prevent duplicate injection

@@ -1,5 +1,5 @@
 from sqladmin import Admin, ModelView
-from .models import Event, AdvertisingRequest, Subscriber, Restaurant, Attraction
+from .models import Event, AdvertisingRequest, Subscriber, Restaurant, Attraction, Recipe
 from wtforms import SelectMultipleField
 from wtforms.validators import ValidationError
 
@@ -40,6 +40,17 @@ EVENT_CATEGORIES = [
     ("faith", "Faith"),
     ("spirituality", "Spirituality"),
     ("religion", "Religion"),
+]
+
+RECIPE_CATEGORIES = [
+    ("breakfast", "Healthy Breakfast Ideas"),
+    ("vegan", "Plant-Based Favorites"),
+    ("vegetarian", "Plant-Based Favorites"),
+    ("meal-prep", "Wellness Meal Prepping"),
+    ("dinner", "Quick Weekly Dinners"),
+    ("lunch", "Go-to Lunches"),
+    ("dessert", "Indulgent Desserts"),
+    ("other", "Good Mood Foods"),
 ]
 
 class EventAdmin(ModelView, model=Event):
@@ -133,6 +144,51 @@ class AttractionAdmin(ModelView, model=Attraction):
             data["category"] = " ".join(data["category"])
         return await super().on_model_change(data, model, is_created, request)
 
+class RecipeAdmin(ModelView, model=Recipe):
+    column_list = [
+        "id",
+        "name",
+        "category",
+        "badge1",
+        "badge2",
+        "sort_order",
+        "featured"
+    ]
+
+    column_sortable_list = ["sort_order", "name"]
+
+    form_columns = "__all__"
+
+    icon = "fa-solid fa-utensils"
+    name = "Recipe"
+    name_plural = "Recipes"
+
+    # Multi-select category
+    form_overrides = {
+        "category": MultipleSelectStringField,
+    }
+
+    create_template = "custom_create.html"
+    edit_template = "custom_edit.html"
+
+    form_args = {
+        "category": {
+            "choices": RECIPE_CATEGORIES,
+            "validators": [validate_category_limit],
+            "description": "Select up to 3 categories.",
+            "render_kw": {
+                "data-role": "select2-tags",
+            }
+        }
+    }
+
+    async def on_model_change(self, data, model, is_created, request):
+        if "category" in data and isinstance(data["category"], list):
+            data["category"] = " ".join(data["category"])
+        return await super().on_model_change(data, model, is_created, request)
+
+   
+
 def setup_admin(app, engine, authentication_backend):
     admin = Admin(app, engine, authentication_backend=authentication_backend, templates_dir="backend/templates")
     admin.add_view(EventAdmin)
@@ -140,4 +196,5 @@ def setup_admin(app, engine, authentication_backend):
     admin.add_view(SubscriberAdmin)
     admin.add_view(RestaurantAdmin)
     admin.add_view(AttractionAdmin)
+    admin.add_view(RecipeAdmin)
     return admin

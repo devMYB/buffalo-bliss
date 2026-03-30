@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Explore our collection of delicious, healthy recipes to nourish your body and soul. Blog-style recipes and wellness tips.">
+    <title>The Latest & Greatest Recipes | Buffalo Bliss</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="../styles.css">
+
+    <style>
+        .page-header {
+            background: var(--gradient-hero);
+            padding: var(--space-16) 0 var(--space-12);
+            text-align: center;
+        }
+
+        .page-wrapper {
+            background-color: var(--color-white);
+            padding: var(--space-12) 0;
+        }
+
+        .recipe-layout {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: var(--space-12);
+        }
+
+        @media (max-width: 1024px) {
+            .recipe-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Section Title */
+        /* Section Title (Removed but kept class for any future use) */
+        .section-title-sm {
+            display: none;
+        }
+
+        /* Recipe Post Style */
+        .recipe-post {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: var(--space-8);
+            margin-bottom: var(--space-12);
+            padding-bottom: var(--space-12);
+            border-bottom: 1px solid var(--color-neutral-100);
+            transition: all var(--transition-base);
+        }
+
+        @media (max-width: 640px) {
+            .recipe-post {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .recipe-post-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: var(--radius-sm);
+        }
+
+        .recipe-post-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .recipe-post-date {
+            text-transform: uppercase;
+            font-size: var(--font-size-xs);
+            letter-spacing: 1px;
+            color: var(--color-text-tertiary);
+            margin-bottom: var(--space-2);
+        }
+
+        .recipe-post-title {
+            font-family: var(--font-heading);
+            font-size: var(--font-size-3xl);
+            color: var(--color-neutral-800);
+            margin-bottom: var(--space-4);
+            line-height: 1.2;
+        }
+
+        .recipe-post-description {
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-6);
+            line-height: 1.6;
+        }
+
+        .continue-reading {
+            text-transform: uppercase;
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-accent);
+            /* Golden-sand accent */
+            letter-spacing: 1px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .continue-reading:hover {
+            color: var(--color-accent-dark);
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-10);
+        }
+
+        .sidebar-widget {
+            background: var(--color-neutral-50);
+            padding: var(--space-6);
+            border-radius: var(--radius-sm);
+        }
+
+        .sidebar-title {
+            font-family: var(--font-heading);
+            text-transform: uppercase;
+            font-size: var(--font-size-sm);
+            letter-spacing: 1px;
+            color: var(--color-primary-dark);
+            margin-bottom: var(--space-6);
+            text-align: center;
+            border-bottom: 1px solid var(--color-neutral-200);
+            padding-bottom: var(--space-2);
+        }
+
+        /* Collections List */
+        .collection-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .collection-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-3) 0;
+            border-bottom: 1px solid var(--color-neutral-100);
+            font-size: var(--font-size-sm);
+            color: var(--color-text-primary);
+            transition: all var(--transition-fast);
+        }
+
+        .collection-item:hover {
+            color: var(--color-accent);
+            padding-left: var(--space-2);
+        }
+
+        .collection-item.clickable {
+            cursor: pointer;
+        }
+
+        .collection-item.active {
+            color: var(--color-accent);
+            padding-left: var(--space-2);
+            font-weight: var(--font-weight-bold);
+        }
+
+        .collection-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: var(--color-secondary-dark);
+            /* Using secondary green */
+            color: white;
+            border-radius: 50%;
+            font-size: 10px;
+            margin-right: var(--space-3);
+        }
+
+        .collection-count {
+            color: var(--color-text-tertiary);
+            font-size: var(--font-size-xs);
+        }
+
+        /* Search Widget */
+        .search-widget {
+            margin-bottom: var(--space-8);
+        }
+
+        /* Newsletter Sidebar Widget */
+        .newsletter-widget {
+            background-color: var(--color-white);
+            border: 1px solid var(--color-neutral-100);
+            text-align: center;
+        }
+
+        .newsletter-widget-title {
+            font-family: var(--font-heading);
+            font-size: var(--font-size-xl);
+            margin-bottom: var(--space-2);
+        }
+
+        .newsletter-widget-text {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-6);
+        }
+
+        /* Badges inside post */
+        .recipe-post-badges {
+            margin-top: var(--space-4);
+            display: flex;
+            gap: var(--space-2);
+            flex-wrap: wrap;
+        }
+
+        /* Buttons from screenshot */
+        .btn-plum {
+            background: var(--gradient-primary);
+            color: var(--color-white) !important;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: var(--space-4) var(--space-8);
+            border-radius: var(--radius-sm);
+            font-size: var(--font-size-sm);
+            width: 100%;
+            border: none;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-plum:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        [data-theme="dark"] .page-wrapper {
+            background-color: var(--color-neutral-900);
+        }
+
+        [data-theme="dark"] .sidebar-widget {
+            background-color: var(--color-neutral-800);
+        }
+
+        /* Slider Card Size Adjustment - Always 3 cards */
+        .slider-content .recipes-card {
+            flex: 0 0 calc((100% - (2 * var(--space-6))) / 3) !important;
+            min-width: unset !important;
+        }
+
+        @media (max-width: 1024px) {
+            .slider-content .recipes-card {
+                flex: 0 0 calc((100% - var(--space-6)) / 2) !important;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .slider-content .recipes-card {
+                flex: 0 0 100% !important;
+            }
+        }
+
+        /* Pagination Styles */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-2);
+            margin-top: var(--space-12);
+        }
+
+        .pagination-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            color: var(--color-text-primary);
+            font-weight: var(--font-weight-semibold);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .pagination-btn.active {
+            background: var(--gradient-primary);
+            color: var(--color-white);
+            border-color: transparent;
+        }
+
+        .pagination-btn:hover:not(.active) {
+            background: var(--color-neutral-100);
+            border-color: var(--color-neutral-300);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header" id="globalNav">
+        <!-- Site navigation rendered from script.js -->
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Recipe Corner</h1>
+            <p
+                style="font-size: var(--font-size-lg); color: var(--color-text-secondary); max-width: 600px; margin: 0 auto;">
+                Discover nourishing recipes and wellness inspiration for your Buffalo home
+            </p>
+        </div>
+    </section>
+
+    <!-- This month's top picks -->
+    <section class="section" style="background: var(--color-neutral-50);">
+        <div class="container">
+            <h2 class="mb-8">This month's top picks</h2>
+
+            <div class="slider-wrapper">
+                <button class="slider-nav prev" id="topPicksPrev" aria-label="Previous recipe">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+
+                <div class="slider-container">
+                    <div id="topPicksContainer" class="slider-content">
+                        <!-- Data rendered from script.js -->
+                    </div>
+                </div>
+
+                <button class="slider-nav next" id="topPicksNext" aria-label="Next recipe">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <div class="page-wrapper">
+        <div class="container">
+            <div class="recipe-layout">
+                <!-- Main Content -->
+                <main class="main-content">
+                    <div id="recipesPageContainer">
+                        <!-- Data rendered from script.js -->
+                    </div>
+
+                    <!-- Pagination -->
+                    <div id="recipesPagination" class="pagination-container">
+                        <!-- Numbers rendered from script.js -->
+                    </div>
+                </main>
+
+                <!-- Sidebar -->
+                <aside class="sidebar">
+                    <!-- Search Widget -->
+                    <div class="search-widget">
+                        <div class="form-group mb-0">
+                            <input type="text" id="searchInput" class="form-input" placeholder="Search recipes...">
+                        </div>
+                    </div>
+
+                    <!-- Collections Widget -->
+                    <div class="sidebar-widget">
+                        <h3 class="sidebar-title">Explore Recipe Types</h3>
+                        <ul class="collection-list" id="recipeTypeFilters">
+                            <li class="collection-item clickable" data-filter="all">
+                                <span><span class="collection-number">1</span> All Recipes</span>
+                            </li>
+                            <li class="collection-item clickable" data-filter="breakfast">
+                                <span><span class="collection-number">2</span> Healthy Breakfast Ideas</span>
+
+                            </li>
+                            <li class="collection-item clickable" data-filter="vegan, vegetarian">
+                                <span><span class="collection-number">3</span> Plant-Based Favorites</span>
+
+                            </li>
+                            <li class="collection-item clickable" data-filter="meal-prep">
+                                <span><span class="collection-number">4</span> Wellness Meal Prepping</span>
+
+                            </li>
+                            <li class="collection-item clickable" data-filter="dinner">
+                                <span><span class="collection-number">5</span> Quick Weekly Dinners</span>
+
+                            </li>
+                            <li class="collection-item clickable" data-filter="lunch">
+                                <span><span class="collection-number">6</span> Go-to Lunches</span>
+
+                            </li>
+                            <li class="collection-item clickable" data-filter="dessert">
+                                <span><span class="collection-number">7</span> Indulgent Desserts</span>
+
+                            </li>
+                            <li class="collection-item clickable" data-filter="other">
+                                <span><span class="collection-number">8</span> Good Mood Foods</span>
+
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Sidebar Image Ad-like section -->
+                    <div style="border-radius: var(--radius-sm); overflow: hidden; box-shadow: var(--shadow-sm);">
+                        <img src="https://images.unsplash.com/photo-1547517023-7ca0c162f816?w=800"
+                            alt="Buffalo Wellness" style="width: 100%; display: block;">
+                        <div
+                            style="background: var(--color-secondary-dark); color: white; padding: var(--space-4); text-align: center;">
+                            <h4 style="font-family: 'Playfair Display'; margin: 0;">Buffalo Wellness Guides</h4>
+                        </div>
+                    </div>
+
+                    <!-- Newsletter Widget -->
+                    <div class="sidebar-widget newsletter-widget">
+                        <i class="fas fa-heart"
+                            style="font-size: 2rem; color: var(--color-primary); margin-bottom: var(--space-4);"></i>
+                        <h3 class="newsletter-widget-title">Stay Inspired</h3>
+                        <p class="newsletter-widget-text">Join our community for fresh Buffalo wellness, inspiration,
+                            and delicious recipes delivered to your inbox.</p>
+                        <form id="sidebarNewsletterForm">
+                            <input type="email" class="form-input mb-4" placeholder="Your email address" required>
+                            <button type="submit" class="btn btn-plum">Subscribe to Bliss</button>
+                        </form>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <!-- Site footer rendered from script.js -->
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="../data.js"></script>
+    <script src="../script.js"></script>
+</body>
+
+</html>
