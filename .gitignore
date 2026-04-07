@@ -8,6 +8,7 @@ venv/
 
 # SQLite (We don't want to overwrite the server db with local data)
 *.db
+!content.db
 !seed_db.py
 
 # OS & IDE

@@ -25,6 +25,12 @@ def validate_category_limit_2(form, field):
     if field.data and len(field.data) > 2:
         raise ValidationError("You can select at most 2 categories.")
 
+def validate_image_extension(form, field):
+    if field.data and field.data.filename:
+        filename = field.data.filename.lower()
+        if not (filename.endswith('.jpg') or filename.endswith('.jpeg') or filename.endswith('.png')):
+            raise ValidationError("Images only! (.jpg, .jpeg, .png, .webp, .gif, .svg, .ico, .bmp, .tiff, .tif, .avif, .heic, .heif)")
+
 #------------------------------------------------------------
 # CATEGORIES
 #------------------------------------------------------------
@@ -341,6 +347,10 @@ class ArticleAdmin(ModelView, model=Article):
 
     form_columns = "__all__"
 
+    form_extra_fields = {
+        "image_file": FileField("Image File", validators=[validate_image_extension])
+    }
+
     create_template = "article_create.html"
     edit_template = "article_edit.html"
 
@@ -361,6 +371,13 @@ class ArticleAdmin(ModelView, model=Article):
             "description": "Enter a URL (https://...) or a local path (assets/images/...). You can also upload a file below.",
             "render_kw": {
                 "placeholder": "Enter image URL if not uploading",
+                "class": "form-control"
+            }
+        },
+        "author": {
+            "label": "Author (Optional)",
+            "render_kw": {
+                "placeholder": "Author's name",
                 "class": "form-control"
             }
         }

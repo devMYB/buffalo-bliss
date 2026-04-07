@@ -101,12 +101,14 @@ class Article(Base):
     image = Column(String(500), nullable=False)
     description = Column(Text, nullable=False)
     full_description = Column(Text, nullable=False)
+    author = Column(String(200), nullable=True)
     minutes = Column(Integer, nullable=False)
     category = Column(String(100), nullable=False)  # health, wealth, spirit, happiness
     badge1 = Column(String(100), nullable=True)
     badge2 = Column(String(100), nullable=True)
     sort_order = Column(Integer, default=0)
     featured = Column(Boolean, default=False)
+    image_file = None
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 

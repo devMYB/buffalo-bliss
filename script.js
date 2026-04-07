@@ -1560,6 +1560,7 @@ function renderArticlesPage(articles, page) {
                     <h2 class="article-post-title">${a.name}</h2>
                 </a>
                 <p class="article-post-description">${a.description}</p>
+                ${a.author ? `<div class="article-post-author mb-2" style="font-size: var(--font-size-sm); color: var(--color-text-tertiary); font-style: italic;">By ${a.author}</div>` : ''}
                 <div class="flex gap-2 mb-4">
                     ${[a.badge1, a.badge2].filter(Boolean).map(b => `<span class="badge badge-secondary">${b}</span>`).join('')}
                 </div>
@@ -1659,12 +1660,18 @@ function renderArticleDetail(article) {
         <article class="blog-post">
             <img src="${resolveImagePath(article.image)}" alt="${article.name}" class="blog-post-image">
             <div class="blog-post-content">
-                ${article.full_description.split(/\n\s*\n/).map(p => `<p>${p}</p>`).join('')}
+                ${article.full_description.includes('<')
+            ? article.full_description
+            : article.full_description.split(/\n\s*\n/).map(p => `<p>${p}</p>`).join('')}
             </div>
+            ${article.author ? `<div class="article-author mb-4" style="color: var(--color-text-tertiary); font-style: italic;">By ${article.author}</div>` : ''}
             <div class="flex gap-2 mt-6">
                 ${[article.badge1, article.badge2].filter(Boolean).map(b => `<span class="badge badge-secondary">${b}</span>`).join('')}
             </div>
         </article>
+        <a href="article.html" class="btn btn-secondary btn-lg">
+            <i class="fas fa-arrow-left mr-2"></i> Back to Articles
+        </a>
     `;
 }
 
@@ -1733,9 +1740,9 @@ async function loadMagazines() {
 }
 
 function renderMagazineCard(mag) {
-    const imageSrc  = resolveImagePath(mag.image);
-    const fileSrc   = resolveImagePath(mag.file);
-    const title     = mag.name || mag.date_label || 'Issue';
+    const imageSrc = resolveImagePath(mag.image);
+    const fileSrc = resolveImagePath(mag.file);
+    const title = mag.name || mag.date_label || 'Issue';
     const dateLabel = mag.date_label || '';
     const safeTitle = title.replace(/'/g, "\\'");
 
@@ -1771,7 +1778,7 @@ function renderMagazineCard(mag) {
 function initMagazineModal() {
     const backdrop = document.getElementById('pdfModalBackdrop');
     const closeBtn = document.getElementById('pdfModalClose');
-    const frame    = document.getElementById('pdfFrame');
+    const frame = document.getElementById('pdfFrame');
 
     if (!backdrop || !closeBtn || !frame) return;
 
@@ -1791,17 +1798,17 @@ function initMagazineModal() {
 
 function openMagazineModal(fileSrc, title) {
     const backdrop = document.getElementById('pdfModalBackdrop');
-    const frame    = document.getElementById('pdfFrame');
-    const titleEl  = document.getElementById('pdfModalTitle');
-    const dlBtn    = document.getElementById('pdfDownloadBtn');
-    const fbBtn    = document.getElementById('pdfFallbackBtn');
+    const frame = document.getElementById('pdfFrame');
+    const titleEl = document.getElementById('pdfModalTitle');
+    const dlBtn = document.getElementById('pdfDownloadBtn');
+    const fbBtn = document.getElementById('pdfFallbackBtn');
     const fallback = document.getElementById('pdfFallback');
 
     if (!backdrop || !frame) return;
 
-    if (titleEl)  titleEl.textContent = title;
-    if (dlBtn)  { dlBtn.href = fileSrc; dlBtn.setAttribute('download', title + '.pdf'); }
-    if (fbBtn)    fbBtn.href = fileSrc;
+    if (titleEl) titleEl.textContent = title;
+    if (dlBtn) { dlBtn.href = fileSrc; dlBtn.setAttribute('download', title + '.pdf'); }
+    if (fbBtn) fbBtn.href = fileSrc;
 
     // Reset state
     frame.style.display = 'block';
@@ -1814,8 +1821,8 @@ function openMagazineModal(fileSrc, title) {
 
 function closeMagazineModal() {
     const backdrop = document.getElementById('pdfModalBackdrop');
-    const frame    = document.getElementById('pdfFrame');
+    const frame = document.getElementById('pdfFrame');
     if (backdrop) backdrop.classList.remove('active');
-    if (frame)    frame.src = '';
+    if (frame) frame.src = '';
     document.body.style.overflow = '';
 }

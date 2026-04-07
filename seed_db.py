@@ -554,6 +554,7 @@ articles_data = [
         "image": "https://www.swcandy.com/cdn/shop/articles/BP1.png?v=1770102088",
         "description": "Transform your relationship with money through daily mindfulness practices.",
         "full_description": "Spending naturally increases with our stress levels. This 30-day challenge helps you identify triggers and develop a healthier financial mindset...\n\nWeek 1: Awareness. Track every penny you spend and note how you felt at that moment.\n\nWeek 2: Intention. Before any purchase, ask if it aligns with your core values.\n\nWeek 3: Gratitude. Focus on what you already have rather than what you lack.\n\nWeek 4: Implementation. Set new, mindful spending habits for the future.",
+        "author": "Anonymous",
         "minutes": 5,
         "category": "wealth",
         "badge1": "Wealth",
@@ -566,6 +567,7 @@ articles_data = [
         "image": "https://images.unsplash.com/photo-1598929214007-1851f46b11e3?q=80&w=734&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Learn why embracing your entrepreneurial journey is vital for both your service and your soul.",
         "full_description": "Entrepreneurship is a marathon, not a sprint. To stay the course, you must find joy in the process...\n\nPassion is the fuel that keeps you going when things get tough. Rediscover the reason you started your business in the first place.\n\nYour service to others is a reflection of your own inner growth. When you love what you do, it shows in the quality of your work.",
+        "author": "Buffalo Bliss Team",
         "minutes": 8,
         "category": "wealth",
         "badge1": "Wealth",
@@ -578,6 +580,7 @@ articles_data = [
         "image": "https://plus.unsplash.com/premium_photo-1682436765795-874b22e69435?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         "description": "Exploring the multifaceted nature of fulfillment beyond traditional relationships.",
         "full_description": "In a world that often prioritizes romantic love, we explore other avenues for deep fulfillment...\n\nCommunity, purpose, and self-discovery are equally important pillars of a happy life. We look at how building strong friendships and pursuing personal passions can lead to a more balanced and joyful existence.",
+        "author": "Wellness Editorial",
         "minutes": 7,
         "category": "happiness",
         "badge1": "Happiness",
@@ -590,6 +593,7 @@ articles_data = [
         "image": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800",
         "description": "Discover the best ways to stay active and healthy in the Queen City.",
         "full_description": "From yoga in Delaware Park to cycling along the Outer Harbor, Buffalo offers plenty of opportunities for physical activity...\n\nExplore local gyms, wellness centers, and outdoor spaces that encourage a healthy lifestyle and community connection.",
+        "author": "City Guide Buffalo",
         "minutes": 6,
         "category": "health",
         "badge1": "Health",
@@ -738,6 +742,7 @@ def seed_articles():
                 image=a["image"],
                 description=a["description"],
                 full_description=a["full_description"],
+                author=a.get("author"),
                 minutes=a["minutes"],
                 category=a["category"],
                 badge1=a.get("badge1"),
@@ -756,9 +761,9 @@ def seed_articles():
     finally:
         db.close()
 
-# if __name__ == "__main__":
-#     seed_events()
-#     seed_restaurants()
-#     seed_attractions()
-#     seed_recipes()
-#     seed_articles()
+if __name__ == "__main__":
+    # seed_events()
+    # seed_restaurants()
+    # seed_attractions()
+    # seed_recipes()
+    seed_articles()

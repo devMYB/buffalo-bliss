@@ -145,7 +145,7 @@ def get_articles(category: Optional[str] = None, featured: Optional[bool] = None
         query = query.filter(Article.category == category)
     if featured is not None:
         query = query.filter(Article.featured == featured)
-    return query.order_by(Article.sort_order, Article.id).all()
+    return query.order_by(Article.sort_order.desc(), Article.id.desc()).all()
 
 @app.get("/api/articles/{article_id}")
 def get_article(article_id: int, db: Session = Depends(get_db)):

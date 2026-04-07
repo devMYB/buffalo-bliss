@@ -3,6 +3,21 @@
 {% block head %}
 {{ super() }}
 
+<!-- CKEditor 5 (Classic) -->
+<script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
+
+<style>
+    /* Ensure CKEditor takes the full width and has a reasonable height */
+    .ck-editor__editable_inline {
+        min-height: 300px;
+        max-height: 600px;
+    }
+    /* Fix for CKEditor z-index in some modal situations if needed, but here mostly for styling */
+    .ck.ck-editor {
+        width: 100% !important;
+    }
+</style>
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         var form = document.querySelector('form');
@@ -26,6 +41,33 @@
                     // Insert after the image URL field
                     fieldContainer.parentNode.insertBefore(uploadDiv, fieldContainer.nextSibling);
                 }
+            }
+
+            // Initialize CKEditor for full_description
+            var fullDescTextarea = document.getElementById("full_description");
+            if (fullDescTextarea) {
+                ClassicEditor
+                    .create(fullDescTextarea, {
+                        toolbar: ['heading', '|', 'bold', 'italic', 'underline', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo'],
+                        heading: {
+                            options: [
+                                { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                                { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                                { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+                                { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' }
+                            ]
+                        }
+                    })
+                    .then(editor => {
+                        console.log('CKEditor initialized for full_description');
+                        // Ensure the data is sync'd back to the textarea before submission
+                        form.addEventListener('submit', () => {
+                            fullDescTextarea.value = editor.getData();
+                        });
+                    })
+                    .catch(error => {
+                        console.error('CKEditor initialization error:', error);
+                    });
             }
         }
     });
