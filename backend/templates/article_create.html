@@ -1,0 +1,33 @@
+{% extends "custom_create.html" %}
+
+{% block head %}
+{{ super() }}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var form = document.querySelector('form');
+        if (form) {
+            // Force multipart/form-data to allow file uploads
+            form.enctype = "multipart/form-data";
+            
+            // Find the image URL field container
+            var imageInput = document.getElementById("image");
+            if (imageInput) {
+                var fieldContainer = imageInput.closest('.mb-3');
+                if (fieldContainer) {
+                    // Create and inject the file upload field
+                    var uploadDiv = document.createElement('div');
+                    uploadDiv.className = 'mb-3';
+                    uploadDiv.innerHTML = `
+                        <label class="form-label" for="image_file">Or Upload Image File</label>
+                        <input class="form-control" id="image_file" name="image_file" type="file">
+                        <div class="form-text">Choose a file to upload to assets/images/. This will override the URL field above.</div>
+                    `;
+                    // Insert after the image URL field
+                    fieldContainer.parentNode.insertBefore(uploadDiv, fieldContainer.nextSibling);
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

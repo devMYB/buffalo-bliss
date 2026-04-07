@@ -1,0 +1,189 @@
+{% extends "sqladmin/layout.html" %}
+{% block content %}
+<div style="padding: 2rem;">
+    <div
+        style="background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); padding: 2.5rem; border: 1px solid #e9ecef;">
+
+        <!-- Header -->
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
+            <div>
+                <h1 style="font-size: 1.75rem; font-weight: 700; margin: 0 0 0.5rem 0; color: #1a1a15;">Editor
+                    Guidelines</h1>
+                <p style="color: #737366; margin: 0; font-size: 1rem;">Everything you need to know for managing Your
+                    Bliss in 716 content.</p>
+            </div>
+            <div style="font-size: 3.5rem; flex-shrink: 0; margin-left: 1.5rem;"><i
+                    class="fa-solid fa-pen-to-square"></i></div>
+        </div>
+
+        <hr style="border: none; border-top: 1px solid #e9ecef; margin: 1.5rem 0;">
+
+        <!-- Events -->
+        <div style="margin-bottom: 2rem;">
+            <h2
+                style="font-size: 1.15rem; font-weight: 700; color: #1a1a15; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fa-solid fa-calendar-days"></i> Events
+            </h2>
+            <div
+                style="background: #fafaf9; border-left: 5px solid #FFB4A2; border-radius: 8px; padding: 1.25rem; font-size: 0.9rem; color: #3F3F35; line-height: 1.8;">
+                <ul style="margin: 0; padding-left: 1.25rem;">
+                    <li><strong>Adding New Events (Using AI)</strong>:
+                        <ul style="margin-top: 0.5rem;">
+                            <li>To generate events quickly, use ChatGPT or any AI tool with the following prompt:</li>
+
+                            <code>
+                                Get me a list of events in and around buffalo. For the events around buffalo, make sure they are less than a 30 minute drive. Additionally, for each event, follow the structure below:
+                                <br>1. Name of the event.
+                                <br>2. One line description of the event.
+                                <br>3. The month the event is available from
+                                <br>4. General time of the event (example: 11:00 AM - 3:00 PM)
+                                <br>5. Name of the venue and the location of the venue (example: Delaware Park, Buffalo, NY)
+                                <br>6. The official website link (url) of the event where tickets can be booked (if the event is free, still get the official website)
+                                <br>IMPORTANT: Give me about 15-20 events starting from this month and give a higher concentration of events that are in the current and the next 2 months.
+                                <br>
+                            </code>
+
+                            <li><strong>Always verify links</strong> provided by AI — sometimes they may be incorrect or
+                                non-functional.</li>
+                            <li>In the above prompt, you can adjust the number of events based on current needs.</li>
+                        </ul>
+                    </li>
+                    <li>Click <strong>Events → Create</strong> to add a new event.</li>
+                    <li><strong>Name</strong>: The full event name, e.g. <code>Buffalo Holiday Spring Market</code></li>
+                    <li><strong>Image</strong>: Paste a valid image URL from reliable sources such as
+                        <code>Unsplash, Pexels, Pixabay</code> or similar stock image websites.
+                    </li>
+                    <li><strong>URL</strong>: Paste the official website link of the event. Always ensure the link is
+                        accurate and working.</li>
+                    <li><strong>Month Format</strong>:
+                        Use one of the following standardized formats for the month field:
+                        <ul style="margin-top: 0.5rem;">
+                            <li><code>Month</code> – for single-month events (e.g. <code>May</code>)</li>
+                            <li><code>Month–Month</code> – for events spanning multiple months (e.g.
+                                <code>May–August</code>)
+                            </li>
+                            <li><code>Year-Round</code> – for events available throughout the year</li>
+                            <li><code>Monthly</code> – for events that occur every month</li>
+                        </ul>
+                        Ensure consistency in formatting across all events.
+                    </li>
+                    <li><strong>Badges</strong> should be separated by commas (e.g.
+                        <code>Food, Local vendors, Music</code>).
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Magazines -->
+        <div style="margin-bottom: 2rem;">
+            <h2
+                style="font-size: 1.15rem; font-weight: 700; color: #1a1a15; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fa-solid fa-book-open"></i> Digital Magazines
+            </h2>
+            <div
+                style="background: #fafaf9; border-left: 5px solid #FFB4A2; border-radius: 8px; padding: 1.25rem; font-size: 0.9rem; color: #3F3F35; line-height: 1.8;">
+                <ul style="margin: 0; padding-left: 1.25rem;">
+                    <li>Click <strong>Magazines → Create</strong> to add a new issue.</li>
+                    <li><strong>Name</strong>: The full issue name, e.g. <code>March 2026</code></li>
+                    <li><strong>Date Added</strong>: Displayed on the website under the cover, e.g.
+                        <code>March 2026</code>
+                    </li>
+                    <li><strong>Cover Image (Upload)</strong>: Click "Choose File" and select your cover image from your
+                        computer. It will be saved automatically to <code>assets/magazines/images/</code></li>
+                    <li><strong>PDF File (Upload)</strong>: Click "Choose File" and select the magazine PDF. It will be
+                        saved automatically to <code>assets/magazines/media/</code></li>
+                    <li>The newest issue always appears first — no sorting needed.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Articles -->
+        <div style="margin-bottom: 2rem;">
+            <h2 style="font-size: 1.15rem; font-weight: 700; color: #1a1a15; margin-bottom: 0.75rem;"><i
+                    class="fa-solid fa-file-lines"></i> Wellness Articles</h2>
+            <div
+                style="background: #fafaf9; border-left: 5px solid #B8C5B8; border-radius: 8px; padding: 1.25rem; font-size: 0.9rem; color: #3F3F35; line-height: 1.8;">
+                <ul style="margin: 0; padding-left: 1.25rem;">
+                    <li>Set <strong>Category</strong> correctly: <code>health</code>, <code>wealth</code>,
+                        <code>spirit</code>, or <code>happiness</code> — this controls which section the article appears
+                        in.
+                    </li>
+                    <li>Enable <strong>Featured</strong> to show the article in the homepage spotlight grid.</li>
+                    <li><strong>Minutes</strong>: Estimated reading time in minutes (e.g. <code>5</code>).</li>
+                    <li>Use <strong>Sort Order</strong> (lower number = appears first) to control the listing order.
+                    </li>
+                    <li><strong>Image</strong>: You have two options for the article image:
+                        <ul style="margin-top: 0.5rem;">
+                            <li>Enter a <strong>URL / Path</strong> (e.g., from Unsplash or a manual path like <code>assets/images/name.jpg</code>).</li>
+                            <li>Or <strong>Upload</strong> a file from your computer which will be saved to <code>assets/images/</code>. Choosing a file overrides the URL field.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Recipes -->
+        <div style="margin-bottom: 2rem;">
+            <h2 style="font-size: 1.15rem; font-weight: 700; color: #1a1a15; margin-bottom: 0.75rem;"><i
+                    class="fa-solid fa-utensils"></i> Recipes</h2>
+            <div
+                style="background: #fafaf9; border-left: 5px solid #6c757d; border-radius: 8px; padding: 1.25rem; font-size: 0.9rem; color: #3F3F35; line-height: 1.8;">
+                <ul style="margin: 0; padding-left: 1.25rem;">
+                    <li>Enable <strong>Featured</strong> to highlight the recipe in the "This Month's Top Picks" slider
+                        on the Recipes page.</li>
+                    <li>Use <strong>Sort Order</strong> (lower = first) to control which recipes appear at the top of
+                        the main listing.</li>
+                    <li><strong>Category</strong>: Select up to 3 relevant tags (e.g. <code>breakfast</code>,
+                        <code>vegan</code>, <code>dinner</code>).
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Restaurants -->
+        <div style="margin-bottom: 2rem;">
+            <h2 style="font-size: 1.15rem; font-weight: 700; color: #1a1a15; margin-bottom: 0.75rem;"><i
+                    class="fa-solid fa-utensils"></i> Restaurants</h2>
+            <div
+                style="background: #fafaf9; border-left: 5px solid #E89580; border-radius: 8px; padding: 1.25rem; font-size: 0.9rem; color: #3F3F35; line-height: 1.8;">
+                <ul style="margin: 0; padding-left: 1.25rem;">
+                    <li><strong>Catchy Phrase</strong>: A short tagline displayed under the restaurant name, e.g.
+                        <code>Hidden Oasis</code>.
+                    </li>
+                    <li><strong>Description</strong>: The full article-style text. Separate paragraphs with a blank
+                        line.</li>
+                    <li>Use <strong>Sort Order</strong> (lower = first) to control which restaurants appear first on the
+                        page.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Attractions -->
+        <div style="margin-bottom: 2rem;">
+            <h2 style="font-size: 1.15rem; font-weight: 700; color: #1a1a15; margin-bottom: 0.75rem;"><i
+                    class="fa-solid fa-map-location-dot"></i> Attractions</h2>
+            <div
+                style="background: #fafaf9; border-left: 5px solid #8FA68F; border-radius: 8px; padding: 1.25rem; font-size: 0.9rem; color: #3F3F35; line-height: 1.8;">
+                <ul style="margin: 0; padding-left: 1.25rem;">
+                    <li><strong>Category</strong>: Select up to 2 tags — these drive the filter buttons on the
+                        Attractions page (e.g. <code>museums</code>, <code>parks &amp; nature</code>).</li>
+                    <li>Enable <strong>Featured</strong> to show the attraction in the "Must-See Attractions" spotlight
+                        slider.</li>
+                    <li><strong>Price</strong>: Use <code>Free</code> or an amount like <code>$15/person</code>.</li>
+                    <li><strong>Hours</strong>: Use a clear format, e.g. <code>Mon–Fri: 9am–5pm</code>.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Pro Tip -->
+        <div
+            style="background: #fffbf0; border: 1px solid #ffe0a0; border-radius: 8px; padding: 1rem 1.25rem; font-size: 0.9rem; color: #3F3F35;">
+            💡 <strong>Pro Tip:</strong> Always use high-quality images to maintain the premium look of the Your Bliss
+            brand.
+            Recommended ratios: <strong>16:9</strong> for article/event/recipe cards, <strong>3:4</strong> for magazine
+            covers.
+        </div>
+
+    </div>
+</div>
+{% endblock %}

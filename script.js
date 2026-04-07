@@ -16,7 +16,8 @@ function renderGlobalNav() {
 
     const navItems = [
         { name: 'Home', url: prefix + 'index.html', active: path.endsWith('/index.html') || path.endsWith('/') },
-        { name: 'Magazine', url: 'https://yourbliss.us/', external: true },
+        { name: 'Digital Edition', url: prefix + 'pages/digital-edition.html', active: path.includes('digital-edition.html') },
+        { name: 'Articles', url: prefix + 'pages/article.html', active: path.includes('article.html') },
         { name: 'Attractions', url: prefix + 'pages/attractions.html', active: path.includes('attractions.html') },
         { name: 'Events', url: prefix + 'pages/events.html', active: path.includes('events.html') },
         { name: 'Recipes', url: prefix + 'pages/recipes.html', active: path.includes('recipes.html') },
@@ -149,6 +150,7 @@ function renderGlobalFooter() {
                 <div class="footer-section">
                     <h4>Magazine</h4>
                     <div class="footer-links">
+                        <a href="${prefix}pages/digital-edition.html" class="footer-link">Digital Edition</a>
                         <a href="https://yourbliss.us/category/health" class="footer-link" target="_blank">Health</a>
                         <a href="https://yourbliss.us/category/wealth" class="footer-link" target="_blank">Wealth</a>
                         <a href="https://yourbliss.us/category/spirit" class="footer-link" target="_blank">Spirit</a>
@@ -200,8 +202,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const isPageRestaurant2 = path.includes('restaurant2.html');
     const isPageRecipes = path.includes('recipes.html');
     const isRecipeDetail = path.includes('recipe-detail.html');
-    const isPageArticle = path.includes('article.html');
+    const isPageArticle = path.includes('article.html') && !path.includes('article-detail.html');
     const isArticleDetail = path.includes('article-detail.html');
+    const isPageDigitalEdition = path.includes('digital-edition.html');
 
     // Render Global Components
     renderGlobalNav();
@@ -230,6 +233,8 @@ document.addEventListener('DOMContentLoaded', () => {
         loadArticles();
     } else if (isArticleDetail) {
         loadArticleDetail();
+    } else if (isPageDigitalEdition) {
+        loadMagazines();
     }
 
     // Initialize UI components after rendering
@@ -1661,4 +1666,156 @@ function renderArticleDetail(article) {
             </div>
         </article>
     `;
+}
+
+// ============================================
+// DIGITAL EDITION - MAGAZINES
+// ============================================
+
+async function loadMagazines() {
+    const loadingEl = document.getElementById('magazineLoading');
+    const container = document.getElementById('magazineYearsContainer');
+    if (!container) return;
+
+    try {
+        const response = await fetch('http://localhost:8000/api/magazines');
+        if (!response.ok) throw new Error(`API error: ${response.status}`);
+        const magazines = await response.json();
+
+        if (loadingEl) loadingEl.style.display = 'none';
+
+        if (!magazines || magazines.length === 0) {
+            container.innerHTML = `
+                <div class="de-empty">
+                    <i class="fas fa-book-open"></i>
+                    <h2>Coming Soon</h2>
+                    <p>Digital editions will be available here shortly. Check back soon!</p>
+                </div>`;
+            return;
+        }
+
+        // Group magazines by year extracted from date_label (e.g. "March 2026" → 2026)
+        const byYear = {};
+        magazines.forEach(mag => {
+            const yearMatch = (mag.date_label || mag.name || '').match(/(\d{4})/);
+            const year = yearMatch ? yearMatch[1] : 'Other';
+            if (!byYear[year]) byYear[year] = [];
+            byYear[year].push(mag);
+        });
+
+        // Sort years descending (newest first)
+        const sortedYears = Object.keys(byYear).sort((a, b) => b - a);
+
+        container.innerHTML = sortedYears.map(year => `
+            <section class="year-section">
+                <h2 class="year-heading">Digital Edition ${year}</h2>
+                <div class="year-divider"></div>
+                <div class="magazine-grid">
+                    ${byYear[year].map(mag => renderMagazineCard(mag)).join('')}
+                </div>
+            </section>
+        `).join('');
+
+        initMagazineModal();
+
+    } catch (err) {
+        console.error('Error loading magazines:', err);
+        if (loadingEl) loadingEl.style.display = 'none';
+        if (container) {
+            container.innerHTML = `
+                <div class="de-empty">
+                    <i class="fas fa-triangle-exclamation"></i>
+                    <h2>Could not load magazines</h2>
+                    <p>Please make sure the backend server is running and try again.</p>
+                </div>`;
+        }
+    }
+}
+
+function renderMagazineCard(mag) {
+    const imageSrc  = resolveImagePath(mag.image);
+    const fileSrc   = resolveImagePath(mag.file);
+    const title     = mag.name || mag.date_label || 'Issue';
+    const dateLabel = mag.date_label || '';
+    const safeTitle = title.replace(/'/g, "\\'");
+
+    const coverMarkup = imageSrc
+        ? `<img src="${imageSrc}" alt="${title} magazine cover" class="magazine-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+           <div class="magazine-cover-placeholder" style="display:none;"><i class="fas fa-book-open"></i><span>${title}</span></div>`
+        : `<div class="magazine-cover-placeholder"><i class="fas fa-book-open"></i><span>${title}</span></div>`;
+
+    return `
+        <div class="magazine-card"
+             role="button"
+             tabindex="0"
+             aria-label="Read ${title} magazine"
+             onclick="openMagazineModal('${fileSrc}', '${safeTitle}')"
+             onkeydown="if(event.key==='Enter'||event.key===' ')openMagazineModal('${fileSrc}','${safeTitle}')"
+        >
+            <div class="magazine-cover-wrap">
+                ${coverMarkup}
+                <div class="magazine-overlay">
+                    <button class="magazine-read-btn" tabindex="-1" aria-hidden="true">
+                        <i class="fas fa-book-reader"></i> Read Now
+                    </button>
+                </div>
+                <span class="magazine-free-badge">FREE</span>
+            </div>
+            <div class="magazine-card-info">
+                <div class="magazine-card-title">${title}</div>
+                ${dateLabel ? `<div class="magazine-card-date">${dateLabel}</div>` : ''}
+            </div>
+        </div>`;
+}
+
+function initMagazineModal() {
+    const backdrop = document.getElementById('pdfModalBackdrop');
+    const closeBtn = document.getElementById('pdfModalClose');
+    const frame    = document.getElementById('pdfFrame');
+
+    if (!backdrop || !closeBtn || !frame) return;
+
+    // Remove old listeners by cloning
+    const newClose = closeBtn.cloneNode(true);
+    closeBtn.parentNode.replaceChild(newClose, closeBtn);
+    newClose.addEventListener('click', closeMagazineModal);
+
+    backdrop.addEventListener('click', (e) => {
+        if (e.target === backdrop) closeMagazineModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeMagazineModal();
+    });
+}
+
+function openMagazineModal(fileSrc, title) {
+    const backdrop = document.getElementById('pdfModalBackdrop');
+    const frame    = document.getElementById('pdfFrame');
+    const titleEl  = document.getElementById('pdfModalTitle');
+    const dlBtn    = document.getElementById('pdfDownloadBtn');
+    const fbBtn    = document.getElementById('pdfFallbackBtn');
+    const fallback = document.getElementById('pdfFallback');
+
+    if (!backdrop || !frame) return;
+
+    if (titleEl)  titleEl.textContent = title;
+    if (dlBtn)  { dlBtn.href = fileSrc; dlBtn.setAttribute('download', title + '.pdf'); }
+    if (fbBtn)    fbBtn.href = fileSrc;
+
+    // Reset state
+    frame.style.display = 'block';
+    if (fallback) fallback.style.display = 'none';
+    frame.src = fileSrc;
+
+    backdrop.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeMagazineModal() {
+    const backdrop = document.getElementById('pdfModalBackdrop');
+    const frame    = document.getElementById('pdfFrame');
+    if (backdrop) backdrop.classList.remove('active');
+    if (frame)    frame.src = '';
+    document.body.style.overflow = '';
 }

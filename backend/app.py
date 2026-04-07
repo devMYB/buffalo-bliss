@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from .db import engine, get_db, SessionLocal
-from .models import Base, Event, AdvertisingRequest, Subscriber, Restaurant, Attraction, Recipe, Article
+from .models import Base, Event, AdvertisingRequest, Subscriber, Restaurant, Attraction, Recipe, Article, Magazine
 from .admin import setup_admin
 from .admin_auth import authentication_backend
 from pydantic import BaseModel, EmailStr, Field
@@ -153,6 +153,17 @@ def get_article(article_id: int, db: Session = Depends(get_db)):
     if not article:
         raise HTTPException(status_code=404, detail="Article not found")
     return article
+
+@app.get("/api/magazines")
+def get_magazines(db: Session = Depends(get_db)):
+    return db.query(Magazine).order_by(Magazine.created_at.desc()).all()
+
+@app.get("/api/magazines/{magazine_id}")
+def get_magazine(magazine_id: int, db: Session = Depends(get_db)):
+    magazine = db.query(Magazine).filter(Magazine.id == magazine_id).first()
+    if not magazine:
+        raise HTTPException(status_code=404, detail="Magazine not found")
+    return magazine
 
 @app.get("/api/health")
 def health_check():

@@ -109,3 +109,14 @@ class Article(Base):
     featured = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+class Magazine(Base):
+    __tablename__ = "magazines"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(200), nullable=False)           # e.g. "March 2026"
+    date_label = Column(String(100), nullable=False)     # e.g. "March 2026" display label
+    image = Column(String(500), nullable=False)          # path: assets/magazines/images/...
+    file = Column(String(500), nullable=False)           # path: assets/magazines/media/...
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
