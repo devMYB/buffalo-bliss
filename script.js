@@ -889,27 +889,7 @@ async function renderDetailPage() {
     }
 
     let item;
-    // if (type === 'events') {
-    //     try {
-    //         const response = await fetch(`http://localhost:8000/api/events/${id}`);
-    //         if (response.ok) {
-    //             item = await response.json();
-    //         }
-    //     } catch (error) {
-    //         console.error('Error fetching event details:', error);
-    //     }
-    // }
 
-    // if (type === 'attractions') {
-    //     try {
-    //         const response = await fetch(`http://localhost:8000/api/attractions/${id}`);
-    //         if (response.ok) {
-    //             item = await response.json();
-    //         }
-    //     } catch (error) {
-    //         console.error('Error fetching attraction details:', error);
-    //     }
-    // }
     try {
         const response = await fetch(`http://localhost:8000/api/${type}/${id}`);
         if (response.ok) {

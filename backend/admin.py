@@ -432,7 +432,7 @@ class MagazineAdmin(ModelView, model=Magazine):
         },
         "sort_order": {
             "label": "Sort Order",
-            "description": "Higher numbers appear first within the same year.",
+            "description": "Please enter the number of the month. (e.g. 1 for January, 2 for February, etc.)",
         },
         "image": {
             "label": "Cover Image Path",
