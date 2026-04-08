@@ -117,8 +117,10 @@ class Magazine(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(200), nullable=False)           # e.g. "March 2026"
-    date_label = Column(String(100), nullable=False)     # e.g. "March 2026" display label
     image = Column(String(500), nullable=False)          # path: assets/magazines/images/...
     file = Column(String(500), nullable=False)           # path: assets/magazines/media/...
+    image_upload = None
+    file_upload = None
+    sort_order = Column(Integer, default=0)              # For custom sorting
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

@@ -1,0 +1,61 @@
+{% extends "custom_create.html" %}
+
+{% block head %}
+{{ super() }}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var form = document.querySelector('form');
+        if (form) {
+            // Force multipart/form-data to allow file uploads
+            form.enctype = "multipart/form-data";
+            
+            // 1. Handle Cover Image Upload
+            var imageInput = document.getElementById("image");
+            if (imageInput) {
+                var fieldContainer = imageInput.closest('.mb-3');
+                if (fieldContainer) {
+                    var uploadDiv = document.createElement('div');
+                    uploadDiv.className = 'mb-3';
+                    uploadDiv.innerHTML = `
+                        <label class="form-label" for="image_upload">Upload Cover Image</label>
+                        <input class="form-control" id="image_upload" name="image_upload" type="file">
+                        <div class="form-text">Choose a file to upload. This will automatically fill the path field above.</div>
+                    `;
+                    fieldContainer.parentNode.insertBefore(uploadDiv, fieldContainer.nextSibling);
+
+                    // Auto-fill logic
+                    document.getElementById('image_upload').addEventListener('change', function() {
+                        if (this.files && this.files[0]) {
+                            imageInput.value = 'assets/magazines/images/' + this.files[0].name;
+                        }
+                    });
+                }
+            }
+
+            // 2. Handle PDF File Upload
+            var fileInput = document.getElementById("file");
+            if (fileInput) {
+                var fieldContainer = fileInput.closest('.mb-3');
+                if (fieldContainer) {
+                    var uploadDiv = document.createElement('div');
+                    uploadDiv.className = 'mb-3';
+                    uploadDiv.innerHTML = `
+                        <label class="form-label" for="file_upload">Upload PDF File</label>
+                        <input class="form-control" id="file_upload" name="file_upload" type="file" accept=".pdf">
+                        <div class="form-text">Choose a PDF file to upload. This will automatically fill the path field above.</div>
+                    `;
+                    fieldContainer.parentNode.insertBefore(uploadDiv, fieldContainer.nextSibling);
+
+                    // Auto-fill logic
+                    document.getElementById('file_upload').addEventListener('change', function() {
+                        if (this.files && this.files[0]) {
+                            fileInput.value = 'assets/magazines/media/' + this.files[0].name;
+                        }
+                    });
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

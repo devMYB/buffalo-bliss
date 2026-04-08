@@ -1704,7 +1704,7 @@ async function loadMagazines() {
         // Group magazines by year extracted from date_label (e.g. "March 2026" → 2026)
         const byYear = {};
         magazines.forEach(mag => {
-            const yearMatch = (mag.date_label || mag.name || '').match(/(\d{4})/);
+            const yearMatch = (mag.name || '').match(/(\d{4})/);
             const year = yearMatch ? yearMatch[1] : 'Other';
             if (!byYear[year]) byYear[year] = [];
             byYear[year].push(mag);
@@ -1742,8 +1742,7 @@ async function loadMagazines() {
 function renderMagazineCard(mag) {
     const imageSrc = resolveImagePath(mag.image);
     const fileSrc = resolveImagePath(mag.file);
-    const title = mag.name || mag.date_label || 'Issue';
-    const dateLabel = mag.date_label || '';
+    const title = mag.name || 'Issue';
     const safeTitle = title.replace(/'/g, "\\'");
 
     const coverMarkup = imageSrc
@@ -1770,7 +1769,6 @@ function renderMagazineCard(mag) {
             </div>
             <div class="magazine-card-info">
                 <div class="magazine-card-title">${title}</div>
-                ${dateLabel ? `<div class="magazine-card-date">${dateLabel}</div>` : ''}
             </div>
         </div>`;
 }

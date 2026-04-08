@@ -409,16 +409,19 @@ class ArticleAdmin(ModelView, model=Article):
 #------------------------------------------------------------
 
 class MagazineAdmin(ModelView, model=Magazine):
-    column_list = ["id", "name", "date_label", "created_at"]
-    column_sortable_list = ["name", "created_at"]
-    form_columns = ["name", "date_label", "image", "file"]
+    column_list = ["id", "name", "sort_order", "created_at"]
+    column_sortable_list = ["name", "sort_order", "created_at"]
+    form_columns = ["name", "sort_order", "image", "file"]
     icon = "fa-solid fa-book-open"
     name = "Magazine"
     name_plural = "Magazines"
 
-    form_overrides = {
-        "image": FileField,
-        "file": FileField,
+    create_template = "magazine_create.html"
+    edit_template = "magazine_edit.html"
+
+    form_extra_fields = {
+        "image_upload": FileField("Cover Image Upload", validators=[validate_image_extension]),
+        "file_upload": FileField("PDF File Upload")
     }
 
     form_args = {
@@ -427,62 +430,56 @@ class MagazineAdmin(ModelView, model=Magazine):
             "validators": [DataRequired()],
             "description": "Magazine issue name (e.g. March 2026)",
         },
-        "date_label": {
-            "label": "Date Added",
-            "validators": [DataRequired()],
-            "description": "Display label for the date (e.g. March 2026)",
-            "render_kw": {"placeholder": "March 2026"},
+        "sort_order": {
+            "label": "Sort Order",
+            "description": "Higher numbers appear first within the same year.",
         },
         "image": {
-            "label": "Cover Image (Upload)",
-            "description": "Upload cover image (will be saved to assets/magazines/images/)",
+            "label": "Cover Image Path",
+            "description": "The path to the cover image. Edit directly or upload a new file below.",
+            "render_kw": {"placeholder": "assets/magazines/images/..."}
         },
         "file": {
-            "label": "PDF File (Upload)",
-            "description": "Upload magazine PDF (will be saved to assets/magazines/media/)",
+            "label": "PDF File Path",
+            "description": "The path to the PDF file. Edit directly or upload a new file below.",
+            "render_kw": {"placeholder": "assets/magazines/media/..."}
         },
+        "image_upload": {
+            "description": "Select a file to upload. It will automatically update the path above."
+        },
+        "file_upload": {
+            "description": "Select a PDF file to upload. It will automatically update the path above."
+        }
     }
 
     async def on_model_change(self, data, model, is_created, request):
         form_data = await request.form()
         
         # Handle Image Upload
-        image_file = form_data.get("image")
-        if image_file and hasattr(image_file, "filename") and image_file.filename:
-            filename = image_file.filename
-            # Define destination
+        image_upload = form_data.get("image_upload")
+        if image_upload and hasattr(image_upload, "filename") and image_upload.filename:
+            filename = image_upload.filename
             dest_dir = os.path.join("assets", "magazines", "images")
             os.makedirs(dest_dir, exist_ok=True)
             save_path = os.path.join(dest_dir, filename)
             
-            # Save file
             with open(save_path, "wb") as buffer:
-                shutil.copyfileobj(image_file.file, buffer)
+                shutil.copyfileobj(image_upload.file, buffer)
             
-            # Store relative path in DB
             data["image"] = f"assets/magazines/images/{filename}"
-        elif not is_created:
-            # Preserve existing image if no new upload during edit
-            data["image"] = model.image
             
         # Handle PDF Upload
-        pdf_file = form_data.get("file")
-        if pdf_file and hasattr(pdf_file, "filename") and pdf_file.filename:
-            filename = pdf_file.filename
-            # Define destination
+        file_upload = form_data.get("file_upload")
+        if file_upload and hasattr(file_upload, "filename") and file_upload.filename:
+            filename = file_upload.filename
             dest_dir = os.path.join("assets", "magazines", "media")
             os.makedirs(dest_dir, exist_ok=True)
             save_path = os.path.join(dest_dir, filename)
             
-            # Save file
             with open(save_path, "wb") as buffer:
-                shutil.copyfileobj(pdf_file.file, buffer)
+                shutil.copyfileobj(file_upload.file, buffer)
             
-            # Store relative path in DB
             data["file"] = f"assets/magazines/media/{filename}"
-        elif not is_created:
-            # Preserve existing file if no new upload during edit
-            data["file"] = model.file
             
         return await super().on_model_change(data, model, is_created, request)
 
@@ -503,6 +500,7 @@ class InstructionsView(BaseView):
 #------------------------------------------------------------
 # ADMIN SETUP SECTION
 #------------------------------------------------------------
+
 
 def setup_admin(app, engine, authentication_backend):
     admin = Admin(

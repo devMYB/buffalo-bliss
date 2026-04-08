@@ -6,7 +6,7 @@ from .models import Base, Event, AdvertisingRequest, Subscriber, Restaurant, Att
 from .admin import setup_admin
 from .admin_auth import authentication_backend
 from pydantic import BaseModel, EmailStr, Field
-from typing import Optional
+from typing import Optional, List
 import os
 
 # Initialize database tables
@@ -156,7 +156,7 @@ def get_article(article_id: int, db: Session = Depends(get_db)):
 
 @app.get("/api/magazines")
 def get_magazines(db: Session = Depends(get_db)):
-    return db.query(Magazine).order_by(Magazine.created_at.desc()).all()
+    return db.query(Magazine).order_by(Magazine.sort_order.desc(), Magazine.created_at.desc()).all()
 
 @app.get("/api/magazines/{magazine_id}")
 def get_magazine(magazine_id: int, db: Session = Depends(get_db)):
