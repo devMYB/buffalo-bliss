@@ -382,7 +382,7 @@ attractions_data = [
         "address": "Buffalo, NY 14214",
         "description": "350-acre centerpiece of Buffalo's park system, designed by Olmsted & Vaux.",
         "full_description": "Designed by the legendary Frederick Law Olmsted, Delaware Park is the crown jewel...",
-        "image": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800",
+        "image": "https://www.bfloparks.org/wp-content/uploads/del18.jpg",
         "category": "parks family",
         "hours": "Dawn to Dusk",
         "price": "Free",

@@ -29,3 +29,5 @@ node_modules/
 backups/
 
 events_backup.py
+
+assets/magazines/*

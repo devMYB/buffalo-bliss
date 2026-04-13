@@ -25,7 +25,9 @@ function renderGlobalNav() {
     ];
 
     const moreItems = [
-        { name: 'Request Advertisement', url: prefix + 'pages/request-advertisement.html', active: path.includes('request-advertisement.html') }
+        { name: 'Subscribe', url: prefix + 'pages/subscribe.html', active: path.includes('subscribe.html') },
+        { name: 'Request Advertisement', url: prefix + 'pages/request-advertisement.html', active: path.includes('request-advertisement.html') },
+        { name: 'Contact Us', url: '#site-footer', active: false }
     ];
 
     const isMoreActive = moreItems.some(item => item.active);
@@ -107,6 +109,16 @@ function renderGlobalNav() {
             mobileNav.classList.toggle('active');
             document.body.classList.toggle('no-scroll');
         });
+
+        // Close mobile nav when a link is clicked (important for hash links)
+        const mobileLinks = mobileNav.querySelectorAll('.mobile-nav-link');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenuToggle.classList.remove('active');
+                mobileNav.classList.remove('active');
+                document.body.classList.remove('no-scroll');
+            });
+        });
     }
 
     // Dropdown hover behavior for desktop (CSS handles most of it, but click for mobile-like touch)
@@ -124,6 +136,8 @@ function renderGlobalNav() {
 function renderGlobalFooter() {
     const footerContainer = document.querySelector('footer.footer');
     if (!footerContainer) return;
+
+    footerContainer.id = 'site-footer';
 
     const path = window.location.pathname;
     const isSubpage = path.includes('/pages/');
@@ -177,7 +191,7 @@ function renderGlobalFooter() {
                         <a href="tel:716-362-7849" class="footer-link">
                             <i class="fas fa-phone"></i> 716-362-7849
                         </a>
-                        <a href="#" class="footer-link">About Us</a>
+                        <a href="${prefix}pages/subscribe.html" class="footer-link">Subscribe</a>
                     </div>
                 </div>
             </div>
@@ -366,6 +380,7 @@ async function loadHomepageRecipes() {
                 </div>
             </div>
         `).join('');
+        initializeClickableCards();
 
     } catch (err) {
         console.error("Homepage recipes failed:", err);
@@ -404,7 +419,7 @@ function renderRecipesPageView(recipes) {
         const featured = recipes.filter(r => r.featured);
 
         topContainer.innerHTML = featured.map(r => `
-            <div class="card recipes-card">
+            <div class="card recipes-card clickable-card" data-href="recipe-detail.html?id=${r.id}">
                 <img src="${resolveImagePath(r.image)}" class="card-image">
 
                 <div class="card-content">

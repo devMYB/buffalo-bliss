@@ -459,7 +459,7 @@ const siteData = {
             id: "restaurants",
             icon: '<i class="fas fa-utensils" style="color: var(--color-primary);"></i>',
             title: "Restaurants & Dining",
-            description: "Discover Buffalo's vibrant food scene, from cozy cafes to fine dining. Special highlights on featured restaurants unique vibes.",
+            description: "Discover Buffalo's vibrant food scene, from cozy cafes to fine dining. Special highlights on featured restaurants.",
             badges: ["200+ Restaurants", "Desi Cuisine"],
             link: "pages/restaurant2.html",
             btnText: "Explore Restaurants",
@@ -468,24 +468,24 @@ const siteData = {
         },
         {
             id: "events",
-            icon: '<i class="fas fa-calendar-alt" style="color: var(--color-primary);"></i>',
+            icon: '<i class="fas fa-calendar-alt" style="color: var(--color-secondary);"></i>',
             title: "Events & Activities",
-            description: "From cultural festivals to fitness classes, discover events happening around Buffalo. Special focus on Desi community events.",
+            description: "From cultural festivals to fitness classes, discover events happening around Buffalo.",
             badges: ["This Weekend", "Cultural Events"],
             link: "pages/events.html",
             btnText: "Browse Events",
-            btnClass: "btn-primary",
+            btnClass: "btn-secondary",
             featured: true
         },
         {
             id: "attractions",
-            icon: '<i class="fas fa-landmark" style="color: var(--color-secondary);"></i>',
+            icon: '<i class="fas fa-landmark" style="color: var(--color-primary);"></i>',
             title: "Attractions & Places",
             description: "Explore museums, parks, galleries, and historic sites. Plan your perfect Buffalo adventure with our curated guides.",
             badges: ["Museums", "Parks"],
             link: "pages/attractions.html",
             btnText: "Discover Places",
-            btnClass: "btn-secondary",
+            btnClass: "btn-primary",
             featured: true
         }
     ]

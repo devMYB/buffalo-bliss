@@ -48,8 +48,15 @@
         }
 
         @keyframes floatIcon {
-            0%, 100% { transform: translateY(0); }
-            50%       { transform: translateY(-8px); }
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
         }
 
         .de-hero h1 {
@@ -69,7 +76,7 @@
             padding: var(--space-16) 0 var(--space-8);
         }
 
-        .year-section + .year-section {
+        .year-section+.year-section {
             padding-top: var(--space-8);
         }
 
@@ -116,13 +123,13 @@
             aspect-ratio: 3 / 4;
             border-radius: var(--radius-lg);
             overflow: hidden;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.08);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.08);
             background: var(--color-neutral-100);
             transition: box-shadow var(--transition-base);
         }
 
         .magazine-card:hover .magazine-cover-wrap {
-            box-shadow: 0 20px 50px rgba(0,0,0,0.22), 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.22), 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .magazine-cover {
@@ -248,8 +255,13 @@
         }
 
         @keyframes spin {
-            from { transform: rotate(0deg); }
-            to   { transform: rotate(360deg); }
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .de-empty {
@@ -396,9 +408,18 @@
 
         /* ---- Responsive ---- */
         @media (max-width: 640px) {
-            .de-hero h1 { font-size: var(--font-size-4xl); }
-            .magazine-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: var(--space-6); }
-            .pdf-frame { min-height: 55vh; }
+            .de-hero h1 {
+                font-size: var(--font-size-4xl);
+            }
+
+            .magazine-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: var(--space-6);
+            }
+
+            .pdf-frame {
+                min-height: 55vh;
+            }
         }
     </style>
 </head>
@@ -414,7 +435,8 @@
         <div class="container">
             <i class="fas fa-book-open de-hero-icon"></i>
             <h1>Digital Edition</h1>
-            <p>Read every issue of Your Bliss in 716 — free, online, anytime. Covering health, wealth, spirit &amp; happiness.</p>
+            <p>Read every issue of Your Bliss Magazine. Covering health, wealth, happiness & Spirit.Free online,
+                anytime. Or find us in your local Top’s, Wegman’s, and select pharmacies.</p>
         </div>
     </section>
 
@@ -433,12 +455,14 @@
     </div>
 
     <!-- PDF Viewer Modal -->
-    <div class="pdf-modal-backdrop" id="pdfModalBackdrop" role="dialog" aria-modal="true" aria-labelledby="pdfModalTitle">
+    <div class="pdf-modal-backdrop" id="pdfModalBackdrop" role="dialog" aria-modal="true"
+        aria-labelledby="pdfModalTitle">
         <div class="pdf-modal">
             <div class="pdf-modal-header">
                 <h2 class="pdf-modal-title" id="pdfModalTitle">Magazine</h2>
                 <div class="pdf-modal-actions">
-                    <a id="pdfDownloadBtn" href="#" download class="btn btn-sm btn-primary" target="_blank" rel="noopener noreferrer">
+                    <a id="pdfDownloadBtn" href="#" download class="btn btn-sm btn-primary" target="_blank"
+                        rel="noopener noreferrer">
                         <i class="fas fa-download"></i> Download
                     </a>
                     <button class="pdf-modal-close" id="pdfModalClose" aria-label="Close magazine viewer">
@@ -451,7 +475,8 @@
                 <div class="pdf-fallback" id="pdfFallback">
                     <i class="fas fa-file-pdf"></i>
                     <h3>Unable to display PDF in browser</h3>
-                    <p>Your browser may be blocking the inline viewer. Use the button below to open or download the magazine.</p>
+                    <p>Your browser may be blocking the inline viewer. Use the button below to open or download the
+                        magazine.</p>
                     <a id="pdfFallbackBtn" href="#" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
                         <i class="fas fa-external-link-alt"></i> Open PDF
                     </a>

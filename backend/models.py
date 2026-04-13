@@ -90,6 +90,7 @@ class Recipe(Base):
     badge2 = Column(String(100), nullable=True)
     featured = Column(Boolean, default=False)
     sort_order = Column(Integer, default=0)            # controls display order
+    image_file = None
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 

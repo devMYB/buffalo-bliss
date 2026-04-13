@@ -61,7 +61,7 @@ EVENT_CATEGORIES = [
 RECIPE_CATEGORIES = [
     ("breakfast", "Healthy Breakfast Ideas"),
     ("vegan", "Plant-Based Favorites"),
-    ("vegetarian", "Plant-Based Favorites"),
+    ("vegetarian", "Vegetarian"),
     ("meal-prep", "Wellness Meal Prepping"),
     ("dinner", "Quick Weekly Dinners"),
     ("lunch", "Go-to Lunches"),
@@ -308,8 +308,12 @@ class RecipeAdmin(ModelView, model=Recipe):
         "category": MultipleSelectStringField,
     }
 
-    create_template = "custom_create.html"
-    edit_template = "custom_edit.html"
+    create_template = "recipe_create.html"
+    edit_template = "recipe_edit.html"
+
+    form_extra_fields = {
+        "image_file": FileField("Image File", validators=[validate_image_extension])
+    }
 
     form_args = {
         "category": {
@@ -319,10 +323,43 @@ class RecipeAdmin(ModelView, model=Recipe):
             "render_kw": {
                 "data-role": "select2-tags",
             }
+        },
+        "image": {
+            "label": "Image URL / Path",
+            "description": "Enter a URL (https://...) or a local path (assets/images/...). You can also upload a file below.",
+            "render_kw": {
+                "placeholder": "Enter image URL if not uploading",
+                "class": "form-control"
+            }
+        },
+        "description": {
+            "label": "Short Description",
+            "render_kw": {
+                "placeholder": "A brief preview of the recipe",
+                "class": "form-control"
+            }
         }
     }
 
     async def on_model_change(self, data, model, is_created, request):
+        form_data = await request.form()
+        
+        # Handle Image Upload (Injected via custom template JS)
+        image_file = form_data.get("image_file")
+        if image_file and hasattr(image_file, "filename") and image_file.filename:
+            filename = image_file.filename
+            # Define destination
+            dest_dir = os.path.join("assets", "images")
+            os.makedirs(dest_dir, exist_ok=True)
+            save_path = os.path.join(dest_dir, filename)
+            
+            # Save file
+            with open(save_path, "wb") as buffer:
+                shutil.copyfileobj(image_file.file, buffer)
+            
+            # Store relative path in DB (overrides URL field)
+            data["image"] = f"assets/images/{filename}"
+
         if "category" in data and isinstance(data["category"], list):
             data["category"] = " ".join(data["category"])
         return await super().on_model_change(data, model, is_created, request)
