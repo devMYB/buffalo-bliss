@@ -17,7 +17,7 @@ class Event(Base):
     time = Column(String(100), nullable=False)       # e.g. "06:30 PM"
     location = Column(String(500), nullable=False)   # e.g. "Canalside, Buffalo, NY"
     price = Column(String(50), nullable=False)       # e.g. "$25" or "Free"
-    url = Column(String(500), nullable=True)         # External ticket/info URL
+    url = Column(String(500), nullable=False)         # External ticket/info URL
     featured = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -51,7 +51,7 @@ class Restaurant(Base):
     catchy_phrase = Column(String(200), nullable=False)   # e.g. "Hidden Oasis"
     image = Column(String(500), nullable=False)
     description = Column(Text, nullable=False)            # Full description paragraphs
-    website_url = Column(String(500), nullable=True)      # Official website link
+    website_url = Column(String(500), nullable=False)      # Official website link
     badge1 = Column(String(100), nullable=True)           # e.g. "Queer-Owned"
     badge2 = Column(String(100), nullable=True)           # e.g. "Coffee & Cocktails"
     sort_order = Column(Integer, default=0)               # Controls display order
@@ -65,7 +65,7 @@ class Attraction(Base):
     name = Column(String(200), nullable=False)
     address = Column(String(500), nullable=False)
     image = Column(String(500), nullable=False)
-    url = Column(String(500), nullable=True)
+    url = Column(String(500), nullable=False)
     description = Column(Text, nullable=False)
     full_description = Column(Text, nullable=False)
     category = Column(String(500), nullable=False)

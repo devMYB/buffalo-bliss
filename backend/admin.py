@@ -81,7 +81,7 @@ ARTICLE_CATEGORIES = [
 #------------------------------------------------------------
 
 class EventAdmin(ModelView, model=Event):
-    column_list = ["id", "name", "category"]
+    column_list = ["id", "name", "category", "featured"]
     form_columns = [
     "name",
     "location",
@@ -242,7 +242,6 @@ class AttractionAdmin(ModelView, model=Attraction):
         "name",
         "address",
         "category",
-        "price",
         "featured",
         "created_at"
     ]
@@ -270,6 +269,42 @@ class AttractionAdmin(ModelView, model=Attraction):
             "description": "Select up to 2 categories.",
             "render_kw": {
                 "data-role": "select2-tags",
+            }
+        },
+        "image": {
+            "label": "Image URL",
+            "render_kw": {
+                "placeholder": "Enter a URL (https://...)",
+                "class": "form-control"
+            }
+        },
+        "url": {
+            "label": "Website URL",
+            "render_kw": {
+                "placeholder": "Official website URL of the attraction",
+                "class": "form-control"
+            }
+        },
+        "full_description": {
+            "label": "Full Description",
+            "render_kw": {
+                "placeholder": "Enter the full blog-style description with paragraphs",
+                "class": "form-control",
+                "rows": 10
+            }
+        },
+        "hours": {
+            "label": "Hours",
+            "render_kw": {
+                "placeholder": "e.g., Mon-Fri 10AM-5PM, Sat-Sun 11AM-6PM",
+                "class": "form-control"
+            }
+        },
+        "price": {
+            "label": "Price",
+            "render_kw": {
+                "placeholder": "e.g., $15 or Free or $10-20 or Varies",
+                "class": "form-control"
             }
         }
     }
