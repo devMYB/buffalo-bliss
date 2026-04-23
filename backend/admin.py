@@ -82,6 +82,8 @@ ARTICLE_CATEGORIES = [
 
 class EventAdmin(ModelView, model=Event):
     column_list = ["id", "name", "category", "featured"]
+    page_size = 25
+    page_size_options = [10, 25, 50, 100]
     form_columns = [
     "name",
     "location",
@@ -185,6 +187,8 @@ class EventAdmin(ModelView, model=Event):
 class AdvertisingRequestAdmin(ModelView, model=AdvertisingRequest):
     column_list = ["id", "full_name", "business_name", "created_at"]
     column_sortable_list = ["created_at"]
+    page_size = 25
+    page_size_options = [10, 25, 50, 100]
     icon = "fa-solid fa-envelope"
 
 #------------------------------------------------------------
@@ -194,6 +198,8 @@ class AdvertisingRequestAdmin(ModelView, model=AdvertisingRequest):
 class SubscriberAdmin(ModelView, model=Subscriber):
     column_list = ["id", "email", "created_at"]
     column_sortable_list = ["created_at"]
+    page_size = 25
+    page_size_options = [10, 25, 50, 100]
     icon = "fa-solid fa-users"
 
 #------------------------------------------------------------
@@ -203,6 +209,8 @@ class SubscriberAdmin(ModelView, model=Subscriber):
 class RestaurantAdmin(ModelView, model=Restaurant):
     column_list = ["id", "name", "address", "badge1", "badge2", "sort_order"]
     column_sortable_list = ["sort_order", "name"]
+    page_size = 25
+    page_size_options = [10, 25, 50, 100]
     form_columns = ["name", "address", "image", "website_url", "description", "catchy_phrase", "badge1", "badge2", "sort_order"]
     icon = "fa-solid fa-utensils"
     name = "Restaurant"
@@ -248,6 +256,9 @@ class AttractionAdmin(ModelView, model=Attraction):
     
     column_sortable_list = ["name", "created_at"]
     
+    page_size = 25
+    page_size_options = [10, 25, 50, 100]
+
     form_columns = "__all__"
     
     icon = "fa-solid fa-map-location-dot"
@@ -331,6 +342,8 @@ class RecipeAdmin(ModelView, model=Recipe):
     ]
 
     column_sortable_list = ["sort_order", "name"]
+    page_size = 25
+    page_size_options = [10, 25, 50, 100]
 
     form_columns = "__all__"
 
@@ -416,6 +429,8 @@ class ArticleAdmin(ModelView, model=Article):
     ]
 
     column_sortable_list = ["sort_order", "name"]
+    page_size = 25
+    page_size_options = [10, 25, 50, 100]
 
     form_columns = "__all__"
 
@@ -483,6 +498,8 @@ class ArticleAdmin(ModelView, model=Article):
 class MagazineAdmin(ModelView, model=Magazine):
     column_list = ["id", "name", "sort_order", "created_at"]
     column_sortable_list = ["name", "sort_order", "created_at"]
+    page_size = 25
+    page_size_options = [10, 25, 50, 100]
     form_columns = ["name", "sort_order", "image", "file"]
     icon = "fa-solid fa-book-open"
     name = "Magazine"

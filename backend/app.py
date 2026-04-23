@@ -126,7 +126,7 @@ def get_recipes(category: Optional[str] = None, db: Session = Depends(get_db)):
     if category:
         query = query.filter(Recipe.category.contains(category))
 
-    return query.order_by(Recipe.sort_order, Recipe.id).all()
+    return query.order_by(Recipe.sort_order.desc(), Recipe.id.desc()).all()
 
 
 @app.get("/api/recipes/{id}")
