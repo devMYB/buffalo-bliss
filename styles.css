@@ -800,6 +800,16 @@ button {
   color: var(--color-accent-dark);
 }
 
+.pagination-ellipsis {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: var(--color-text-tertiary);
+  font-weight: var(--font-weight-medium);
+}
+
 /* ============================================
    FORMS
    ============================================ */

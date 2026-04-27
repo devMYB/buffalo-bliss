@@ -7,6 +7,7 @@ from .admin import setup_admin
 from .admin_auth import authentication_backend
 from pydantic import BaseModel, EmailStr, Field
 from typing import Optional, List
+from datetime import datetime
 import os
 
 # Initialize database tables
@@ -25,6 +26,13 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# --- CONFIGURATION FOR FRONTEND VISIBILITY ---
+# Only articles between these dates will show on the website
+# The Admin panel will still show EVERYTHING.
+ARTICLES_START_DATE = datetime(2026, 4, 3)
+ARTICLES_END_DATE   = datetime(2026, 12, 31)
+RECIPES_SORT_ORDER = 100
 
 # --- Schemas ---
 class AdRequestSchema(BaseModel):
@@ -122,7 +130,9 @@ def get_attraction(attraction_id: int, db: Session = Depends(get_db)):
 @app.get("/api/recipes")
 def get_recipes(category: Optional[str] = None, db: Session = Depends(get_db)):
     query = db.query(Recipe)
-
+    # --- ADDED SORT ORDER FILTER ---
+    query = query.filter(Recipe.sort_order > RECIPES_SORT_ORDER)
+    
     if category:
         query = query.filter(Recipe.category.contains(category))
 
@@ -141,6 +151,10 @@ def get_recipe(id: int, db: Session = Depends(get_db)):
 @app.get("/api/articles")
 def get_articles(category: Optional[str] = None, featured: Optional[bool] = None, db: Session = Depends(get_db)):
     query = db.query(Article)
+    # --- ADDED DATE FILTER ---
+    query = query.filter(Article.created_at >= ARTICLES_START_DATE)
+    query = query.filter(Article.created_at <= ARTICLES_END_DATE)
+
     if category:
         query = query.filter(Article.category == category)
     if featured is not None:

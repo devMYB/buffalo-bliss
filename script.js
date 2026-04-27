@@ -283,7 +283,7 @@ async function renderFeaturedArticles() {
     if (!container) return;
 
     try {
-        const response = await fetch("http://localhost:8000/api/articles?featured=true");
+        const response = await fetch("/api/articles?featured=true");
         const articles = await response.json();
 
         if (articles.length === 0) {
@@ -352,7 +352,7 @@ let filteredRecipes = [];
 
 async function loadHomepageRecipes() {
     try {
-        const response = await fetch("http://localhost:8000/api/recipes");
+        const response = await fetch("/api/recipes");
         const recipes = await response.json();
 
         const container = document.getElementById("recipesContainer");
@@ -389,7 +389,7 @@ async function loadHomepageRecipes() {
 
 async function loadRecipes() {
     try {
-        const response = await fetch("http://localhost:8000/api/recipes");
+        const response = await fetch("/api/recipes");
         const recipes = await response.json();
 
         allRecipes = recipes;
@@ -441,6 +441,53 @@ function renderRecipesPageView(recipes) {
     // 2. PAGINATED MAIN LIST
     // =============================
     renderRecipesPage(recipes, currentPage);
+}
+
+// ============================================
+// PAGINATION UTILITIES
+// ============================================
+
+function renderPaginationHTML(currentPage, totalPages, type) {
+    if (totalPages <= 1) return '';
+
+    const delta = 1; // Number of pages shown around current page
+    const range = [];
+    const rangeWithDots = [];
+    let l;
+
+    range.push(1);
+    for (let i = currentPage - delta; i <= currentPage + delta; i++) {
+        if (i < totalPages && i > 1) {
+            range.push(i);
+        }
+    }
+    if (totalPages > 1) {
+        range.push(totalPages);
+    }
+
+    for (let i of range) {
+        if (l) {
+            if (i - l === 2) {
+                rangeWithDots.push(l + 1);
+            } else if (i - l !== 1) {
+                rangeWithDots.push('...');
+            }
+        }
+        rangeWithDots.push(i);
+        l = i;
+    }
+
+    return rangeWithDots.map(i => {
+        if (i === '...') {
+            return `<span class="pagination-ellipsis">...</span>`;
+        }
+        const onClick = type === 'article' ? `changeArticlePage(${i})` : `changeRecipePage(${i})`;
+        return `
+            <button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="${onClick}">
+                ${i}
+            </button>
+        `;
+    }).join('');
 }
 
 function renderRecipesPage(recipes, page) {
@@ -501,15 +548,7 @@ function renderRecipesPage(recipes, page) {
     // =============================
     if (pagination) {
         const totalPages = Math.ceil(recipes.length / RECIPES_PER_PAGE);
-
-        pagination.innerHTML = Array.from({ length: totalPages }, (_, i) => `
-            <button 
-                class="pagination-btn ${i + 1 === page ? 'active' : ''}" 
-                onclick="changeRecipePage(${i + 1})"
-            >
-                ${i + 1}
-            </button>
-        `).join('');
+        pagination.innerHTML = renderPaginationHTML(page, totalPages, 'recipe');
     }
 }
 
@@ -531,7 +570,7 @@ async function loadRecipeDetail() {
     }
 
     try {
-        const response = await fetch(`http://localhost:8000/api/recipes/${id}`);
+        const response = await fetch(`/api/recipes/${id}`);
         const recipe = await response.json();
 
         renderRecipeDetail(recipe);
@@ -589,7 +628,7 @@ function renderRecipeDetail(recipe) {
 
 async function loadRestaurantArticles() {
     try {
-        const response = await fetch(`http://localhost:8000/api/restaurants`);
+        const response = await fetch(`/api/restaurants`);
 
         if (!response.ok) {
             throw new Error(`API error: ${response.status}`);
@@ -658,7 +697,7 @@ function renderRestaurantArticles(restaurants) {
 
 async function loadEvents() {
     try {
-        const response = await fetch(`http://localhost:8000/api/events`);
+        const response = await fetch(`/api/events`);
         if (!response.ok) throw new Error(`API error: ${response.status}`);
         const events = await response.json();
         renderEvents(events);
@@ -859,7 +898,7 @@ function renderAttractions(attractions) {
 
 async function loadAttractions() {
     try {
-        const response = await fetch("http://localhost:8000/api/attractions");
+        const response = await fetch("/api/attractions");
 
         if (!response.ok) {
             throw new Error(`API error: ${response.status}`);
@@ -906,7 +945,7 @@ async function renderDetailPage() {
     let item;
 
     try {
-        const response = await fetch(`http://localhost:8000/api/${type}/${id}`);
+        const response = await fetch(`/api/${type}/${id}`);
         if (response.ok) {
             item = await response.json();
         }
@@ -1101,7 +1140,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 async function handleSubscribe(email, form) {
     try {
-        const response = await fetch('http://localhost:8000/api/subscribe', {
+        const response = await fetch('/api/subscribe', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email })
@@ -1489,11 +1528,11 @@ function initSidebarNewsletter() {
 let allArticles = [];
 let filteredArticles = [];
 let currentArticlePage = 1;
-const ARTICLES_PER_PAGE = 6;
+const ARTICLES_PER_PAGE = 10;
 
 async function loadArticles() {
     try {
-        const response = await fetch("http://localhost:8000/api/articles");
+        const response = await fetch("/api/articles");
         const articles = await response.json();
 
         allArticles = articles;
@@ -1566,11 +1605,7 @@ function renderArticlesPage(articles, page) {
     initializeClickableCards();
     if (pagination) {
         const totalPages = Math.ceil(articles.length / ARTICLES_PER_PAGE);
-        pagination.innerHTML = Array.from({ length: totalPages }, (_, i) => `
-            <button class="pagination-btn ${i + 1 === page ? 'active' : ''}" onclick="changeArticlePage(${i + 1})">
-                ${i + 1}
-            </button>
-        `).join('');
+        pagination.innerHTML = renderPaginationHTML(page, totalPages, 'article');
     }
 }
 
@@ -1633,7 +1668,7 @@ async function loadArticleDetail() {
         return;
     }
     try {
-        const response = await fetch(`http://localhost:8000/api/articles/${id}`);
+        const response = await fetch(`/api/articles/${id}`);
         const article = await response.json();
         renderArticleDetail(article);
     } catch (error) {
@@ -1680,7 +1715,7 @@ async function loadMagazines() {
     if (!container) return;
 
     try {
-        const response = await fetch('http://localhost:8000/api/magazines');
+        const response = await fetch('/api/magazines');
         if (!response.ok) throw new Error(`API error: ${response.status}`);
         const magazines = await response.json();
 

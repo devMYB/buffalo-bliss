@@ -335,9 +335,8 @@ class RecipeAdmin(ModelView, model=Recipe):
         "id",
         "name",
         "category",
-        "badge1",
-        "badge2",
         "sort_order",
+        "created_at",
         "featured"
     ]
 
@@ -421,10 +420,8 @@ class ArticleAdmin(ModelView, model=Article):
         "id",
         "name",
         "category",
-        "badge1",
-        "badge2",
-        "minutes",
         "sort_order",
+        "created_at",
         "featured"
     ]
 
