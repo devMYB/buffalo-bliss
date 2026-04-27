@@ -341,6 +341,8 @@ class RecipeAdmin(ModelView, model=Recipe):
     ]
 
     column_sortable_list = ["sort_order", "name"]
+    column_default_sort = ("sort_order", True)
+
     page_size = 25
     page_size_options = [10, 25, 50, 100]
 
@@ -426,6 +428,10 @@ class ArticleAdmin(ModelView, model=Article):
     ]
 
     column_sortable_list = ["sort_order", "name"]
+    column_default_sort = ("sort_order", True)
+    
+    column_searchable_list = ["name", "category", "description", "author"]
+
     page_size = 25
     page_size_options = [10, 25, 50, 100]
 

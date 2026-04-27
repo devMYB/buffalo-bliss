@@ -283,7 +283,7 @@ async function renderFeaturedArticles() {
     if (!container) return;
 
     try {
-        const response = await fetch("localhost:8000/api/articles?featured=true");
+        const response = await fetch("http://localhost:8000/api/articles?featured=true");
         const articles = await response.json();
 
         if (articles.length === 0) {
@@ -352,7 +352,7 @@ let filteredRecipes = [];
 
 async function loadHomepageRecipes() {
     try {
-        const response = await fetch("localhost:8000/api/recipes");
+        const response = await fetch("http://localhost:8000/api/recipes");
         const recipes = await response.json();
 
         const container = document.getElementById("recipesContainer");
@@ -389,7 +389,7 @@ async function loadHomepageRecipes() {
 
 async function loadRecipes() {
     try {
-        const response = await fetch("localhost:8000/api/recipes");
+        const response = await fetch("http://localhost:8000/api/recipes");
         const recipes = await response.json();
 
         allRecipes = recipes;
@@ -570,7 +570,7 @@ async function loadRecipeDetail() {
     }
 
     try {
-        const response = await fetch(`localhost:8000/api/recipes/${id}`);
+        const response = await fetch(`http://localhost:8000/api/recipes/${id}`);
         const recipe = await response.json();
 
         renderRecipeDetail(recipe);
@@ -628,7 +628,7 @@ function renderRecipeDetail(recipe) {
 
 async function loadRestaurantArticles() {
     try {
-        const response = await fetch(`localhost:8000/api/restaurants`);
+        const response = await fetch(`http://localhost:8000/api/restaurants`);
 
         if (!response.ok) {
             throw new Error(`API error: ${response.status}`);
@@ -697,7 +697,7 @@ function renderRestaurantArticles(restaurants) {
 
 async function loadEvents() {
     try {
-        const response = await fetch(`localhost:8000/api/events`);
+        const response = await fetch(`http://localhost:8000/api/events`);
         if (!response.ok) throw new Error(`API error: ${response.status}`);
         const events = await response.json();
         renderEvents(events);
@@ -898,7 +898,7 @@ function renderAttractions(attractions) {
 
 async function loadAttractions() {
     try {
-        const response = await fetch("localhost:8000/api/attractions");
+        const response = await fetch("http://localhost:8000/api/attractions");
 
         if (!response.ok) {
             throw new Error(`API error: ${response.status}`);
@@ -945,7 +945,7 @@ async function renderDetailPage() {
     let item;
 
     try {
-        const response = await fetch(`localhost:8000/api/${type}/${id}`);
+        const response = await fetch(`http://localhost:8000/api/${type}/${id}`);
         if (response.ok) {
             item = await response.json();
         }
@@ -1140,7 +1140,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 async function handleSubscribe(email, form) {
     try {
-        const response = await fetch('localhost:8000/api/subscribe', {
+        const response = await fetch('http://localhost:8000/api/subscribe', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email })
@@ -1532,7 +1532,7 @@ const ARTICLES_PER_PAGE = 10;
 
 async function loadArticles() {
     try {
-        const response = await fetch("localhost:8000/api/articles");
+        const response = await fetch("http://localhost:8000/api/articles");
         const articles = await response.json();
 
         allArticles = articles;
@@ -1628,12 +1628,21 @@ function initializeArticleFilters() {
     });
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
-            const term = e.target.value.toLowerCase();
-            filteredArticles = allArticles.filter(a =>
-                a.name.toLowerCase().includes(term) ||
-                a.description.toLowerCase().includes(term) ||
-                a.category.toLowerCase().includes(term)
-            );
+            const term = e.target.value.toLowerCase().trim();
+
+            if (!allArticles || !Array.isArray(allArticles)) return;
+            filteredArticles = allArticles.filter(a => {
+                const name = (a.name || "").toLowerCase();
+                const desc = (a.description || "").toLowerCase();
+                const cat = (a.category || "").toLowerCase();
+                const author = (a.author || "").toLowerCase();
+
+                return name.includes(term) ||
+                    desc.includes(term) ||
+                    cat.includes(term) ||
+                    author.includes(term);
+            });
+
             currentArticlePage = 1;
             renderArticlesPage(filteredArticles, currentArticlePage);
         });
@@ -1668,7 +1677,7 @@ async function loadArticleDetail() {
         return;
     }
     try {
-        const response = await fetch(`localhost:8000/api/articles/${id}`);
+        const response = await fetch(`http://localhost:8000/api/articles/${id}`);
         const article = await response.json();
         renderArticleDetail(article);
     } catch (error) {
@@ -1715,7 +1724,7 @@ async function loadMagazines() {
     if (!container) return;
 
     try {
-        const response = await fetch('localhost:8000/api/magazines');
+        const response = await fetch('http://localhost:8000/api/magazines');
         if (!response.ok) throw new Error(`API error: ${response.status}`);
         const magazines = await response.json();
 
