@@ -8,8 +8,6 @@ venv/
 
 # SQLite (We don't want to overwrite the server db with local data)
 *.db
-!content.db
-!seed_db.py
 
 # OS & IDE
 .DS_Store
@@ -31,3 +29,4 @@ backups/
 events_backup.py
 
 assets/magazines/*
+seed_data/*
