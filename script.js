@@ -283,7 +283,7 @@ async function renderFeaturedArticles() {
     if (!container) return;
 
     try {
-        const response = await fetch("/api/articles?featured=true");
+        const response = await fetch("localhost:8000/api/articles?featured=true");
         const articles = await response.json();
 
         if (articles.length === 0) {
@@ -352,7 +352,7 @@ let filteredRecipes = [];
 
 async function loadHomepageRecipes() {
     try {
-        const response = await fetch("/api/recipes");
+        const response = await fetch("localhost:8000/api/recipes");
         const recipes = await response.json();
 
         const container = document.getElementById("recipesContainer");
@@ -389,7 +389,7 @@ async function loadHomepageRecipes() {
 
 async function loadRecipes() {
     try {
-        const response = await fetch("/api/recipes");
+        const response = await fetch("localhost:8000/api/recipes");
         const recipes = await response.json();
 
         allRecipes = recipes;
@@ -570,7 +570,7 @@ async function loadRecipeDetail() {
     }
 
     try {
-        const response = await fetch(`/api/recipes/${id}`);
+        const response = await fetch(`localhost:8000/api/recipes/${id}`);
         const recipe = await response.json();
 
         renderRecipeDetail(recipe);
@@ -628,7 +628,7 @@ function renderRecipeDetail(recipe) {
 
 async function loadRestaurantArticles() {
     try {
-        const response = await fetch(`/api/restaurants`);
+        const response = await fetch(`localhost:8000/api/restaurants`);
 
         if (!response.ok) {
             throw new Error(`API error: ${response.status}`);
@@ -697,7 +697,7 @@ function renderRestaurantArticles(restaurants) {
 
 async function loadEvents() {
     try {
-        const response = await fetch(`/api/events`);
+        const response = await fetch(`localhost:8000/api/events`);
         if (!response.ok) throw new Error(`API error: ${response.status}`);
         const events = await response.json();
         renderEvents(events);
@@ -898,7 +898,7 @@ function renderAttractions(attractions) {
 
 async function loadAttractions() {
     try {
-        const response = await fetch("/api/attractions");
+        const response = await fetch("localhost:8000/api/attractions");
 
         if (!response.ok) {
             throw new Error(`API error: ${response.status}`);
@@ -945,7 +945,7 @@ async function renderDetailPage() {
     let item;
 
     try {
-        const response = await fetch(`/api/${type}/${id}`);
+        const response = await fetch(`localhost:8000/api/${type}/${id}`);
         if (response.ok) {
             item = await response.json();
         }
@@ -1140,7 +1140,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 async function handleSubscribe(email, form) {
     try {
-        const response = await fetch('/api/subscribe', {
+        const response = await fetch('localhost:8000/api/subscribe', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email })
@@ -1532,7 +1532,7 @@ const ARTICLES_PER_PAGE = 10;
 
 async function loadArticles() {
     try {
-        const response = await fetch("/api/articles");
+        const response = await fetch("localhost:8000/api/articles");
         const articles = await response.json();
 
         allArticles = articles;
@@ -1668,7 +1668,7 @@ async function loadArticleDetail() {
         return;
     }
     try {
-        const response = await fetch(`/api/articles/${id}`);
+        const response = await fetch(`localhost:8000/api/articles/${id}`);
         const article = await response.json();
         renderArticleDetail(article);
     } catch (error) {
@@ -1715,7 +1715,7 @@ async function loadMagazines() {
     if (!container) return;
 
     try {
-        const response = await fetch('/api/magazines');
+        const response = await fetch('localhost:8000/api/magazines');
         if (!response.ok) throw new Error(`API error: ${response.status}`);
         const magazines = await response.json();
 
